@@ -21,7 +21,7 @@ $resultado = $stmt->get_result();
 // si el numero de filas retoradas es mayor que cero existe por tanto se loguea
 if ($resultado->num_rows > 0) {
     $row = $resultado->fetch_array();
-    $respuesta['password'] = $row['password'];
+    $respuesta['emailEmp'] = $row['emailEmp'];
     echo json_encode(array($respuesta));
 }
 $stmt->close();
