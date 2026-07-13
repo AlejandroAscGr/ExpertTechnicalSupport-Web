@@ -1,6 +1,8 @@
 <?php
 include '../backend_general/conexion.php';
 
+//TEST DE GIT A VER SI JALA
+
 // aqui se prepara el query para solicitar entrar cawn
 $query = "select pass from empleado where emailEmp = ?";
 
