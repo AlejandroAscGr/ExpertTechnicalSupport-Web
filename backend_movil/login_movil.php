@@ -7,7 +7,7 @@ include ("../backend_general/conexion.php");
 $query = "Select pass from empleado where emailEmp = ?";
 
 // statement para preparar cawn
-$stmt = $mysqli->prepare($query);
+ $stmt = $mysqli->prepare($query);
 
 //aqui van los datos que hay que sustituir cawn
 $stmt->bind_param("s", $_GET['emailEmp']);
@@ -21,7 +21,7 @@ $resultado = $stmt->get_result();
 // si el numero de filas retoradas es mayor que cero existe por tanto se loguea
 if ($resultado->num_rows > 0) {
     $row = $resultado->fetch_array();
-    $respuesta['emailEmp'] = $row['emailEmp'];
+    $respuesta['pass'] = $row['pass'];
     echo json_encode(array($respuesta));
 }
 $stmt->close();
