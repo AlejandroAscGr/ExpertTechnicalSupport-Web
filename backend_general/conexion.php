@@ -7,7 +7,7 @@ $passwordbd = ""; // este tambien cawn
 $basedatos = "isana2labs"; // Segun yo asi se llama cawn
 
 //aqui se enlaza el pedo cawn
-$conexion = new mysqli($servidor, $usuario, $passwordbd, $basedatos);
+$mysqli = new mysqli ($servidor, $usuariobd, $passwordbd, $basedatos);
 
 // y aqui le calamos el pedo cawn
 if (mysqli_connect_errno()) {

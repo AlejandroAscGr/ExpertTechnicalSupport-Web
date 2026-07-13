@@ -1,10 +1,10 @@
 <?php
-include '../backend_general/conexion.php';
+include ("../backend_general/conexion.php");
 
 //TEST DE GIT A VER SI JALA
 
 // aqui se prepara el query para solicitar entrar cawn
-$query = "select pass from empleado where emailEmp = ?";
+$query = "Select pass from empleado where emailEmp = ?";
 
 // statement para preparar cawn
 $stmt = $mysqli->prepare($query);
@@ -24,8 +24,8 @@ if ($resultado->num_rows > 0) {
     $respuesta['password'] = $row['password'];
     echo json_encode(array($respuesta));
 }
-$stmt->close;
+$stmt->close();
 
-include '../backend_general/cerrar_conexion.php';
+include ("../backend_general/cerrar_conexion.php");
 
 ?>
