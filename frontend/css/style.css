@@ -136,3 +136,108 @@
     border-color: #198754;
     transform: translateY(-2px);
 }
+
+
+
+/* =========================================
+   Fondo Global (Aplica al Body de la Landing)
+========================================= */
+.app-bg {
+    background: 
+        radial-gradient(circle at 15% 10%, rgba(32, 201, 151, 0.25) 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(25, 135, 84, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 1) 20%, rgba(233, 245, 239, 1) 100%);
+    background-color: #ffffff;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   Menú Lateral (Sidebar)
+========================================= */
+.glass-sidebar {
+    width: 280px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-right: 1px solid rgba(25, 135, 84, 0.15);
+    z-index: 1000;
+}
+
+/* Links del menú */
+.glass-hover {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.glass-hover:hover {
+    background: rgba(25, 135, 84, 0.08);
+    color: #198754 !important;
+    transform: translateX(5px); /* Pequeño salto a la derecha al pasar el mouse */
+}
+
+/* Link Activo */
+.active-glass {
+    background: rgba(25, 135, 84, 0.15) !important;
+    color: #146c43 !important;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* =========================================
+   Contenido Principal
+========================================= */
+.main-content {
+    margin-left: 280px; /* Deja el espacio exacto del Sidebar */
+}
+
+/* Tarjetas con efecto Cristal (Secciones) */
+.glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(25, 135, 84, 0.1) !important;
+}
+
+/* Cajas de Íconos para Servicios */
+.icon-box {
+    width: 70px;
+    height: 70px;
+    background: rgba(25, 135, 84, 0.1);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover .icon-box {
+    background: #198754;
+    color: white !important;
+}
+
+/* =========================================
+   Espacios (Placeholders) para tus imágenes
+========================================= */
+.image-placeholder {
+    background: rgba(0, 0, 0, 0.03);
+    border: 2px dashed rgba(25, 135, 84, 0.2);
+    min-height: 300px;
+    width: 100%;
+}
+
+.placeholder-vertical {
+    min-height: 100%;
+    height: 350px;
+}

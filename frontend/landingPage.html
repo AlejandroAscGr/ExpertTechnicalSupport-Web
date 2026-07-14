@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISANA LABS - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--Iconos-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="app-bg">
+
+    <!-- Contenedor Principal -->
+    <div class="d-flex h-100">
+
+        <!-- MENU LATERAL -->
+        <nav class="glass-sidebar d-flex flex-column flex-shrink-0 p-4 vh-100 position-fixed">
+            <!-- Logos -->
+            <div class="text-center mb-5">
+                <img src="img/logoETS75px.png" alt="Logo ETS" style="max-height: 65px; width: auto;" class="mb-2">
+                <h5 class="fw-bold text-dark mb-0">ISANA LABS</h5>
+                <small class="text-secondary">Expert Technical Support</small>
+            </div>
+
+            <!-- Nav -->
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li class="nav-item">
+                    <a href="#inicio" class="nav-link active-glass" aria-current="page">
+                        <i class="bi bi-house-door me-2"></i> Inicio
+                    </a>
+                </li>
+                <li>
+                    <a href="#nosotros" class="nav-link text-dark glass-hover">
+                        <i class="bi bi-people me-2"></i> Sobre Nosotros
+                    </a>
+                </li>
+                <li>
+                    <a href="#servicios" class="nav-link text-dark glass-hover">
+                        <i class="bi bi-tools me-2"></i> Servicios
+                    </a>
+                </li>
+                <li>
+                    <a href="#contacto" class="nav-link text-dark glass-hover">
+                        <i class="bi bi-envelope me-2"></i> Contacto
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="text-secondary opacity-25">
+            
+            <!-- Btn Login -->
+            <div class="mt-2">
+                <a href="index.html" class="btn btn-success w-100 py-2 fw-bold shadow-sm d-flex justify-content-center align-items-center">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
+                </a>
+            </div>
+        </nav>
+
+        <!-- PRINCIPAL -->
+        <main class="main-content flex-grow-1 p-5 overflow-auto">
+            
+            <!-- Inicio -->
+            <section id="inicio" class="glass-card rounded-4 p-5 mb-5 mt-3 shadow-sm">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <span class="badge bg-success bg-opacity-25 text-success px-3 py-2 rounded-pill mb-3">Soporte Técnico Especializado</span>
+                        <h1 class="fw-bold display-5 mb-4 text-dark">Soluciones tecnológicas para tu empresa</h1>
+                        <p class="text-secondary lead mb-4">Gestionamos, reparamos y optimizamos tus recursos informáticos para que tu negocio nunca se detenga.</p>
+                        <a href="#servicios" class="btn btn-success px-4 py-2 rounded-pill fw-semibold shadow-sm">Ver Servicios</a>
+                    </div>
+                    <div class="col-lg-6 mt-4 mt-lg-0">
+                        <!-- Espacio para imagen -->
+                        <div class="image-placeholder rounded-4 d-flex justify-content-center align-items-center shadow-sm">
+                            <div class="text-center text-secondary">
+                                <i class="bi bi-image fs-1 mb-2"></i>
+                                <p class="mb-0">Espacio para Imagen</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--  Sobre Nosotros -->
+            <section id="nosotros" class="mb-5">
+                <h3 class="fw-bold text-dark mb-4 ms-2"><i class="bi bi-dash text-success"></i> Sobre Nosotros</h3>
+                <div class="glass-card rounded-4 p-5 shadow-sm">
+                    <div class="row">
+                        <div class="col-md-5 mb-4 mb-md-0">
+                            <!-- Espacio para imagen -->
+                            <div class="image-placeholder placeholder-vertical rounded-4 d-flex justify-content-center align-items-center">
+                                <span class="text-secondary"><i class="bi bi-camera me-2"></i>Imagen Equipo/Oficina</span>
+                            </div>
+                        </div>
+                        <div class="col-md-7 d-flex flex-column justify-content-center">
+                            <h4 class="fw-bold mb-3">Más que soporte, somos tus aliados</h4>
+                            <p class="text-secondary">En ISANA LABS nos dedicamos a ofrecer soluciones integrales de infraestructura, redes y mantenimiento de equipos. Nuestro objetivo es simplificar la tecnología para que tú puedas enfocarte en hacer crecer tu negocio.</p>
+                            <p class="text-secondary">Contamos con un equipo altamente capacitado y herramientas de vanguardia para asegurar la continuidad de tus operaciones 24/7.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Servicios -->
+            <section id="servicios" class="mb-5">
+                <h3 class="fw-bold text-dark mb-4 ms-2"><i class="bi bi-dash text-success"></i> Nuestros Servicios</h3>
+                <div class="row g-4">
+                    <!-- Servicio 1 -->
+                    <div class="col-md-4">
+                        <div class="glass-card h-100 rounded-4 p-4 shadow-sm text-center card-hover">
+                            <div class="icon-box mx-auto mb-3 text-success">
+                                <i class="bi bi-hdd-network fs-2"></i>
+                            </div>
+                            <h5 class="fw-bold">Gestión de Redes</h5>
+                            <p class="text-secondary small">Instalación, configuración y monitoreo de infraestructura de red empresarial.</p>
+                        </div>
+                    </div>
+                    <!-- Servicio 2 -->
+                    <div class="col-md-4">
+                        <div class="glass-card h-100 rounded-4 p-4 shadow-sm text-center card-hover">
+                            <div class="icon-box mx-auto mb-3 text-success">
+                                <i class="bi bi-pc-display fs-2"></i>
+                            </div>
+                            <h5 class="fw-bold">Mantenimiento PC</h5>
+                            <p class="text-secondary small">Soporte preventivo y correctivo para equipos de cómputo y servidores.</p>
+                        </div>
+                    </div>
+                    <!-- Servicio 3 -->
+                    <div class="col-md-4">
+                        <div class="glass-card h-100 rounded-4 p-4 shadow-sm text-center card-hover">
+                            <div class="icon-box mx-auto mb-3 text-success">
+                                <i class="bi bi-shield-check fs-2"></i>
+                            </div>
+                            <h5 class="fw-bold">Seguridad IT</h5>
+                            <p class="text-secondary small">Protección de datos, respaldos en la nube y prevención de amenazas cibernéticas.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
