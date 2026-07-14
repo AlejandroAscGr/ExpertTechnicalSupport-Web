@@ -1,0 +1,138 @@
+/* =========================================
+   Fondo Colorido Luminoso (Mesh Gradient)
+========================================= */
+.login-bg {
+    background: 
+        radial-gradient(circle at 15% 10%, rgba(32, 201, 151, 0.35) 0%, transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(25, 135, 84, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 1) 20%, rgba(233, 245, 239, 1) 100%);
+    background-color: #ffffff;
+    min-height: 100vh;
+    margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+}
+
+.content-wrapper {
+    z-index: 10;
+}
+
+/* =========================================
+   Tarjeta Principal Dividida (Más amplia)
+========================================= */
+.login-card {
+    background: rgba(255, 255, 255, 0.8); 
+    backdrop-filter: blur(20px); 
+    -webkit-backdrop-filter: blur(20px);
+    width: 100%;
+    max-width: 1050px; /* Aumentamos el ancho para que sea más rectangular */
+    min-height: 600px; /* Un poco más de altura para que respiren los elementos */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 
+                0 5px 15px rgba(25, 135, 84, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+}
+
+/* =========================================
+   Panel Izquierdo (Diseño Curvo Verde)
+========================================= */
+.left-panel {
+    background: linear-gradient(135deg, #20c997 0%, #198754 100%);
+    width: 40%; /* Reducimos un poco el porcentaje para darle más espacio al formulario */
+    /* Curva suavizada para adaptarse al nuevo alto */
+    border-radius: 0 200px 200px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.right-panel {
+    width: 60%; /* Más espacio para que los inputs no se sientan apretados */
+    padding: 3rem 6rem !important; /* Aumentamos el padding lateral interno */
+}
+
+/* Adaptación a dispositivos móviles */
+@media (max-width: 991px) {
+    .left-panel, .right-panel {
+        width: 100%;
+        padding: 3rem !important;
+    }
+    .left-panel {
+        border-radius: 0 0 50px 50px;
+    }
+}
+
+/* =========================================
+   Campos de Entrada e Íconos (Inputs)
+========================================= */
+.glass-input {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(25, 135, 84, 0.3) !important;
+    border-right: none !important; /* Se quita el borde derecho para fusionar con el ícono */
+    color: #212529 !important;
+    padding: 0.75rem 1rem;
+}
+
+.custom-rounded-start {
+    border-radius: 8px 0 0 8px !important;
+}
+
+.glass-addon {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(25, 135, 84, 0.3) !important;
+    border-left: none !important; /* Fusión con el input */
+    border-radius: 0 8px 8px 0 !important;
+}
+
+/* Efecto al hacer clic en el input */
+.glass-input:focus {
+    background: #ffffff !important;
+    border-color: #198754 !important;
+    box-shadow: none !important;
+}
+
+.glass-input:focus + .glass-addon {
+    background: #ffffff !important;
+    border-color: #198754 !important;
+}
+
+/* =========================================
+   Botones
+========================================= */
+.login-btn {
+    background-color: #5c8df6; /* Azul suave que hace contraste, o puedes usar #198754 si prefieres verde */
+    background: linear-gradient(90deg, #198754 0%, #20c997 100%);
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1.05rem;
+    transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(25, 135, 84, 0.3);
+}
+
+.login-btn:active {
+    transform: translateY(1px);
+}
+
+/* Botones de Redes Sociales */
+.social-btn {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #495057;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.social-btn:hover {
+    background-color: #f8f9fa;
+    color: #198754;
+    border-color: #198754;
+    transform: translateY(-2px);
+}
