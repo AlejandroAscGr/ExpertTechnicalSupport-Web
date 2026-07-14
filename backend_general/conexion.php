@@ -10,7 +10,7 @@ $basedatos = "isana2labs"; // Segun yo asi se llama cawn
 $mysqli = new mysqli($servidor, $usuariobd, $passwordbd, $basedatos);
 
 // y aqui le calamos el pedo cawn
-if (mysqli_connect_errno()) {
+if (mysqli_connect_error()) {
     printf("Fallo en la conexión: %s\n", mysqli_connect_error());
     exit();
 }
