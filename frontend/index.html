@@ -28,7 +28,7 @@
     <div class="d-flex">
 
         <!-- MENÚ LATERAL MINIMIZABLE (Fijo en PC, Desplegable en Móvil) -->
-        <nav id="sidebar" class="offcanvas-lg offcanvas-start glass-sidebar d-flex flex-column flex-shrink-0 p-3 vh-100 position-fixed transition-all" tabindex="-1" aria-labelledby="sidebarMenuLabel">
+        <nav id="sidebar" class="offcanvas-lg offcanvas-start glass-sidebar collapsed d-flex flex-column flex-shrink-0 p-3 vh-100 position-fixed transition-all" tabindex="-1" aria-labelledby="sidebarMenuLabel">
             
             <!-- Botón cerrar (Solo Móvil) -->
             <div class="offcanvas-header d-lg-none p-0 mb-3 justify-content-end">
@@ -46,8 +46,8 @@
             <div class="text-center mb-5 logo-container d-none d-lg-block">
                 <img src="img/logoETS75px.png" alt="Logo ETS" style="max-height: 50px; width: auto;" class="mb-2">
                 <div class="logo-text">
-                    <h5 class="fw-bold text-dark mb-0">ISANA LABS</h5>
-                    <small class="text-secondary">Expert Technical Support</small>
+                    <h5 class="fw-bold text-dark mb-0">Expert Technical Support</h5>
+                    <small class="text-secondary">Powered by ISANA LABS</small>
                 </div>
             </div>
 
@@ -97,7 +97,7 @@
         </nav>
 
         <!-- CONTENIDO PRINCIPAL -->
-        <main id="mainContent" class="main-content flex-grow-1 p-4 p-lg-5 overflow-auto w-100 transition-all">
+        <main id="mainContent" class="main-content expanded flex-grow-1 p-4 p-lg-5 overflow-auto w-100 transition-all">
             
             <!-- Sección: Inicio (Hero) -->
             <section id="inicio" class="glass-card rounded-4 p-4 p-lg-5 mb-5 mt-lg-3 shadow-sm position-relative overflow-hidden">
@@ -148,21 +148,21 @@
                         </div>
                         <div class="col-md-7 ps-lg-5">
                             <h4 class="fw-bold mb-3">Más que soporte, somos tus aliados estratégicos</h4>
-                            <p class="text-secondary">En ISANA LABS entendemos que la tecnología es el corazón de tu negocio. Nos dedicamos a ofrecer soluciones integrales de infraestructura, redes y mantenimiento de equipos con una visión clara: <strong>simplificar la tecnología para que tú puedas enfocarte en crecer</strong>.</p>
+                            <p class="text-secondary">En Expert Technical Support entendemos que la tecnología es el corazón de tu negocio. Nos dedicamos a ofrecer soluciones integrales de infraestructura, redes y mantenimiento de equipos con una visión clara: <strong>simplificar la tecnología para que tú puedas enfocarte en crecer</strong>.</p>
                             <p class="text-secondary mb-4">Contamos con un equipo altamente capacitado y un sistema de gestión de tickets avanzado (ETS) para asegurar la continuidad de tus operaciones sin interrupciones.</p>
                             
-                            <!-- Estadísticas Rápidas -->
+                            <!-- Estadísticas Rápidas (Modificado para animación) -->
                             <div class="row text-center g-3">
                                 <div class="col-4">
-                                    <h3 class="fw-bold text-success mb-0">+500</h3>
+                                    <h3 class="fw-bold text-success mb-0">+<span class="counter" data-target="500">0</span></h3>
                                     <p class="text-secondary small mb-0">Tickets Resueltos</p>
                                 </div>
                                 <div class="col-4 border-start border-end">
-                                    <h3 class="fw-bold text-success mb-0">99%</h3>
+                                    <h3 class="fw-bold text-success mb-0"><span class="counter" data-target="99">0</span>%</h3>
                                     <p class="text-secondary small mb-0">Uptime Garantizado</p>
                                 </div>
                                 <div class="col-4">
-                                    <h3 class="fw-bold text-success mb-0">24/7</h3>
+                                    <h3 class="fw-bold text-success mb-0"><span class="counter" data-target="24">0</span>/7</h3>
                                     <p class="text-secondary small mb-0">Monitoreo</p>
                                 </div>
                             </div>
@@ -296,9 +296,11 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Script para Minimizar/Expandir la Barra Lateral -->
+<!-- Script para Menú, ScrollSpy y Animación de Contadores -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            
+            // 1. LÓGICA DE LA BARRA LATERAL (Minimizar/Expandir)
             const toggleBtn = document.getElementById('toggleSidebar');
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
@@ -309,6 +311,72 @@
                     mainContent.classList.toggle('expanded');
                 });
             }
+
+            // 2. MENÚ ACTIVO DINÁMICO (ScrollSpy)
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('#sidebar .nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollY >= (sectionTop - 250)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active-glass');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active-glass');
+                    }
+                });
+            });
+
+            // 3. ANIMACIÓN DE NÚMEROS (Reiniciable cada vez que entra en pantalla)
+            const startCounting = (counter) => {
+                const target = +counter.getAttribute('data-target');
+                let count = +counter.innerText;
+                const increment = target / 40; // Ajusta el 40 para cambiar la velocidad
+
+                // Verificamos el estado para saber si debemos seguir animando
+                if (count < target && counter.getAttribute('data-counting') === 'true') {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(() => startCounting(counter), 30);
+                } else if (counter.getAttribute('data-counting') === 'true') {
+                    counter.innerText = target;
+                }
+            };
+
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const countersToAnimate = entry.target.querySelectorAll('.counter');
+                    
+                    if (entry.isIntersecting) {
+                        // Entró en pantalla: Arranca la cuenta
+                        countersToAnimate.forEach(counter => {
+                            counter.setAttribute('data-counting', 'true');
+                            // Si está en cero, iniciamos la función
+                            if(counter.innerText === '0') {
+                                startCounting(counter);
+                            }
+                        });
+                    } else {
+                        // Salió de pantalla: Reiniciar a cero inmediatamente
+                        countersToAnimate.forEach(counter => {
+                            counter.setAttribute('data-counting', 'false'); // Detiene el ciclo si seguía contando
+                            counter.innerText = '0';
+                        });
+                    }
+                });
+            }, { threshold: 0.3 }); // El 30% de la sección debe ser visible para arrancar
+
+            const statsSection = document.getElementById('nosotros');
+            if (statsSection) {
+                statsObserver.observe(statsSection);
+            }
+
         });
     </script>
 </body>
