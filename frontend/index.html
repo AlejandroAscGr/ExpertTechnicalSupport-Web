@@ -3,80 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ISANA LABS</title>
+    <title>ISANA LABS - Expert Technical Support</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Iconos -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="./css/style.css" rel="stylesheet">
+    <!-- CSS Personalizado -->
+    <link href="css/style.css" rel="stylesheet">
 </head>
-<body class="login-bg">
+<body class="app-bg">
 
-    <div class="container d-flex justify-content-center align-items-center vh-100 position-relative content-wrapper">
-        
-        <div class="login-card rounded-4 shadow-lg d-flex flex-column flex-lg-row overflow-hidden">
+    <!-- CABECERA MÓVIL (Solo visible en celulares y tablets) -->
+    <header class="d-lg-none glass-header p-3 d-flex justify-content-between align-items-center sticky-top">
+        <div class="d-flex align-items-center">
+            <img src="img/logoETS75px.png" alt="Logo ETS" style="max-height: 40px; width: auto;" class="me-2">
+            <span class="fw-bold text-dark fs-5">ISANA LABS</span>
+        </div>
+        <button class="btn btn-outline-success border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
+            <i class="bi bi-list fs-2"></i>
+        </button>
+    </header>
+
+    <!-- Contenedor Principal Flex -->
+    <div class="d-flex">
+
+        <!-- MENÚ LATERAL MINIMIZABLE (Fijo en PC, Desplegable en Móvil) -->
+        <nav id="sidebar" class="offcanvas-lg offcanvas-start glass-sidebar d-flex flex-column flex-shrink-0 p-3 vh-100 position-fixed transition-all" tabindex="-1" aria-labelledby="sidebarMenuLabel">
             
-            <div class="left-panel d-flex flex-column justify-content-center align-items-center text-center p-5">
-                <h2 class="fw-bold text-white mb-2">¡Hola, Bienvenido!</h2>
-                <p class="text-white-50 mb-4">¿No tienes una Cuenta?</p>
-                <button type="button" class="btn btn-outline-light rounded-pill px-5 py-2 fw-semibold">
-                    Registrarse
+            <!-- Botón cerrar (Solo Móvil) -->
+            <div class="offcanvas-header d-lg-none p-0 mb-3 justify-content-end">
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Cerrar"></button>
+            </div>
+
+            <!-- Botón para Contraer/Expandir (Solo PC) -->
+            <div class="d-none d-lg-flex justify-content-end mb-3">
+                <button id="toggleSidebar" class="btn btn-sm text-success border-0 glass-hover px-2 py-1">
+                    <i class="bi bi-list fs-3"></i>
                 </button>
             </div>
 
-            <div class="right-panel p-5 d-flex flex-column justify-content-center">
-                
-                <div class="mb-4">
-                    <div class="d-flex justify-content-center align-items-center mb-3">
-                        <div class="me-3">
-                            <img src="img/logoETS75px.png" alt="Logo ETS" style="max-height: 60px; width: auto;">
+            <!-- Logos -->
+            <div class="text-center mb-5 logo-container d-none d-lg-block">
+                <img src="img/logoETS75px.png" alt="Logo ETS" style="max-height: 50px; width: auto;" class="mb-2">
+                <div class="logo-text">
+                    <h5 class="fw-bold text-dark mb-0">ISANA LABS</h5>
+                    <small class="text-secondary">Expert Technical Support</small>
+                </div>
+            </div>
+
+            <!-- Navegación -->
+            <ul class="nav nav-pills flex-column mb-auto gap-2">
+                <li class="nav-item">
+                    <a href="#inicio" class="nav-link active-glass d-flex align-items-center">
+                        <i class="bi bi-house-door fs-5 mb-0"></i> 
+                        <span class="nav-text ms-3">Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#nosotros" class="nav-link text-dark glass-hover d-flex align-items-center">
+                        <i class="bi bi-people fs-5 mb-0"></i> 
+                        <span class="nav-text ms-3">Sobre Nosotros</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#servicios" class="nav-link text-dark glass-hover d-flex align-items-center">
+                        <i class="bi bi-tools fs-5 mb-0"></i> 
+                        <span class="nav-text ms-3">Servicios</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#beneficios" class="nav-link text-dark glass-hover d-flex align-items-center">
+                        <i class="bi bi-award fs-5 mb-0"></i> 
+                        <span class="nav-text ms-3">Beneficios</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#contacto" class="nav-link text-dark glass-hover d-flex align-items-center">
+                        <i class="bi bi-envelope fs-5 mb-0"></i> 
+                        <span class="nav-text ms-3">Contacto</span>
+                    </a>
+                </li>
+            </ul>
+
+            <hr class="text-secondary opacity-25 divider-line">
+            
+            <!-- Btn Login -->
+            <div class="mt-2 login-btn-container">
+                <a href="login.html" class="btn btn-success w-100 py-2 fw-bold shadow-sm d-flex justify-content-center align-items-center text-nowrap">
+                    <i class="bi bi-box-arrow-in-right fs-5"></i> 
+                    <span class="nav-text ms-2">Iniciar Sesión</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main id="mainContent" class="main-content flex-grow-1 p-4 p-lg-5 overflow-auto w-100 transition-all">
+            
+            <!-- Sección: Inicio (Hero) -->
+            <section id="inicio" class="glass-card rounded-4 p-4 p-lg-5 mb-5 mt-lg-3 shadow-sm position-relative overflow-hidden">
+                <div class="row align-items-center position-relative" style="z-index: 2;">
+                    <div class="col-lg-7">
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill mb-3">
+                            <i class="bi bi-check-circle-fill me-1"></i> Líderes en Soporte TI
+                        </span>
+                        <h1 class="fw-bold display-5 mb-4 text-dark">Soluciones tecnológicas inteligentes para tu empresa</h1>
+                        <p class="text-secondary lead mb-4">Gestionamos, reparamos y optimizamos tus recursos informáticos y redes. Tu negocio nunca se detiene, nuestro soporte tampoco.</p>
+                        
+                        <!-- Puntos de confianza -->
+                        <div class="d-flex flex-wrap gap-3 mb-4">
+                            <div class="d-flex align-items-center text-dark fw-medium small">
+                                <i class="bi bi-shield-check text-success fs-5 me-2"></i> 100% Seguro
+                            </div>
+                            <div class="d-flex align-items-center text-dark fw-medium small">
+                                <i class="bi bi-clock-history text-success fs-5 me-2"></i> Soporte 24/7
+                            </div>
+                            <div class="d-flex align-items-center text-dark fw-medium small">
+                                <i class="bi bi-person-badge text-success fs-5 me-2"></i> Expertos Certificados
+                            </div>
                         </div>
-                        <div class="text-start" style="color: #5c636a; line-height: 1.1;">
-                            <div class="fs-4 fw-medium">Expert</div>
-                            <div class="fs-4 fw-bold">Technical</div>
-                            <div class="fs-4 fw-bold">Support</div>
-                        </div>
+
+                        <a href="#servicios" class="btn btn-success px-4 py-2 rounded-pill fw-semibold shadow-sm me-2 mb-2">Ver Servicios</a>
+                        <a href="#contacto" class="btn btn-outline-dark px-4 py-2 rounded-pill fw-semibold mb-2">Contáctanos</a>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center border-top pt-2 mx-5">
-                        <p class="text-secondary small mb-0">Powered by ISANA LABS</p>
+                    <div class="col-lg-5 mt-5 mt-lg-0">
+                        <div class="image-placeholder rounded-4 d-flex justify-content-center align-items-center shadow-sm" style="min-height: 350px;">
+                            <div class="text-center text-secondary">
+                                <i class="bi bi-laptop fs-1 mb-2"></i>
+                                <p class="mb-0 small">Imagen representativa de Servidores/IT</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </section>
 
-                <h3 class="text-center fw-bold mb-4 text-dark">Iniciar Sesión</h3>
-
-                <form id="loginForm">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control glass-input custom-rounded-start" placeholder="Usuario / Correo" required>
-                        <span class="input-group-text glass-addon"><i class="bi bi-person text-secondary"></i></span>
-                    </div>
-                    
-                    <div class="input-group mb-2">
-                        <input type="password" class="form-control glass-input custom-rounded-start" placeholder="Password" required>
-                        <span class="input-group-text glass-addon"><i class="bi bi-lock text-secondary"></i></span>
-                    </div>
-                    
-                    <div class="text-center mb-4">
-                        <a href="#" class="text-success small text-decoration-none fw-semibold">¿Olvidaste tu contraseña?</a>
-                    </div>
-
-                    <button type="submit" class="btn btn-success w-100 py-2 fw-bold login-btn mb-4">
-                        Iniciar Sesión
-                    </button>
-                    
-                    <div class="text-center mt-2">
-                        <p class="text-secondary small mb-3">o Iniciar Sesión con las Plataformas Sociales</p>
-                        <div class="d-flex justify-content-center gap-2">
-                            <button type="button" class="btn social-btn"><i class="bi bi-google"></i></button>
-                            <button type="button" class="btn social-btn"><i class="bi bi-facebook"></i></button>
-                            <button type="button" class="btn social-btn"><i class="bi bi-github"></i></button>
-                            <button type="button" class="btn social-btn"><i class="bi bi-linkedin"></i></button>
+            <!-- Sección: Sobre Nosotros -->
+            <section id="nosotros" class="mb-5 pt-3">
+                <h3 class="fw-bold text-dark mb-4 ms-2"><i class="bi bi-dash text-success"></i> Sobre Nosotros</h3>
+                <div class="glass-card rounded-4 p-4 p-lg-5 shadow-sm">
+                    <div class="row align-items-center">
+                        <div class="col-md-5 mb-4 mb-md-0">
+                            <div class="image-placeholder placeholder-vertical rounded-4 d-flex justify-content-center align-items-center">
+                                <span class="text-secondary small"><i class="bi bi-camera me-2"></i>Imagen Equipo ISANA</span>
+                            </div>
+                        </div>
+                        <div class="col-md-7 ps-lg-5">
+                            <h4 class="fw-bold mb-3">Más que soporte, somos tus aliados estratégicos</h4>
+                            <p class="text-secondary">En ISANA LABS entendemos que la tecnología es el corazón de tu negocio. Nos dedicamos a ofrecer soluciones integrales de infraestructura, redes y mantenimiento de equipos con una visión clara: <strong>simplificar la tecnología para que tú puedas enfocarte en crecer</strong>.</p>
+                            <p class="text-secondary mb-4">Contamos con un equipo altamente capacitado y un sistema de gestión de tickets avanzado (ETS) para asegurar la continuidad de tus operaciones sin interrupciones.</p>
+                            
+                            <!-- Estadísticas Rápidas -->
+                            <div class="row text-center g-3">
+                                <div class="col-4">
+                                    <h3 class="fw-bold text-success mb-0">+500</h3>
+                                    <p class="text-secondary small mb-0">Tickets Resueltos</p>
+                                </div>
+                                <div class="col-4 border-start border-end">
+                                    <h3 class="fw-bold text-success mb-0">99%</h3>
+                                    <p class="text-secondary small mb-0">Uptime Garantizado</p>
+                                </div>
+                                <div class="col-4">
+                                    <h3 class="fw-bold text-success mb-0">24/7</h3>
+                                    <p class="text-secondary small mb-0">Monitoreo</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </form>
-                
-            </div>
-            
-        </div>
+                </div>
+            </section>
+
+            <!-- Sección: Servicios -->
+            <section id="servicios" class="mb-5 pt-3">
+                <h3 class="fw-bold text-dark mb-4 ms-2"><i class="bi bi-dash text-success"></i> Nuestros Servicios</h3>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="glass-card h-100 rounded-4 p-4 p-lg-5 shadow-sm text-center card-hover">
+                            <div class="icon-box mx-auto mb-4 text-success shadow-sm">
+                                <i class="bi bi-hdd-network fs-2"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">Infraestructura y Redes</h5>
+                            <p class="text-secondary small mb-0">Diseño, instalación, configuración y monitoreo activo de redes corporativas. Optimizamos tu conectividad para máxima velocidad y estabilidad.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="glass-card h-100 rounded-4 p-4 p-lg-5 shadow-sm text-center card-hover">
+                            <div class="icon-box mx-auto mb-4 text-success shadow-sm">
+                                <i class="bi bi-pc-display fs-2"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">Mantenimiento de Equipos</h5>
+                            <p class="text-secondary small mb-0">Soporte preventivo y correctivo para estaciones de trabajo, laptops y servidores. Alargamos la vida útil de tu hardware empresarial.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="glass-card h-100 rounded-4 p-4 p-lg-5 shadow-sm text-center card-hover">
+                            <div class="icon-box mx-auto mb-4 text-success shadow-sm">
+                                <i class="bi bi-shield-lock fs-2"></i>
+                            </div>
+                            <h5 class="fw-bold mb-3">Seguridad y Respaldos</h5>
+                            <p class="text-secondary small mb-0">Protección integral de datos, configuración de firewalls, respaldos automatizados en la nube y prevención de amenazas cibernéticas.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Por qué elegirnos -->
+            <section id="beneficios" class="mb-5 pt-3">
+                <div class="glass-card rounded-4 p-4 p-lg-5 shadow-sm">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <h3 class="fw-bold text-dark mb-3">El respaldo técnico que tu equipo merece</h3>
+                            <p class="text-secondary mb-4">No somos solo un proveedor, operamos como tu propio departamento de TI extendido.</p>
+                            
+                            <!-- Lista de beneficios -->
+                            <div class="d-flex mb-3">
+                                <div class="flex-shrink-0 mt-1">
+                                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;">
+                                        <i class="bi bi-lightning-charge-fill"></i>
+                                    </div>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="fw-bold mb-1">Tiempos de Respuesta Récord</h6>
+                                    <p class="text-secondary small">Nuestro portal ETS (Expert Technical Support) prioriza tus urgencias automáticamente.</p>
+                                </div>
+                            </div>
+                            <div class="d-flex mb-3">
+                                <div class="flex-shrink-0 mt-1">
+                                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;">
+                                        <i class="bi bi-graph-up-arrow"></i>
+                                    </div>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="fw-bold mb-1">Escalabilidad Garantizada</h6>
+                                    <p class="text-secondary small">Soluciones que crecen al mismo ritmo que tu empresa sin costos ocultos.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <!-- Imagen descriptiva -->
+                            <div class="image-placeholder rounded-4 d-flex justify-content-center align-items-center shadow-sm" style="min-height: 300px;">
+                                <div class="text-center text-secondary">
+                                    <i class="bi bi-bar-chart-steps fs-1 mb-2"></i>
+                                    <p class="mb-0 small">Dashboard / Gráficos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Contacto -->
+            <section id="contacto" class="mb-5 pt-3">
+                <div class="glass-card rounded-4 p-5 shadow-sm text-center position-relative overflow-hidden">
+                    <!-- Efecto de luz de fondo en la tarjeta -->
+                    <div class="position-absolute top-50 start-50 translate-middle w-100 h-100" style="background: radial-gradient(circle, rgba(25,135,84,0.1) 0%, transparent 70%); z-index: 0;"></div>
+                    
+                    <div class="position-relative" style="z-index: 1;">
+                        <div class="icon-box mx-auto mb-4 text-success bg-white shadow-sm" style="width: 80px; height: 80px; border-radius: 25px;">
+                            <i class="bi bi-headset fs-1"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3">¿Listo para optimizar tu infraestructura?</h3>
+                        <p class="text-secondary mb-4 mx-auto" style="max-width: 600px;">
+                            Déjanos tus datos o ingresa a nuestro portal. Nuestro equipo de ingenieros está listo para brindarte el mejor soporte corporativo.
+                        </p>
+                        <a href="mailto:contacto@isanalabs.com" class="btn btn-success px-5 py-3 rounded-pill fw-bold shadow-sm mb-3 me-2">
+                            <i class="bi bi-envelope me-2"></i> Solicitar Asesoría
+                        </a>
+                        <a href="login.html" class="btn btn-outline-success px-5 py-3 rounded-pill fw-bold shadow-sm mb-3 bg-white">
+                            Ir al Portal ETS
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="pt-4 pb-2 border-top border-success border-opacity-10">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <div class="mb-3 mb-md-0 d-flex align-items-center">
+                        <img src="img/logo-isana.png" alt="ISANA LABS" style="height: 20px;" class="me-2 opacity-75">
+                        <small class="text-secondary">&copy; 2026 ISANA LABS. Todos los derechos reservados.</small>
+                    </div>
+                    <ul class="list-unstyled d-flex gap-3 mb-0">
+                        <li><a href="#" class="text-secondary text-decoration-none small glass-hover px-2 py-1">Términos</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none small glass-hover px-2 py-1">Privacidad</a></li>
+                        <li><a href="#" class="text-success"><i class="bi bi-linkedin"></i></a></li>
+                        <li><a href="#" class="text-success"><i class="bi bi-twitter-x"></i></a></li>
+                    </ul>
+                </div>
+            </footer>
+
+        </main>
     </div>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para Minimizar/Expandir la Barra Lateral -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const toggleBtn = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+
+            if(toggleBtn && sidebar && mainContent) {
+                toggleBtn.addEventListener('click', function() {
+                    sidebar.classList.toggle('collapsed');
+                    mainContent.classList.toggle('expanded');
+                });
+            }
+        });
+    </script>
 </body>
 </html>

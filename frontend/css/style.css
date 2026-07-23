@@ -1,6 +1,8 @@
-/* =========================================
-   Fondo Colorido Luminoso (Mesh Gradient)
-========================================= */
+/* ==========================================================================
+   SECCIÓN 1: ESTILOS GENERALES Y LOGIN (login.html)
+   ========================================================================== */
+
+/* Fondo Colorido Luminoso (Mesh Gradient) para Login */
 .login-bg {
     background: 
         radial-gradient(circle at 15% 10%, rgba(32, 201, 151, 0.35) 0%, transparent 45%),
@@ -17,39 +19,34 @@
     z-index: 10;
 }
 
-/* =========================================
-   Tarjeta Principal Dividida (Más amplia)
-========================================= */
+/* Tarjeta Principal Dividida (Login) */
 .login-card {
     background: rgba(255, 255, 255, 0.8); 
     backdrop-filter: blur(20px); 
     -webkit-backdrop-filter: blur(20px);
     width: 100%;
-    max-width: 1050px; /* Aumentamos el ancho para que sea más rectangular */
-    min-height: 600px; /* Un poco más de altura para que respiren los elementos */
+    max-width: 1050px; 
+    min-height: 600px; 
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 
                 0 5px 15px rgba(25, 135, 84, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.9) !important;
 }
 
-/* =========================================
-   Panel Izquierdo (Diseño Curvo Verde)
-========================================= */
+/* Panel Izquierdo (Diseño Curvo Verde - Login) */
 .left-panel {
     background: linear-gradient(135deg, #20c997 0%, #198754 100%);
-    width: 40%; /* Reducimos un poco el porcentaje para darle más espacio al formulario */
-    /* Curva suavizada para adaptarse al nuevo alto */
+    width: 40%; 
     border-radius: 0 200px 200px 0;
     position: relative;
     z-index: 1;
 }
 
 .right-panel {
-    width: 60%; /* Más espacio para que los inputs no se sientan apretados */
-    padding: 3rem 6rem !important; /* Aumentamos el padding lateral interno */
+    width: 60%; 
+    padding: 3rem 6rem !important; 
 }
 
-/* Adaptación a dispositivos móviles */
+/* Adaptación a dispositivos móviles para Login */
 @media (max-width: 991px) {
     .left-panel, .right-panel {
         width: 100%;
@@ -60,13 +57,11 @@
     }
 }
 
-/* =========================================
-   Campos de Entrada e Íconos (Inputs)
-========================================= */
+/* Campos de Entrada e Íconos (Inputs) */
 .glass-input {
     background: rgba(255, 255, 255, 0.8) !important;
     border: 1px solid rgba(25, 135, 84, 0.3) !important;
-    border-right: none !important; /* Se quita el borde derecho para fusionar con el ícono */
+    border-right: none !important; 
     color: #212529 !important;
     padding: 0.75rem 1rem;
 }
@@ -78,7 +73,7 @@
 .glass-addon {
     background: rgba(255, 255, 255, 0.8) !important;
     border: 1px solid rgba(25, 135, 84, 0.3) !important;
-    border-left: none !important; /* Fusión con el input */
+    border-left: none !important; 
     border-radius: 0 8px 8px 0 !important;
 }
 
@@ -94,11 +89,9 @@
     border-color: #198754 !important;
 }
 
-/* =========================================
-   Botones
-========================================= */
+/* Botones Generales */
 .login-btn {
-    background-color: #5c8df6; /* Azul suave que hace contraste, o puedes usar #198754 si prefieres verde */
+    background-color: #5c8df6; 
     background: linear-gradient(90deg, #198754 0%, #20c997 100%);
     border: none;
     border-radius: 8px;
@@ -138,10 +131,11 @@
 }
 
 
+/* ==========================================================================
+   SECCIÓN 2: ESTILOS LANDING PAGE RESPONSIVA (index.html)
+   ========================================================================== */
 
-/* =========================================
-   Fondo Global (Aplica al Body de la Landing)
-========================================= */
+/* Fondo Global (Aplica al Body de la Landing) */
 .app-bg {
     background: 
         radial-gradient(circle at 15% 10%, rgba(32, 201, 151, 0.25) 0%, transparent 45%),
@@ -153,21 +147,57 @@
     overflow-x: hidden;
 }
 
-/* =========================================
-   Menú Lateral (Sidebar)
-========================================= */
+/* Transiciones Suaves Globales para el Menú */
+.transition-all {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Cabecera Móvil (Solo visible en celulares) */
+.glass-header {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(25, 135, 84, 0.15);
+    z-index: 1040;
+}
+
+/* Menú Lateral (Mini Sidebar) */
 .glass-sidebar {
     width: 280px;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border-right: 1px solid rgba(25, 135, 84, 0.15);
-    z-index: 1000;
+    z-index: 1050;
+    overflow-x: hidden; 
+}
+
+/* ESTADO CONTRAÍDO (Solo Íconos) */
+.glass-sidebar.collapsed {
+    width: 85px;
+}
+
+/* Oculta los textos y logos cuando está contraído */
+.glass-sidebar.collapsed .nav-text,
+.glass-sidebar.collapsed .logo-text,
+.glass-sidebar.collapsed .divider-line {
+    display: none !important;
+}
+
+/* Centra los íconos cuando está contraído */
+.glass-sidebar.collapsed .nav-link,
+.glass-sidebar.collapsed .login-btn-container a {
+    justify-content: center !important;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.glass-sidebar.collapsed .bi {
+    margin: 0 !important;
 }
 
 /* Links del menú */
 .glass-hover {
-    transition: all 0.2s ease;
     border-radius: 8px;
     font-weight: 500;
 }
@@ -175,39 +205,51 @@
 .glass-hover:hover {
     background: rgba(25, 135, 84, 0.08);
     color: #198754 !important;
-    transform: translateX(5px); /* Pequeño salto a la derecha al pasar el mouse */
 }
 
-/* Link Activo */
+/* Link Activo (Mejorado con borde lateral) */
 .active-glass {
-    background: rgba(25, 135, 84, 0.15) !important;
+    background: rgba(25, 135, 84, 0.12) !important;
     color: #146c43 !important;
     border-radius: 8px;
     font-weight: 600;
+    border-left: 4px solid #198754;
 }
 
-/* =========================================
-   Contenido Principal
-========================================= */
+/* Contenido Principal */
 .main-content {
-    margin-left: 280px; /* Deja el espacio exacto del Sidebar */
+    margin-left: 280px; /* Deja el espacio exacto del Sidebar expandido */
+}
+
+/* Cuando el sidebar se contrae, el contenido principal se expande */
+.main-content.expanded {
+    margin-left: 85px;
+}
+
+/* En móviles, quitar márgenes laterales */
+@media (max-width: 991.98px) {
+    .main-content, .main-content.expanded {
+        margin-left: 0 !important; 
+        padding-top: 1rem !important;
+    }
 }
 
 /* Tarjetas con efecto Cristal (Secciones) */
 .glass-card {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
 .card-hover {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
 }
 
 .card-hover:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(25, 135, 84, 0.1) !important;
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(25, 135, 84, 0.08) !important;
+    background: rgba(255, 255, 255, 0.85); 
 }
 
 /* Cajas de Íconos para Servicios */
@@ -225,19 +267,17 @@
 .card-hover:hover .icon-box {
     background: #198754;
     color: white !important;
+    transform: scale(1.1); 
 }
 
-/* =========================================
-   Espacios (Placeholders) para tus imágenes
-========================================= */
+/* Espacios (Placeholders) para tus imágenes */
 .image-placeholder {
-    background: rgba(0, 0, 0, 0.03);
+    background: rgba(255, 255, 255, 0.5);
     border: 2px dashed rgba(25, 135, 84, 0.2);
-    min-height: 300px;
     width: 100%;
 }
 
 .placeholder-vertical {
     min-height: 100%;
-    height: 350px;
+    height: 380px;
 }
