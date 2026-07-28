@@ -161,12 +161,13 @@
     z-index: 1040;
 }
 
-/* Menú Lateral (Mini Sidebar) */
+/* Menú Lateral (Mini Sidebar Sólido) */
 .glass-sidebar {
     width: 280px;
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    /* Color 100% sólido (Blanco) para distinguirse del fondo */
+    background-color: #ffffff; 
+    /* Sombra verde muy sutil para crear separación visual */
+    box-shadow: 4px 0 25px rgba(25, 135, 84, 0.08);
     border-right: 1px solid rgba(25, 135, 84, 0.15);
     z-index: 1050;
     overflow-x: hidden; 
