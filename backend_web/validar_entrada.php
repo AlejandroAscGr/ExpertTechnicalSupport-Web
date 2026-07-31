@@ -1,12 +1,13 @@
 <?php
     session_start();
 
-    include ("conexion.php"); 
-    $query = "Select nombresEmp, apellidosEmp, rolEmp from isana2labs where emailemp = ? and pass = ?";
+include("../backend_general/conexion.php");
+
+    $query = "Select nombresEmp, apellidosEmp, rolEmp from empleado where emailEmp = ? and pass = ?";
 
     $stmt = $mysqli->prepare($query);
 
-    $stmt->bind_param("ss", $_POST['emailemp'], $_POST['pass']);
+    $stmt->bind_param("ss", $_POST['emailEmp'], $_POST['pass']);
 
     $stmt->execute();
 
@@ -15,14 +16,14 @@
         if ($resultado->num_rows > 0){
             $row = $resultado->fetch_array();
             $_SESSION['usuario'] = $row['nombresEmp']." ". $row['apellidosEmp'];
+
             $_SESSION['perfil'] = $row['rolEmp']; 
-            header("Location: ../frontend");
+            header("Location: ../frontend/index.html");
 
         }else {
-             header("Location: ../");
-
+            header("Location: ../frontend/login.html");
         }
 
         $stmt->close();
-    include ("cerrar_conexion.php");
+    include("../backend_general/cerrar_conexion.php");
 ?>

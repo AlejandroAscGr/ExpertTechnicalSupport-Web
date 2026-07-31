@@ -42,14 +42,14 @@
 
                 <h3 class="text-center fw-bold mb-4 text-dark">Iniciar Sesión</h3>
 
-                <form id="loginForm">
+                <form id="loginForm" action="../backend_web/validar_entrada.php" method="POST">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control glass-input custom-rounded-start" placeholder="Usuario / Correo" required>
+                        <input name="emailEmp" type="text" class="form-control glass-input custom-rounded-start" placeholder="Usuario / Correo" required>
                         <span class="input-group-text glass-addon"><i class="bi bi-person text-secondary"></i></span>
                     </div>
                     
                     <div class="input-group mb-2">
-                        <input type="password" class="form-control glass-input custom-rounded-start" placeholder="Password" required>
+                        <input name="pass" type="password" class="form-control glass-input custom-rounded-start" placeholder="Password" required>
                         <span class="input-group-text glass-addon"><i class="bi bi-lock text-secondary"></i></span>
                     </div>
                     
