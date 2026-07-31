@@ -282,3 +282,16 @@
     min-height: 100%;
     height: 380px;
 }
+
+.services-link {
+    color: #198754;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.services-link:hover {
+    color: #146c43;
+    text-decoration: underline;
+}
