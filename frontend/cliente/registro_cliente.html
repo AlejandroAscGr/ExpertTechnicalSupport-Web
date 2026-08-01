@@ -17,6 +17,14 @@
 </head>
 
 <body class="app-bg">
+    
+    <div
+    id="mensajeRegistro"
+    class="alert alert-success text-center d-none m-3"
+    role="alert"
+>
+    Cuenta registrada con éxito. Redirigiendo al inicio de sesión...
+</div>
 
     <header class="glass-header p-3 shadow-sm">
         <div class="container d-flex justify-content-between align-items-center">
@@ -61,19 +69,18 @@
                         </p>
                     </div>
 
-                    <form action="#" method="POST">
+                    <form action="../../backend_web/registrar_cliente.php" method="POST">
 
                         <div class="row g-3">
 
                             <div class="col-md-6">
                                 <label for="nombre" class="form-label">
-                                    Nombre
-                                </label>
+                                    Nombre</label>
 
                                 <input type="text"
                                     class="form-control"
                                     id="nombre"
-                                    name="nombre"
+                                    name="nombreC"
                                     required>
 
                                 <label for="apellido" class="form-label">
@@ -83,7 +90,7 @@
                                 <input type="text"
                                     class="form-control"
                                     id="apellido"
-                                    name="apellido"
+                                    name="apellidoC"
                                     required>
 
                                 <label for="telefono" class="form-label">
@@ -93,7 +100,8 @@
                                 <input type="tel"
                                     class="form-control"
                                     id="telefono"
-                                    name="telefono"
+                                    name="telefonoC"
+                                    maxlength="10"
                                     required>
 
                                 <label for="correo" class="form-label">
@@ -103,7 +111,7 @@
                                 <input type="email"
                                     class="form-control"
                                     id="correo"
-                                    name="correo"
+                                    name="correoC"
                                     required>
 
                                 <label for="empresa" class="form-label">
@@ -113,7 +121,7 @@
                                 <input type="text"
                                     class="form-control"
                                     id="empresa"
-                                    name="empresa">
+                                    name="empresaC">
 
                             <label for="passC" class="form-label">
                                 Contraseña
@@ -123,6 +131,7 @@
                                 class="form-control"
                                 id="passC"
                                 name="passC"
+                                maxlength="20"
                                 required>
                         </div>
 
@@ -154,6 +163,23 @@
         </div>
 
     </main>
+
+
+    <script>
+    const parametros = new URLSearchParams(window.location.search);
+    const mensajeRegistro = document.getElementById("mensajeRegistro");
+
+    if (parametros.get("registro") === "exito") {
+        mensajeRegistro.classList.remove("d-none");
+
+        setTimeout(() => {
+            mensajeRegistro.classList.add("d-none");
+
+            window.location.replace("../login.html");
+        }, 3000);
+    }
+</script>
+    
 
 </body>
 
