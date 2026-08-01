@@ -1,56 +1,108 @@
 <?php
-    session_start();
 
+session_start();
 include("../backend_general/conexion.php");
 
-    $query = "Select nombresEmp, apellidosEmp, rolEmp from empleado where emailEmp = ? and pass = ?";
+// Recibe los datos enviados desde el formulario
+$correo = $_POST['emailEmp'];
+$password = $_POST['pass'];
 
-    $stmt = $mysqli->prepare($query);
+// Busca las credenciales en empleados y clientes
+$query = "
+    SELECT
+        idEmpleado AS id,
+        nombresEmp AS nombre,
+        apellidosEmp AS apellido,
+        rolEmp AS perfil,
+        NULL AS empresa
+    FROM empleado
+    WHERE emailEmp = ? AND pass = ?
 
-    $stmt->bind_param("ss", $_POST['emailEmp'], $_POST['pass']);
+    UNION ALL
 
-    $stmt->execute();
+    SELECT
+        idCliente AS id,
+        nombreC AS nombre,
+        apellidoC AS apellido,
+        'CLIENTE' AS perfil,
+        empresaC AS empresa
+    FROM cliente
+    WHERE correoC = ? AND passC = ?
 
-    $resultado = $stmt->get_result();
+    LIMIT 1
+";
 
-        if ($resultado->num_rows > 0) {
+$stmt = $mysqli->prepare($query);
 
+// Coloca el correo y contraseña en los cuatro signos ?
+$stmt->bind_param(
+    "ssss",
+    $correo,
+    $password,
+    $correo,
+    $password
+);
+
+$stmt->execute();
+
+$resultado = $stmt->get_result();
+
+// Comprueba si encontró una cuenta
+if ($resultado->num_rows > 0) {
+
+    // Guarda la cuenta encontrada
     $row = $resultado->fetch_array();
 
+    // Genera un nuevo identificador para la sesión
     session_regenerate_id(true);
 
+    // Guarda el nombre completo
     $_SESSION['usuario'] =
-        $row['nombresEmp'] . " " . $row['apellidosEmp'];
+        $row['nombre'] . " " . $row['apellido'];
 
-    $_SESSION['perfil'] = strtoupper(trim($row['rolEmp']));
+    // Guarda el perfil en mayúsculas
+    $_SESSION['perfil'] =
+        strtoupper(trim($row['perfil']));
 
+    // Envía al usuario al panel correspondiente
     switch ($_SESSION['perfil']) {
 
         case "DIRECTOR":
+
+            $_SESSION['idEmpleado'] = $row['id'];
+
             header("Location: ../frontend/dg/indexdg.html");
             exit;
 
         case "TECNICO":
+
+            $_SESSION['idEmpleado'] = $row['id'];
+
             header("Location: ../frontend/tc/indextc.html");
             exit;
 
+        case "CLIENTE":
 
-        // case "CL":
-        //     header("Location: ../frontend/cliente/index.php");
-        //     exit;
-        //para el caso de cliente, se puede agregar un nuevo caso aquí si es necesario.
+            $_SESSION['idCliente'] = $row['id'];
+            $_SESSION['empresa'] = $row['empresa'];
+
+            header("Location: ../frontend/cliente/indexcliente.html");
+            exit;
 
         default:
+
+            // Si el perfil no está reconocido, destruye la sesión
             session_destroy();
+
             header("Location: ../frontend/login.html");
             exit;
     }
 
 } else {
+
+    // Si las credenciales no coinciden, regresa al login
     header("Location: ../frontend/login.html");
     exit;
 }
 
-        $stmt->close();
-    include("../backend_general/cerrar_conexion.php");
 ?>
