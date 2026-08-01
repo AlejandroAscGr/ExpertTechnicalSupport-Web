@@ -1,5 +1,5 @@
 <?php
-include ("../backend_general/conexion.php");
+include("../backend_general/conexion.php");
 
 // estas son las variales que se van a actualizar cawn
 $idTicket = $_GET['idTicket'];
@@ -15,7 +15,7 @@ if ($status == "Cerrado") {
         notasTecnico = ?,
         fechaCierreT = CURDATE()
     WHERE idTicket = ?";
-    
+
     $stmt = $mysqli->prepare($query);
     $stmt->bind_param("sssi", $modalidad, $status, $notas, $idTicket);
     // si no esta cerrado la fecha queda como null cawn
@@ -31,7 +31,7 @@ if ($status == "Cerrado") {
     // ahora se prepara el statement cawn
     $stmt = $mysqli->prepare($query);
     $stmt->bind_param("sssi", $modalidad, $status, $notas, $idTicket);
-}   
+}
 
 // si falla ps que tire error y si no que muestre que si cawn
 // aqui se encarga el yeison 
@@ -44,5 +44,7 @@ if ($stmt->execute()) {
 
 // y ps ya, se acaba el pedo
 $stmt->close();
-include ("../backend_general/cerrar_conexion.php");
+include("../backend_general/cerrar_conexion.php");
+
+// la cague con el nombre, a ver si no me chingo el git cawn
 ?>
