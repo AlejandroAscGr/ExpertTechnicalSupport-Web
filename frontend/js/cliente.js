@@ -1,88 +1,3 @@
-function setupNewTicket() {
-
-    const form = document.getElementById("newTicketForm");
-
-    if (!form) return;
-
-
-    const policySelect =
-        document.getElementById("ticketPolicy");
-
-    const policies = getPolicies().filter(
-        policy => policy.status !== "Cancelada"
-    );
-
-
-    policies.forEach(policy => {
-
-        const option = document.createElement("option");
-
-        option.value = policy.id;
-
-        option.textContent =
-            `${policy.business} - Plan ${policy.plan}`;
-
-        policySelect.appendChild(option);
-
-    });
-
-
-    form.addEventListener("submit", event => {
-
-        event.preventDefault();
-
-
-        const tickets = getTickets();
-
-        const nextNumber =
-            String(tickets.length + 1).padStart(3, "0");
-
-
-        const ticket = {
-
-            id: `TKT-${nextNumber}`,
-
-            policyId:
-                document.getElementById("ticketPolicy").value,
-
-            modality:
-                document.getElementById("ticketModality").value,
-
-            concept:
-                document.getElementById("ticketConcept").value.trim(),
-
-            description:
-                document.getElementById("ticketDescription").value.trim(),
-
-            status: "Pendiente",
-
-            technician: null,
-
-            technicalNotes: "",
-
-            creationDate:
-                new Date().toLocaleDateString("es-MX"),
-
-            attentionDate: null,
-
-            clientApproval: false,
-
-            closingDate: null
-
-        };
-
-
-        tickets.push(ticket);
-
-        saveTickets(tickets);
-
-
-        window.location.href =
-            `tickets_cliente.html?created=1`;
-
-    });
-
-}
 document.addEventListener("DOMContentLoaded", function () {
     resaltarPaginaActual();
 
@@ -198,6 +113,106 @@ document.addEventListener("DOMContentLoaded", function () {
     function saveTickets(tickets) {
         localStorage.setItem("etsDemoTickets", JSON.stringify(tickets));
     }
+    // Crear un nuevo ticket
+const newTicketForm = document.getElementById(
+    "newTicketForm"
+);
+
+if (newTicketForm) {
+
+    const ticketPolicy = document.getElementById(
+        "ticketPolicy"
+    );
+
+    const polizasActivas = polizas.filter(
+        function (poliza) {
+            return poliza.estado !== "Cancelada";
+        }
+    );
+
+
+    // Mostrar las pólizas disponibles
+    polizasActivas.forEach(function (poliza) {
+
+        const opcion = document.createElement(
+            "option"
+        );
+
+        opcion.value = poliza.id;
+
+        opcion.textContent =
+            poliza.negocio +
+            " - Plan " +
+            poliza.plan;
+
+        ticketPolicy.appendChild(opcion);
+    });
+
+
+    newTicketForm.addEventListener(
+        "submit",
+        function (evento) {
+
+            evento.preventDefault();
+
+            const tickets = getTickets();
+
+            const nuevoNumero =
+                String(tickets.length + 1)
+                    .padStart(3, "0");
+
+
+            const nuevoTicket = {
+
+                id: "TKT-" + nuevoNumero,
+
+                idPoliza: Number(
+                    ticketPolicy.value
+                ),
+
+                modalidad:
+                    document.getElementById(
+                        "ticketModality"
+                    ).value,
+
+                concepto:
+                    document.getElementById(
+                        "ticketConcept"
+                    ).value.trim(),
+
+                descripcion:
+                    document.getElementById(
+                        "ticketDescription"
+                    ).value.trim(),
+
+                estado: "Pendiente",
+
+                idEmpleado: null,
+
+                notasTecnico: "",
+
+                fechaCreacion:
+                    new Date()
+                        .toLocaleDateString("es-MX"),
+
+                fechaAtencion: null,
+
+                conformidadCliente: false,
+
+                fechaCierre: null
+            };
+
+
+            tickets.push(nuevoTicket);
+
+            saveTickets(tickets);
+
+            window.location.href =
+                "tickets_cliente.html?created=1";
+        }
+    );
+}
+
 
 
     function obtenerIniciales(nombre, apellido) {
