@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Mis pólizas - ETS</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    >
+
+    <link
+        href="../css/style.css"
+        rel="stylesheet"
+    >
+</head>
+
+<body class="app-bg client-area">
+
+    <header class="glass-header sticky-top shadow-sm">
+
+        <nav class="container navbar navbar-expand-lg py-3">
+
+            <a
+                class="navbar-brand d-flex align-items-center"
+                href="indexcliente.html"
+            >
+                <img
+                    src="../img/logoETS75px.png"
+                    alt="Logo ETS"
+                    class="client-logo me-3"
+                >
+
+                <span>
+                    <strong class="d-block lh-1">
+                        Expert Technical Support
+                    </strong>
+
+                    <small class="text-secondary">
+                        Panel del cliente
+                    </small>
+                </span>
+            </a>
+
+            <button
+                class="navbar-toggler border-0"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#clientNav"
+            >
+                <i class="bi bi-list fs-2"></i>
+            </button>
+
+            <div
+                class="collapse navbar-collapse"
+                id="clientNav"
+            >
+
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link client-nav-link"
+                            href="indexcliente.html"
+                        >
+                            <i class="bi bi-grid me-1"></i>
+                            Resumen
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link client-nav-link active"
+                            href="polizas_cliente.html"
+                        >
+                            <i class="bi bi-file-earmark-check me-1"></i>
+                            Mis pólizas
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link client-nav-link"
+                            href="perfil_cliente.html"
+                        >
+                            <i class="bi bi-person me-1"></i>
+                            Mi perfil
+                        </a>
+                    </li>
+
+                    <li class="nav-item ms-lg-2">
+                        <a
+                            class="btn btn-outline-success"
+                            href="../../backend_general/cerrar_sesion.php"
+                        >
+                            <i class="bi bi-box-arrow-right me-1"></i>
+                            Salir
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+    <main class="container py-4 py-lg-5">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb small">
+
+                <li class="breadcrumb-item">
+                    <a href="indexcliente.html">
+                        Panel
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    Mis pólizas
+                </li>
+
+            </ol>
+
+        </nav>
+
+        <section class="glass-card rounded-4 p-4 p-lg-5 shadow-sm">
+
+            <div
+                class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4"
+            >
+
+                <div>
+
+                    <span class="eyebrow">
+                        Coberturas contratadas
+                    </span>
+
+                    <h1 class="h2 fw-bold mt-2 mb-1">
+                        Mis pólizas
+                    </h1>
+
+                    <p class="text-secondary mb-0">
+                        Administra la cobertura de cada uno de tus negocios.
+                    </p>
+
+                </div>
+
+                <a
+                    href="nueva_poliza.html"
+                    class="btn btn-success login-btn px-4"
+                >
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Nueva póliza
+                </a>
+
+            </div>
+
+            <div class="policy-filter mb-4">
+
+                <button
+                    class="active"
+                    data-policy-filter="all"
+                >
+                    Todas
+                </button>
+
+                <button data-policy-filter="Activa">
+                    Activas
+                </button>
+
+                <button data-policy-filter="Por renovar">
+                    Por renovar
+                </button>
+
+                <button data-policy-filter="Cancelada">
+                    Canceladas
+                </button>
+
+            </div>
+
+            <!-- JavaScript colocará aquí las tarjetas de las pólizas -->
+            <div
+                id="policiesGrid"
+                class="row g-4"
+            ></div>
+
+        </section>
+
+    </main>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+    <script src="../js/cliente.js"></script>
+
+</body>
+
+</html>

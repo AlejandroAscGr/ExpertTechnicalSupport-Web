@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Nueva póliza - ETS</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    >
+
+    <link
+        href="../css/style.css"
+        rel="stylesheet"
+    >
+</head>
+
+<body class="app-bg client-area">
+
+    <header class="glass-header sticky-top shadow-sm">
+
+        <nav class="container navbar navbar-expand-lg py-3">
+
+            <a
+                class="navbar-brand d-flex align-items-center"
+                href="indexcliente.html"
+            >
+                <img
+                    src="../img/logoETS75px.png"
+                    alt="Logo ETS"
+                    class="client-logo me-3"
+                >
+
+                <span>
+                    <strong class="d-block lh-1">
+                        Expert Technical Support
+                    </strong>
+
+                    <small class="text-secondary">
+                        Panel del cliente
+                    </small>
+                </span>
+            </a>
+
+            <div class="ms-auto">
+
+                <a
+                    href="polizas_cliente.html"
+                    class="btn btn-outline-success"
+                >
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Regresar
+                </a>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+    <main class="container py-4 py-lg-5">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb small">
+
+                <li class="breadcrumb-item">
+                    <a href="indexcliente.html">
+                        Panel
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item">
+                    <a href="polizas_cliente.html">
+                        Mis pólizas
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    Nueva póliza
+                </li>
+
+            </ol>
+
+        </nav>
+
+        <section class="glass-card rounded-4 p-4 p-lg-5 shadow-sm">
+
+            <div class="text-center mx-auto mb-5 form-heading">
+
+                <span class="eyebrow">
+                    Nueva cobertura
+                </span>
+
+                <h1 class="h2 fw-bold mt-2">
+                    Contratar una póliza
+                </h1>
+
+                <p class="text-secondary">
+                    Selecciona el tipo de plan y registra los datos
+                    del negocio que tendrá la cobertura.
+                </p>
+
+            </div>
+
+            <form id="newPolicyForm">
+
+                <div class="form-section-title mb-4">
+
+                    <span>1</span>
+
+                    <div>
+                        <h2 class="h5 fw-bold mb-0">
+                            Selecciona el tipo de póliza
+                        </h2>
+
+                        <small class="text-secondary">
+                            Elige la cobertura adecuada para tu negocio.
+                        </small>
+                    </div>
+
+                </div>
+
+                <div class="row g-4 mb-5">
+
+                    <div class="col-md-4">
+
+                        <label class="plan-option">
+
+                            <input
+                                type="radio"
+                                name="policyPlan"
+                                value="Esencial"
+                                required
+                            >
+
+                            <span class="plan-check">
+                                <i class="bi bi-check-lg"></i>
+                            </span>
+
+                            <span class="plan-icon">
+                                <i class="bi bi-building"></i>
+                            </span>
+
+                            <strong>
+                                Esencial
+                            </strong>
+
+                            <small>
+                                Hasta 20 dispositivos
+                            </small>
+
+                            <span class="plan-capacity">
+                                10 presenciales · 20 remotos · 8 asesorías
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="plan-option featured">
+
+                            <span class="popular-label">
+                                Más elegido
+                            </span>
+
+                            <input
+                                type="radio"
+                                name="policyPlan"
+                                value="Profesional"
+                            >
+
+                            <span class="plan-check">
+                                <i class="bi bi-check-lg"></i>
+                            </span>
+
+                            <span class="plan-icon">
+                                <i class="bi bi-buildings"></i>
+                            </span>
+
+                            <strong>
+                                Profesional
+                            </strong>
+
+                            <small>
+                                Hasta 45 dispositivos
+                            </small>
+
+                            <span class="plan-capacity">
+                                15 presenciales · 30 remotos · 12 asesorías
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="plan-option">
+
+                            <input
+                                type="radio"
+                                name="policyPlan"
+                                value="Empresarial"
+                            >
+
+                            <span class="plan-check">
+                                <i class="bi bi-check-lg"></i>
+                            </span>
+
+                            <span class="plan-icon">
+                                <i class="bi bi-diagram-3"></i>
+                            </span>
+
+                            <strong>
+                                Empresarial
+                            </strong>
+
+                            <small>
+                                Hasta 90 dispositivos
+                            </small>
+
+                            <span class="plan-capacity">
+                                25 presenciales · 50 remotos · 20 asesorías
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <div class="form-section-title">
+
+                    <span>2</span>
+
+                    <div>
+                        <h2 class="h5 fw-bold mb-0">
+                            Datos del negocio
+                        </h2>
+
+                        <small class="text-secondary">
+                            Esta información identificará la póliza.
+                        </small>
+                    </div>
+
+                </div>
+
+                <div class="row g-3 mt-1">
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="form-label"
+                            for="businessName"
+                        >
+                            Empresa o negocio
+                        </label>
+
+                        <input
+                            id="businessName"
+                            class="form-control client-input"
+                            type="text"
+                            required
+                            placeholder="Ej. Sucursal Centro"
+                        >
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="form-label"
+                            for="businessPhone"
+                        >
+                            Teléfono
+                        </label>
+
+                        <input
+                            id="businessPhone"
+                            class="form-control client-input"
+                            type="tel"
+                            maxlength="10"
+                            required
+                            placeholder="33 0000 0000"
+                        >
+
+                    </div>
+
+                    <div class="col-12">
+
+                        <label
+                            class="form-label"
+                            for="businessAddress"
+                        >
+                            Dirección
+                        </label>
+
+                        <input
+                            id="businessAddress"
+                            class="form-control client-input"
+                            type="text"
+                            required
+                            placeholder="Calle, número, colonia, ciudad y estado"
+                        >
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="form-label"
+                            for="businessEmail"
+                        >
+                            Correo de contacto
+                        </label>
+
+                        <input
+                            id="businessEmail"
+                            class="form-control client-input"
+                            type="email"
+                            required
+                            placeholder="contacto@negocio.com"
+                        >
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label
+                            class="form-label"
+                            for="businessContact"
+                        >
+                            Persona responsable
+                        </label>
+
+                        <input
+                            id="businessContact"
+                            class="form-control client-input"
+                            type="text"
+                            required
+                            placeholder="Nombre del contacto"
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-note mt-4">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    <p class="mb-0">
+                        <strong>Esta es una maqueta.</strong>
+                        Al continuar se creará una póliza de demostración;
+                        todavía no se realizará ningún cobro ni registro
+                        en la base de datos.
+                    </p>
+
+                </div>
+
+                <div
+                    class="d-flex flex-column flex-sm-row justify-content-end gap-2 mt-4"
+                >
+
+                    <a
+                        href="polizas_cliente.html"
+                        class="btn btn-light px-4"
+                    >
+                        Cancelar
+                    </a>
+
+                    <button
+                        class="btn btn-success login-btn px-4"
+                        type="submit"
+                    >
+                        Continuar
+                        <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+    <script src="../js/cliente.js"></script>
+
+</body>
+
+</html>

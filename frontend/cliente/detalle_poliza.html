@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Detalle de póliza - ETS</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    >
+
+    <link
+        href="../css/style.css"
+        rel="stylesheet"
+    >
+</head>
+
+<body class="app-bg client-area">
+
+    <header class="glass-header sticky-top shadow-sm">
+
+        <nav class="container navbar navbar-expand-lg py-3">
+
+            <a
+                class="navbar-brand d-flex align-items-center"
+                href="indexcliente.html"
+            >
+                <img
+                    src="../img/logoETS75px.png"
+                    alt="Logo ETS"
+                    class="client-logo me-3"
+                >
+
+                <span>
+                    <strong class="d-block lh-1">
+                        Expert Technical Support
+                    </strong>
+
+                    <small class="text-secondary">
+                        Panel del cliente
+                    </small>
+                </span>
+            </a>
+
+            <div class="ms-auto">
+
+                <a
+                    href="polizas_cliente.html"
+                    class="btn btn-outline-success"
+                >
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Mis pólizas
+                </a>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+    <main class="container py-4 py-lg-5">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb small">
+
+                <li class="breadcrumb-item">
+                    <a href="indexcliente.html">
+                        Panel
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item">
+                    <a href="polizas_cliente.html">
+                        Mis pólizas
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    Detalle
+                </li>
+
+            </ol>
+
+        </nav>
+
+        <div
+            id="policyNotFound"
+            class="alert alert-warning d-none"
+        >
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            No se encontró la póliza solicitada.
+
+            <a
+                href="polizas_cliente.html"
+                class="alert-link"
+            >
+                Regresar a mis pólizas
+            </a>
+        </div>
+
+        <div id="policyDetailContent">
+
+            <section class="glass-card rounded-4 p-4 p-lg-5 shadow-sm mb-4">
+
+                <div
+                    class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-start gap-4"
+                >
+
+                    <div class="d-flex align-items-start gap-3">
+
+                        <span class="policy-main-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </span>
+
+                        <div>
+
+                            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+
+                                <span
+                                    id="policyStatus"
+                                    class="policy-status status-active"
+                                >
+                                    Activa
+                                </span>
+
+                                <span
+                                    id="policyNumber"
+                                    class="text-secondary small"
+                                >
+                                    Póliza #ETS-001
+                                </span>
+
+                            </div>
+
+                            <h1
+                                id="policyBusinessName"
+                                class="h2 fw-bold mb-1"
+                            >
+                                Negocio
+                            </h1>
+
+                            <p class="text-secondary mb-0">
+
+                                Plan
+
+                                <strong
+                                    id="policyPlanName"
+                                    class="text-dark"
+                                >
+                                    Esencial
+                                </strong>
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <button
+                            class="btn btn-outline-success"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editPolicyModal"
+                        >
+                            <i class="bi bi-pencil-square me-1"></i>
+                            Editar datos
+                        </button>
+
+                        <button
+                            id="renewPolicyButton"
+                            class="btn btn-success login-btn"
+                            type="button"
+                        >
+                            <i class="bi bi-arrow-clockwise me-1"></i>
+                            Renovar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <div class="row g-4">
+
+                <div class="col-lg-8">
+
+                    <section class="glass-card rounded-4 p-4 shadow-sm mb-4">
+
+                        <div class="mb-4">
+
+                            <span class="eyebrow">
+                                Información registrada
+                            </span>
+
+                            <h2 class="h4 fw-bold mt-2 mb-0">
+                                Datos del negocio
+                            </h2>
+
+                        </div>
+
+                        <div class="row g-4">
+
+                            <div class="col-md-6">
+
+                                <div class="policy-data">
+
+                                    <span>
+                                        <i class="bi bi-building me-2"></i>
+                                        Empresa o negocio
+                                    </span>
+
+                                    <strong id="detailBusinessName">
+                                        Sin información
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="policy-data">
+
+                                    <span>
+                                        <i class="bi bi-person me-2"></i>
+                                        Persona responsable
+                                    </span>
+
+                                    <strong id="detailBusinessContact">
+                                        Sin información
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="policy-data">
+
+                                    <span>
+                                        <i class="bi bi-telephone me-2"></i>
+                                        Teléfono
+                                    </span>
+
+                                    <strong id="detailBusinessPhone">
+                                        Sin información
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="policy-data">
+
+                                    <span>
+                                        <i class="bi bi-envelope me-2"></i>
+                                        Correo de contacto
+                                    </span>
+
+                                    <strong id="detailBusinessEmail">
+                                        Sin información
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-12">
+
+                                <div class="policy-data">
+
+                                    <span>
+                                        <i class="bi bi-geo-alt me-2"></i>
+                                        Dirección
+                                    </span>
+
+                                    <strong id="detailBusinessAddress">
+                                        Sin información
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <section class="glass-card rounded-4 p-4 shadow-sm">
+
+                        <div
+                            class="d-flex flex-column flex-sm-row justify-content-between gap-3 mb-4"
+                        >
+
+                            <div>
+
+                                <span class="eyebrow">
+                                    Servicios incluidos
+                                </span>
+
+                                <h2 class="h4 fw-bold mt-2 mb-0">
+                                    Cobertura de la póliza
+                                </h2>
+
+                            </div>
+
+                            <button
+                                class="btn btn-outline-success align-self-sm-start"
+                                type="button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#changePlanModal"
+                            >
+                                <i class="bi bi-stars me-1"></i>
+                                Mejorar póliza
+                            </button>
+
+                        </div>
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <div class="coverage-item">
+
+                                    <i class="bi bi-pc-display"></i>
+
+                                    <div>
+                                        <span>Dispositivos cubiertos</span>
+                                        <strong id="policyDevices">20</strong>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="coverage-item">
+
+                                    <i class="bi bi-person-workspace"></i>
+
+                                    <div>
+                                        <span>Servicios presenciales</span>
+                                        <strong id="policyOnsite">10</strong>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="coverage-item">
+
+                                    <i class="bi bi-headset"></i>
+
+                                    <div>
+                                        <span>Servicios remotos</span>
+                                        <strong id="policyRemote">20</strong>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="coverage-item">
+
+                                    <i class="bi bi-chat-square-text"></i>
+
+                                    <div>
+                                        <span>Asesorías especializadas</span>
+                                        <strong id="policyConsulting">8</strong>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+                <div class="col-lg-4">
+
+                    <section class="glass-card rounded-4 p-4 shadow-sm mb-4">
+
+                        <h2 class="h5 fw-bold mb-4">
+                            Vigencia
+                        </h2>
+
+                        <div class="policy-date mb-3">
+
+                            <span>
+                                Fecha de inicio
+                            </span>
+
+                            <strong id="policyStartDate">
+                                01/08/2026
+                            </strong>
+
+                        </div>
+
+                        <div class="policy-date mb-3">
+
+                            <span>
+                                Fecha de vencimiento
+                            </span>
+
+                            <strong id="policyEndDate">
+                                01/08/2027
+                            </strong>
+
+                        </div>
+
+                        <div class="policy-date">
+
+                            <span>
+                                Duración
+                            </span>
+
+                            <strong>
+                                12 meses
+                            </strong>
+
+                        </div>
+
+                    </section>
+
+                    <section class="glass-card rounded-4 p-4 shadow-sm">
+
+                        <h2 class="h5 fw-bold mb-2">
+                            Administrar póliza
+                        </h2>
+
+                        <p class="text-secondary small">
+                            Puedes actualizar o cancelar únicamente esta cobertura.
+                        </p>
+
+                        <button
+                            id="cancelPolicyButton"
+                            class="btn btn-outline-danger w-100"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#cancelPolicyModal"
+                        >
+                            <i class="bi bi-x-circle me-1"></i>
+                            Cancelar póliza
+                        </button>
+
+                    </section>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Modal para editar los datos del negocio -->
+    <div
+        class="modal fade"
+        id="editPolicyModal"
+        tabindex="-1"
+        aria-hidden="true"
+    >
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+            <div class="modal-content client-modal">
+
+                <div class="modal-header border-0">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            Actualizar información
+                        </span>
+
+                        <h2 class="modal-title h4 fw-bold mt-2">
+                            Editar datos de la póliza
+                        </h2>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar"
+                    ></button>
+
+                </div>
+
+                <form id="editPolicyForm">
+
+                    <div class="modal-body">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <label
+                                    class="form-label"
+                                    for="editBusinessName"
+                                >
+                                    Empresa o negocio
+                                </label>
+
+                                <input
+                                    id="editBusinessName"
+                                    class="form-control client-input"
+                                    type="text"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label
+                                    class="form-label"
+                                    for="editBusinessContact"
+                                >
+                                    Persona responsable
+                                </label>
+
+                                <input
+                                    id="editBusinessContact"
+                                    class="form-control client-input"
+                                    type="text"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label
+                                    class="form-label"
+                                    for="editBusinessPhone"
+                                >
+                                    Teléfono
+                                </label>
+
+                                <input
+                                    id="editBusinessPhone"
+                                    class="form-control client-input"
+                                    type="tel"
+                                    maxlength="10"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <label
+                                    class="form-label"
+                                    for="editBusinessEmail"
+                                >
+                                    Correo de contacto
+                                </label>
+
+                                <input
+                                    id="editBusinessEmail"
+                                    class="form-control client-input"
+                                    type="email"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="col-12">
+
+                                <label
+                                    class="form-label"
+                                    for="editBusinessAddress"
+                                >
+                                    Dirección
+                                </label>
+
+                                <input
+                                    id="editBusinessAddress"
+                                    class="form-control client-input"
+                                    type="text"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer border-0">
+
+                        <button
+                            type="button"
+                            class="btn btn-light"
+                            data-bs-dismiss="modal"
+                        >
+                            Cerrar
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-success login-btn"
+                        >
+                            Guardar cambios
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal para cambiar el tipo de póliza -->
+    <div
+        class="modal fade"
+        id="changePlanModal"
+        tabindex="-1"
+        aria-hidden="true"
+    >
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content client-modal">
+
+                <div class="modal-header border-0">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            Cambiar cobertura
+                        </span>
+
+                        <h2 class="modal-title h4 fw-bold mt-2">
+                            Mejorar póliza
+                        </h2>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar"
+                    ></button>
+
+                </div>
+
+                <form id="changePlanForm">
+
+                    <div class="modal-body">
+
+                        <label
+                            class="form-label"
+                            for="newPolicyPlan"
+                        >
+                            Nuevo tipo de póliza
+                        </label>
+
+                        <select
+                            id="newPolicyPlan"
+                            class="form-select client-input"
+                            required
+                        >
+
+                            <option value="Esencial">
+                                Esencial
+                            </option>
+
+                            <option value="Profesional">
+                                Profesional
+                            </option>
+
+                            <option value="Empresarial">
+                                Empresarial
+                            </option>
+
+                        </select>
+
+                        <p class="form-text mt-3">
+                            Para esta maqueta el cambio se aplicará inmediatamente.
+                            Posteriormente se puede agregar un proceso de autorización
+                            y pago.
+                        </p>
+
+                    </div>
+
+                    <div class="modal-footer border-0">
+
+                        <button
+                            type="button"
+                            class="btn btn-light"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancelar
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-success login-btn"
+                        >
+                            Actualizar póliza
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal para confirmar la cancelación -->
+    <div
+        class="modal fade"
+        id="cancelPolicyModal"
+        tabindex="-1"
+        aria-hidden="true"
+    >
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content client-modal">
+
+                <div class="modal-header border-0">
+
+                    <h2 class="modal-title h4 fw-bold">
+                        Cancelar póliza
+                    </h2>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar"
+                    ></button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="cancel-warning mb-3">
+
+                        <i class="bi bi-exclamation-triangle"></i>
+
+                    </div>
+
+                    <p class="mb-2">
+                        ¿Confirmas que deseas cancelar esta póliza?
+                    </p>
+
+                    <p class="text-secondary small mb-0">
+                        La póliza permanecerá en tu historial, pero dejará
+                        de aparecer como una cobertura activa.
+                    </p>
+
+                </div>
+
+                <div class="modal-footer border-0">
+
+                    <button
+                        type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal"
+                    >
+                        Conservar póliza
+                    </button>
+
+                    <button
+                        id="confirmCancelPolicy"
+                        type="button"
+                        class="btn btn-danger"
+                    >
+                        Sí, cancelar
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+    <script src="../js/cliente.js"></script>
+
+</body>
+
+</html>

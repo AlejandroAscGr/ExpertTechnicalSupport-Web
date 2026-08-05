@@ -295,3 +295,234 @@
     color: #146c43;
     text-decoration: underline;
 }
+
+/* ==========================================================================
+   SECCIÓN 4: COMPLEMENTOS PARA PÓLIZAS
+   ========================================================================== */
+
+/* Pólizas mostradas en el panel principal */
+.dashboard-policy {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    color: #24332c;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(25, 135, 84, 0.1);
+    border-radius: 16px;
+    transition: all 0.25s ease;
+}
+
+.dashboard-policy:hover {
+    color: #146c43;
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(25, 135, 84, 0.25);
+    transform: translateY(-2px);
+}
+
+.dashboard-policy-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    color: #198754;
+    background: rgba(25, 135, 84, 0.1);
+    font-size: 1.25rem;
+}
+
+.dashboard-policy strong,
+.dashboard-policy small {
+    display: block;
+}
+
+.dashboard-policy small {
+    margin-top: 0.15rem;
+    color: #758179;
+}
+
+/* Estado próximo a renovar */
+.status-renew {
+    color: #8a6200;
+    background: #fff2c7;
+}
+
+/* Información de las tarjetas de pólizas */
+.policy-card-data {
+    display: grid;
+    gap: 0.7rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(25, 135, 84, 0.1);
+}
+
+.policy-card-data span {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: #647169;
+    font-size: 0.86rem;
+}
+
+.policy-card-data i {
+    color: #198754;
+}
+
+/* Estado vacío */
+.empty-policy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 150px;
+    padding: 2rem;
+    border: 2px dashed rgba(25, 135, 84, 0.18);
+    border-radius: 20px;
+    color: #536158;
+    background: rgba(255, 255, 255, 0.42);
+}
+
+.empty-policy > i {
+    color: #20c997;
+    font-size: 2.3rem;
+}
+
+/* Encabezado del detalle de la póliza */
+.policy-main-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    color: #198754;
+    background: rgba(25, 135, 84, 0.1);
+    font-size: 1.7rem;
+}
+
+/* Datos registrados del negocio */
+.policy-data {
+    height: 100%;
+    padding: 1rem;
+    border: 1px solid rgba(25, 135, 84, 0.1);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.policy-data span,
+.policy-data strong {
+    display: block;
+}
+
+.policy-data span {
+    margin-bottom: 0.35rem;
+    color: #758179;
+    font-size: 0.82rem;
+}
+
+.policy-data span i {
+    color: #198754;
+}
+
+.policy-data strong {
+    overflow-wrap: anywhere;
+}
+
+/* Elementos de cobertura */
+.coverage-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+    padding: 1rem;
+    border-radius: 15px;
+    background: rgba(25, 135, 84, 0.06);
+}
+
+.coverage-item > i {
+    color: #198754;
+    font-size: 1.45rem;
+}
+
+.coverage-item span,
+.coverage-item strong {
+    display: block;
+}
+
+.coverage-item span {
+    color: #758179;
+    font-size: 0.82rem;
+}
+
+.coverage-item strong {
+    margin-top: 0.1rem;
+    font-size: 1.15rem;
+}
+
+/* Fechas de vigencia */
+.policy-date {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(25, 135, 84, 0.1);
+}
+
+.policy-date:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.policy-date span,
+.policy-date strong {
+    display: block;
+}
+
+.policy-date span {
+    margin-bottom: 0.2rem;
+    color: #758179;
+    font-size: 0.82rem;
+}
+
+/* Modales */
+.client-modal {
+    border: 0;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 24px 60px rgba(20, 108, 67, 0.18);
+}
+
+.cancel-warning {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    color: #dc3545;
+    background: rgba(220, 53, 69, 0.1);
+    font-size: 1.8rem;
+}
+
+/* Adaptación para celulares */
+@media (max-width: 767.98px) {
+    .dashboard-policy {
+        grid-template-columns: auto 1fr;
+    }
+
+    .dashboard-policy .policy-status {
+        grid-column: 2;
+        justify-self: start;
+    }
+
+    .dashboard-policy > .bi-chevron-right {
+        display: none;
+    }
+
+    .empty-policy {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .policy-main-icon {
+        width: 52px;
+        height: 52px;
+    }
+}
