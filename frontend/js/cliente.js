@@ -944,6 +944,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function resaltarPaginaActual() {
+
     const paginaActual =
         window.location.pathname.split("/").pop()
         || "indexcliente.html";
@@ -953,32 +954,33 @@ function resaltarPaginaActual() {
         "nueva_poliza.html",
         "detalle_poliza.html"
     ];
-        const ticketPages = [
+
+    const paginasTickets = [
         "tickets_cliente.html",
         "nuevo_ticket.html",
         "detalle_ticket.html"
     ];
 
-
     document
         .querySelectorAll(".client-nav-link")
         .forEach(function (enlace) {
+
             const paginaEnlace = enlace
                 .getAttribute("href")
                 .split("?")[0];
 
-        const isActive =
-            linkPage === currentPage ||
+            const estaActivo =
+                paginaEnlace === paginaActual ||
 
-            (
-                linkPage === "polizas_cliente.html" &&
-                policyPages.includes(currentPage)
-            ) ||
+                (
+                    paginaEnlace === "polizas_cliente.html" &&
+                    paginasPolizas.includes(paginaActual)
+                ) ||
 
-            (
-                linkPage === "tickets_cliente.html" &&
-                ticketPages.includes(currentPage)
-            );
+                (
+                    paginaEnlace === "tickets_cliente.html" &&
+                    paginasTickets.includes(paginaActual)
+                );
 
             enlace.classList.toggle("active", estaActivo);
 
