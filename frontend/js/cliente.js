@@ -1,4 +1,90 @@
+function setupNewTicket() {
+
+    const form = document.getElementById("newTicketForm");
+
+    if (!form) return;
+
+
+    const policySelect =
+        document.getElementById("ticketPolicy");
+
+    const policies = getPolicies().filter(
+        policy => policy.status !== "Cancelada"
+    );
+
+
+    policies.forEach(policy => {
+
+        const option = document.createElement("option");
+
+        option.value = policy.id;
+
+        option.textContent =
+            `${policy.business} - Plan ${policy.plan}`;
+
+        policySelect.appendChild(option);
+
+    });
+
+
+    form.addEventListener("submit", event => {
+
+        event.preventDefault();
+
+
+        const tickets = getTickets();
+
+        const nextNumber =
+            String(tickets.length + 1).padStart(3, "0");
+
+
+        const ticket = {
+
+            id: `TKT-${nextNumber}`,
+
+            policyId:
+                document.getElementById("ticketPolicy").value,
+
+            modality:
+                document.getElementById("ticketModality").value,
+
+            concept:
+                document.getElementById("ticketConcept").value.trim(),
+
+            description:
+                document.getElementById("ticketDescription").value.trim(),
+
+            status: "Pendiente",
+
+            technician: null,
+
+            technicalNotes: "",
+
+            creationDate:
+                new Date().toLocaleDateString("es-MX"),
+
+            attentionDate: null,
+
+            clientApproval: false,
+
+            closingDate: null
+
+        };
+
+
+        tickets.push(ticket);
+
+        saveTickets(tickets);
+
+
+        window.location.href =
+            `tickets_cliente.html?created=1`;
+
+    });
+
+}
 document.addEventListener("DOMContentLoaded", function () {
+    resaltarPaginaActual();
 
     const planes = {
         Esencial: {
@@ -104,6 +190,13 @@ document.addEventListener("DOMContentLoaded", function () {
             "polizasETS",
             JSON.stringify(polizas)
         );
+    }
+    function getTickets() {
+    return JSON.parse(localStorage.getItem("etsDemoTickets")) || [];
+    }
+
+    function saveTickets(tickets) {
+        localStorage.setItem("etsDemoTickets", JSON.stringify(tickets));
     }
 
 
@@ -849,3 +942,50 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+
+function resaltarPaginaActual() {
+    const paginaActual =
+        window.location.pathname.split("/").pop()
+        || "indexcliente.html";
+
+    const paginasPolizas = [
+        "polizas_cliente.html",
+        "nueva_poliza.html",
+        "detalle_poliza.html"
+    ];
+        const ticketPages = [
+        "tickets_cliente.html",
+        "nuevo_ticket.html",
+        "detalle_ticket.html"
+    ];
+
+
+    document
+        .querySelectorAll(".client-nav-link")
+        .forEach(function (enlace) {
+            const paginaEnlace = enlace
+                .getAttribute("href")
+                .split("?")[0];
+
+        const isActive =
+            linkPage === currentPage ||
+
+            (
+                linkPage === "polizas_cliente.html" &&
+                policyPages.includes(currentPage)
+            ) ||
+
+            (
+                linkPage === "tickets_cliente.html" &&
+                ticketPages.includes(currentPage)
+            );
+
+            enlace.classList.toggle("active", estaActivo);
+
+            if (estaActivo) {
+                enlace.setAttribute("aria-current", "page");
+            } else {
+                enlace.removeAttribute("aria-current");
+            }
+        });
+}

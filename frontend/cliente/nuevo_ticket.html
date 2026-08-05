@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nuevo ticket - ETS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+
+<body class="app-bg client-area">
+
+    <header class="glass-header sticky-top shadow-sm">
+
+        <nav class="container navbar py-3">
+
+            <a class="navbar-brand d-flex align-items-center"
+                href="indexcliente.html">
+
+                <img src="../img/logoETS75px.png"
+                    alt="Logo ETS"
+                    class="client-logo me-3">
+
+                <span>
+                    <strong class="d-block lh-1">
+                        Expert Technical Support
+                    </strong>
+
+                    <small class="text-secondary">
+                        Panel del cliente
+                    </small>
+                </span>
+
+            </a>
+
+            <a href="tickets_cliente.html"
+                class="btn btn-outline-success">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Regresar
+
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <main class="container py-4 py-lg-5">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb small">
+
+                <li class="breadcrumb-item">
+                    <a href="indexcliente.html">Panel</a>
+                </li>
+
+                <li class="breadcrumb-item">
+                    <a href="tickets_cliente.html">Mis tickets</a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    Nuevo ticket
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <section class="glass-card rounded-4 p-4 p-lg-5 shadow-sm">
+
+            <div class="text-center mx-auto mb-5 form-heading">
+
+                <span class="eyebrow">
+                    Solicitud de soporte
+                </span>
+
+                <h1 class="h2 fw-bold mt-2">
+                    Crear nuevo ticket
+                </h1>
+
+                <p class="text-secondary">
+                    Describe el problema y selecciona el tipo de
+                    atención que necesitas.
+                </p>
+
+            </div>
+
+
+            <form id="newTicketForm">
+
+                <!-- Póliza -->
+                <div class="mb-4">
+
+                    <label for="ticketPolicy"
+                        class="form-label fw-semibold">
+
+                        Póliza
+
+                    </label>
+
+                    <select id="ticketPolicy"
+                        class="form-select client-input"
+                        required>
+
+                        <option value="">
+                            Selecciona una póliza
+                        </option>
+
+                        <!-- Se llenarán con cliente.js -->
+
+                    </select>
+
+                    <small class="text-secondary">
+                        El servicio se descontará de la póliza seleccionada
+                        cuando el ticket sea cerrado.
+                    </small>
+
+                </div>
+
+
+                <!-- Modalidad -->
+                <div class="mb-4">
+
+                    <label for="ticketModality"
+                        class="form-label fw-semibold">
+
+                        Tipo de atención
+
+                    </label>
+
+                    <select id="ticketModality"
+                        class="form-select client-input"
+                        required>
+
+                        <option value="">
+                            Selecciona una modalidad
+                        </option>
+
+                        <option value="Remoto">
+                            Soporte remoto
+                        </option>
+
+                        <option value="Presencial">
+                            Soporte presencial
+                        </option>
+
+                        <option value="Asesoria">
+                            Asesoría
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Concepto -->
+                <div class="mb-4">
+
+                    <label for="ticketConcept"
+                        class="form-label fw-semibold">
+
+                        ¿Qué problema tienes?
+
+                    </label>
+
+                    <input id="ticketConcept"
+                        type="text"
+                        class="form-control client-input"
+                        maxlength="100"
+                        required
+                        placeholder="Ej. La impresora no permite imprimir">
+
+                </div>
+
+
+                <!-- Descripción -->
+                <div class="mb-4">
+
+                    <label for="ticketDescription"
+                        class="form-label fw-semibold">
+
+                        Descripción del problema
+
+                    </label>
+
+                    <textarea id="ticketDescription"
+                        class="form-control client-input"
+                        rows="5"
+                        maxlength="500"
+                        required
+                        placeholder="Describe con más detalle lo que sucede..."></textarea>
+
+                </div>
+
+
+                <div class="form-note">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    <p class="mb-0">
+                        Una vez enviado, el sistema determinará la
+                        asignación del servicio automáticamente.
+                        Podrás consultar su seguimiento desde
+                        <strong>Mis tickets</strong>.
+                    </p>
+
+                </div>
+
+
+                <div class="d-flex flex-column flex-sm-row
+                    justify-content-end gap-2 mt-4">
+
+                    <a href="tickets_cliente.html"
+                        class="btn btn-light px-4">
+
+                        Cancelar
+
+                    </a>
+
+                    <button type="submit"
+                        class="btn btn-success login-btn px-4">
+
+                        Crear ticket
+                        <i class="bi bi-arrow-right ms-1"></i>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <script src="../js/cliente.js"></script>
+
+</body>
+
+</html>
