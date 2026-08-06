@@ -1,5 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
     resaltarPaginaActual();
+    mostrarTickets();
+    configurarFiltrosTickets();
+    mostrarDetalleTicket();
+
+    const parametrosTicket =
+    new URLSearchParams(window.location.search);
+
+if (parametrosTicket.get("created")) {
+
+    const alerta =
+        document.getElementById("ticketCreatedAlert");
+
+    if (alerta) {
+        alerta.classList.remove("d-none");
+    }
+}
 
     const planes = {
         Esencial: {
@@ -956,6 +972,320 @@ if (newTicketForm) {
         }
     }
 
+    function mostrarDetalleTicket() {
+
+    const contenedor =
+        document.getElementById("ticketDetail");
+
+    if (!contenedor) return;
+
+
+    const parametros =
+        new URLSearchParams(window.location.search);
+
+    const idTicket = parametros.get("id");
+
+    const tickets = getTickets();
+
+    const ticket = tickets.find(
+        function (ticket) {
+            return ticket.id === idTicket;
+        }
+    );
+
+
+    if (!ticket) {
+
+        contenedor.innerHTML = `
+            <div class="glass-card rounded-4 p-5
+                shadow-sm text-center">
+
+                <i class="bi bi-exclamation-circle
+                    fs-1 text-secondary"></i>
+
+                <h1 class="h4 mt-3">
+                    Ticket no encontrado
+                </h1>
+
+                <p class="text-secondary">
+                    No fue posible encontrar
+                    la solicitud seleccionada.
+                </p>
+
+                <a href="tickets_cliente.html"
+                    class="btn btn-success">
+
+                    Volver a mis tickets
+
+                </a>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const poliza = polizas.find(
+        function (poliza) {
+            return poliza.id === ticket.idPoliza;
+        }
+    );
+
+    const nombrePoliza = poliza
+        ? poliza.negocio + " - Plan " + poliza.plan
+        : "Póliza no disponible";
+
+
+    let tecnico = "Pendiente de asignación";
+
+    if (ticket.idEmpleado) {
+        tecnico = "Técnico #" + ticket.idEmpleado;
+    }
+
+
+    let accionesConformidad = "";
+
+    if (ticket.estado === "Pendiente conformidad") {
+
+        accionesConformidad = `
+            <section class="glass-card rounded-4
+                p-4 shadow-sm mt-4">
+
+                <div class="mb-3">
+
+                    <span class="eyebrow">
+                        Confirmación del servicio
+                    </span>
+
+                    <h2 class="h5 fw-bold mt-2">
+                        ¿El problema quedó solucionado?
+                    </h2>
+
+                    <p class="text-secondary mb-0">
+                        Confirma el resultado del servicio
+                        realizado por el técnico.
+                    </p>
+
+                </div>
+
+
+                <div class="d-flex flex-column
+                    flex-sm-row gap-2">
+
+                    <button id="confirmTicket"
+                        class="btn btn-success">
+
+                        <i class="bi bi-check-circle me-1"></i>
+                        Sí, quedó solucionado
+
+                    </button>
+
+                    <button id="continueTicket"
+                        class="btn btn-outline-danger">
+
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>
+                        El problema continúa
+
+                    </button>
+
+                </div>
+
+            </section>
+        `;
+    }
+
+
+    contenedor.innerHTML = `
+
+        <section class="glass-card rounded-4
+            p-4 p-lg-5 shadow-sm">
+
+            <div class="d-flex flex-column
+                flex-md-row justify-content-between
+                gap-3 mb-4">
+
+                <div>
+
+                    <span class="eyebrow">
+                        ${ticket.id}
+                    </span>
+
+                    <h1 class="h2 fw-bold mt-2 mb-2">
+                        ${ticket.concepto}
+                    </h1>
+
+                    <span class="policy-status
+                        ${claseEstadoTicket(ticket.estado)}">
+
+                        ${ticket.estado}
+
+                    </span>
+
+                </div>
+
+                <div class="text-md-end">
+
+                    <small class="text-secondary d-block">
+                        Fecha de creación
+                    </small>
+
+                    <strong>
+                        ${ticket.fechaCreacion}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <hr>
+
+
+            <div class="row g-4 mt-1">
+
+                <div class="col-md-6">
+
+                    <small class="text-secondary">
+                        Póliza
+                    </small>
+
+                    <p class="fw-semibold mb-0">
+                        ${nombrePoliza}
+                    </p>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <small class="text-secondary">
+                        Modalidad
+                    </small>
+
+                    <p class="fw-semibold mb-0">
+                        ${ticket.modalidad}
+                    </p>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <small class="text-secondary">
+                        Técnico asignado
+                    </small>
+
+                    <p class="fw-semibold mb-0">
+                        ${tecnico}
+                    </p>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <small class="text-secondary">
+                        Fecha de atención
+                    </small>
+
+                    <p class="fw-semibold mb-0">
+                        ${ticket.fechaAtencion || "Pendiente"}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4">
+
+
+            <div>
+
+                <h2 class="h5 fw-bold">
+                    Descripción del problema
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    ${ticket.descripcion}
+                </p>
+
+            </div>
+
+
+            ${
+                ticket.notasTecnico
+                    ? `
+                        <hr class="my-4">
+
+                        <div>
+
+                            <h2 class="h5 fw-bold">
+                                Notas del técnico
+                            </h2>
+
+                            <p class="text-secondary mb-0">
+                                ${ticket.notasTecnico}
+                            </p>
+
+                        </div>
+                    `
+                    : ""
+            }
+
+        </section>
+
+        ${accionesConformidad}
+    `;
+
+
+    const botonConfirmar =
+        document.getElementById("confirmTicket");
+
+    const botonContinuar =
+        document.getElementById("continueTicket");
+
+
+    if (botonConfirmar) {
+
+        botonConfirmar.addEventListener(
+            "click",
+            function () {
+
+                ticket.conformidadCliente = true;
+                ticket.estado = "Cerrado";
+
+                ticket.fechaCierre =
+                    new Date()
+                        .toLocaleDateString("es-MX");
+
+                saveTickets(tickets);
+
+                mostrarDetalleTicket();
+            }
+        );
+    }
+
+
+    if (botonContinuar) {
+
+        botonContinuar.addEventListener(
+            "click",
+            function () {
+
+                ticket.conformidadCliente = false;
+                ticket.estado = "Proceso";
+
+                saveTickets(tickets);
+
+                mostrarDetalleTicket();
+            }
+        );
+    }
+
+}
+
 });
 
 function resaltarPaginaActual() {
@@ -1004,5 +1334,189 @@ function resaltarPaginaActual() {
             } else {
                 enlace.removeAttribute("aria-current");
             }
+        });
+}
+
+
+function claseEstadoTicket(estado) {
+
+    if (estado === "Cerrado") {
+        return "status-active";
+    }
+
+    if (
+        estado === "Asignado" ||
+        estado === "Proceso" ||
+        estado === "Pendiente conformidad"
+    ) {
+        return "status-warning";
+    }
+
+    return "status-cancelled";
+}
+
+
+function ticketCoincideFiltro(ticket, filtro) {
+
+    if (filtro === "all") {
+        return true;
+    }
+
+    if (filtro === "Pendiente") {
+        return ticket.estado === "Pendiente";
+    }
+
+    if (filtro === "Atencion") {
+
+        return [
+            "Asignado",
+            "Proceso",
+            "Pendiente conformidad"
+        ].includes(ticket.estado);
+    }
+
+    if (filtro === "Cerrado") {
+        return ticket.estado === "Cerrado";
+    }
+
+    return true;
+}
+
+
+function mostrarTickets(filtro = "all") {
+
+    const contenedor =
+        document.getElementById("ticketsList");
+
+    if (!contenedor) return;
+
+
+    const tickets = getTickets().filter(
+        function (ticket) {
+            return ticketCoincideFiltro(
+                ticket,
+                filtro
+            );
+        }
+    );
+
+
+    if (tickets.length === 0) {
+
+        contenedor.innerHTML = `
+            <div class="empty-state">
+
+                <i class="bi bi-ticket-perforated"></i>
+
+                <h2 class="h5">
+                    No hay tickets en esta sección
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Cuando solicites soporte,
+                    tus tickets aparecerán aquí.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    contenedor.innerHTML = tickets.map(
+        function (ticket) {
+
+            const poliza = polizas.find(
+                function (poliza) {
+                    return poliza.id === ticket.idPoliza;
+                }
+            );
+
+            const nombrePoliza = poliza
+                ? poliza.negocio + " - Plan " + poliza.plan
+                : "Póliza no disponible";
+
+
+            return `
+                <article class="policy-row">
+
+                    <div class="policy-symbol">
+                        <i class="bi bi-ticket-perforated"></i>
+                    </div>
+
+                    <div class="flex-grow-1">
+
+                        <div class="d-flex flex-wrap
+                            align-items-center gap-2 mb-1">
+
+                            <h2 class="h6 fw-bold mb-0">
+                                ${ticket.concepto}
+                            </h2>
+
+                            <span class="policy-status
+                                ${claseEstadoTicket(ticket.estado)}">
+
+                                ${ticket.estado}
+
+                            </span>
+
+                        </div>
+
+                        <p class="text-secondary small mb-1">
+
+                            <strong>${ticket.id}</strong>
+                            · ${ticket.modalidad}
+                            · ${ticket.fechaCreacion}
+
+                        </p>
+
+                        <p class="text-secondary small mb-0">
+
+                            <i class="bi bi-file-earmark-check me-1"></i>
+                            ${nombrePoliza}
+
+                        </p>
+
+                    </div>
+
+                    <a href="detalle_ticket.html?id=${ticket.id}"
+                        class="btn btn-sm btn-outline-success">
+
+                        Ver detalle
+
+                    </a>
+
+                </article>
+            `;
+        }
+    ).join("");
+}
+
+
+function configurarFiltrosTickets() {
+
+    document
+        .querySelectorAll("[data-ticket-filter]")
+        .forEach(function (boton) {
+
+            boton.addEventListener(
+                "click",
+                function () {
+
+                    document
+                        .querySelectorAll("[data-ticket-filter]")
+                        .forEach(function (item) {
+                            item.classList.remove("active");
+                        });
+
+                    boton.classList.add("active");
+
+                    mostrarTickets(
+                        boton.dataset.ticketFilter
+                    );
+                }
+            );
+
         });
 }
