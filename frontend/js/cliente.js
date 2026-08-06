@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
     resaltarPaginaActual();
-    mostrarTickets();
-    configurarFiltrosTickets();
-    mostrarDetalleTicket();
 
     const parametrosTicket =
     new URLSearchParams(window.location.search);
@@ -1423,6 +1420,10 @@ function configurarFiltrosTickets() {
     }
 
 }
+    mostrarTickets();
+    configurarFiltrosTickets();
+    mostrarDetalleTicket();
+
 
 });
 
