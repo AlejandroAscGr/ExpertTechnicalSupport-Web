@@ -397,6 +397,144 @@ if (newTicketForm) {
         "policiesGrid"
     );
 
+    function mostrarTickets(filtro = "all") {
+
+    const contenedor =
+        document.getElementById("ticketsList");
+
+    if (!contenedor) return;
+
+
+    const tickets = getTickets().filter(
+        function (ticket) {
+            return ticketCoincideFiltro(
+                ticket,
+                filtro
+            );
+        }
+    );
+
+
+    if (tickets.length === 0) {
+
+        contenedor.innerHTML = `
+            <div class="empty-state">
+
+                <i class="bi bi-ticket-perforated"></i>
+
+                <h2 class="h5">
+                    No hay tickets en esta sección
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Cuando solicites soporte,
+                    tus tickets aparecerán aquí.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    contenedor.innerHTML = tickets.map(
+        function (ticket) {
+
+            const poliza = polizas.find(
+                function (poliza) {
+                    return poliza.id === ticket.idPoliza;
+                }
+            );
+
+            const nombrePoliza = poliza
+                ? poliza.negocio + " - Plan " + poliza.plan
+                : "Póliza no disponible";
+
+
+            return `
+                <article class="policy-row">
+
+                    <div class="policy-symbol">
+                        <i class="bi bi-ticket-perforated"></i>
+                    </div>
+
+                    <div class="flex-grow-1">
+
+                        <div class="d-flex flex-wrap
+                            align-items-center gap-2 mb-1">
+
+                            <h2 class="h6 fw-bold mb-0">
+                                ${ticket.concepto}
+                            </h2>
+
+                            <span class="policy-status
+                                ${claseEstadoTicket(ticket.estado)}">
+
+                                ${ticket.estado}
+
+                            </span>
+
+                        </div>
+
+                        <p class="text-secondary small mb-1">
+
+                            <strong>${ticket.id}</strong>
+                            · ${ticket.modalidad}
+                            · ${ticket.fechaCreacion}
+
+                        </p>
+
+                        <p class="text-secondary small mb-0">
+
+                            <i class="bi bi-file-earmark-check me-1"></i>
+                            ${nombrePoliza}
+
+                        </p>
+
+                    </div>
+
+                    <a href="detalle_ticket.html?id=${ticket.id}"
+                        class="btn btn-sm btn-outline-success">
+
+                        Ver detalle
+
+                    </a>
+
+                </article>
+            `;
+        }
+    ).join("");
+}
+
+
+function configurarFiltrosTickets() {
+
+    document
+        .querySelectorAll("[data-ticket-filter]")
+        .forEach(function (boton) {
+
+            boton.addEventListener(
+                "click",
+                function () {
+
+                    document
+                        .querySelectorAll("[data-ticket-filter]")
+                        .forEach(function (item) {
+                            item.classList.remove("active");
+                        });
+
+                    boton.classList.add("active");
+
+                    mostrarTickets(
+                        boton.dataset.ticketFilter
+                    );
+                }
+            );
+
+        });
+}
+
 
     function mostrarPolizas(filtro) {
 
@@ -1383,140 +1521,3 @@ function ticketCoincideFiltro(ticket, filtro) {
 }
 
 
-function mostrarTickets(filtro = "all") {
-
-    const contenedor =
-        document.getElementById("ticketsList");
-
-    if (!contenedor) return;
-
-
-    const tickets = getTickets().filter(
-        function (ticket) {
-            return ticketCoincideFiltro(
-                ticket,
-                filtro
-            );
-        }
-    );
-
-
-    if (tickets.length === 0) {
-
-        contenedor.innerHTML = `
-            <div class="empty-state">
-
-                <i class="bi bi-ticket-perforated"></i>
-
-                <h2 class="h5">
-                    No hay tickets en esta sección
-                </h2>
-
-                <p class="text-secondary mb-0">
-                    Cuando solicites soporte,
-                    tus tickets aparecerán aquí.
-                </p>
-
-            </div>
-        `;
-
-        return;
-    }
-
-
-    contenedor.innerHTML = tickets.map(
-        function (ticket) {
-
-            const poliza = polizas.find(
-                function (poliza) {
-                    return poliza.id === ticket.idPoliza;
-                }
-            );
-
-            const nombrePoliza = poliza
-                ? poliza.negocio + " - Plan " + poliza.plan
-                : "Póliza no disponible";
-
-
-            return `
-                <article class="policy-row">
-
-                    <div class="policy-symbol">
-                        <i class="bi bi-ticket-perforated"></i>
-                    </div>
-
-                    <div class="flex-grow-1">
-
-                        <div class="d-flex flex-wrap
-                            align-items-center gap-2 mb-1">
-
-                            <h2 class="h6 fw-bold mb-0">
-                                ${ticket.concepto}
-                            </h2>
-
-                            <span class="policy-status
-                                ${claseEstadoTicket(ticket.estado)}">
-
-                                ${ticket.estado}
-
-                            </span>
-
-                        </div>
-
-                        <p class="text-secondary small mb-1">
-
-                            <strong>${ticket.id}</strong>
-                            · ${ticket.modalidad}
-                            · ${ticket.fechaCreacion}
-
-                        </p>
-
-                        <p class="text-secondary small mb-0">
-
-                            <i class="bi bi-file-earmark-check me-1"></i>
-                            ${nombrePoliza}
-
-                        </p>
-
-                    </div>
-
-                    <a href="detalle_ticket.html?id=${ticket.id}"
-                        class="btn btn-sm btn-outline-success">
-
-                        Ver detalle
-
-                    </a>
-
-                </article>
-            `;
-        }
-    ).join("");
-}
-
-
-function configurarFiltrosTickets() {
-
-    document
-        .querySelectorAll("[data-ticket-filter]")
-        .forEach(function (boton) {
-
-            boton.addEventListener(
-                "click",
-                function () {
-
-                    document
-                        .querySelectorAll("[data-ticket-filter]")
-                        .forEach(function (item) {
-                            item.classList.remove("active");
-                        });
-
-                    boton.classList.add("active");
-
-                    mostrarTickets(
-                        boton.dataset.ticketFilter
-                    );
-                }
-            );
-
-        });
-}
