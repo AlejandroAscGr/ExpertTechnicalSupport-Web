@@ -418,107 +418,139 @@ if (newTicketForm) {
     if (!contenedor) return;
 
 
-    const tickets = getTickets().filter(
-        function (ticket) {
-            return ticketCoincideFiltro(
-                ticket,
-                filtro
-            );
-        }
-    );
+    // Obtiene los tickets del cliente desde la BD
+    fetch("../../backend_web/tickets_cliente.php")
+        .then(function (respuesta) {
+            return respuesta.json();
+        })
+        .then(function (datos) {
+
+            if (!datos.success) {
+                console.error(datos.mensaje);
+                return;
+            }
 
 
-    if (tickets.length === 0) {
+            // Filtra los tickets según la opción seleccionada
+            const tickets = datos.tickets.filter(
+                function (ticket) {
 
-        contenedor.innerHTML = `
-            <div class="empty-state">
-
-                <i class="bi bi-ticket-perforated"></i>
-
-                <h2 class="h5">
-                    No hay tickets en esta sección
-                </h2>
-
-                <p class="text-secondary mb-0">
-                    Cuando solicites soporte,
-                    tus tickets aparecerán aquí.
-                </p>
-
-            </div>
-        `;
-
-        return;
-    }
-
-
-    contenedor.innerHTML = tickets.map(
-        function (ticket) {
-
-            const poliza = polizas.find(
-                function (poliza) {
-                    return poliza.id === ticket.idPoliza;
+                    return ticketCoincideFiltro(
+                        {
+                            estado: ticket.statusT
+                        },
+                        filtro
+                    );
                 }
             );
 
-            const nombrePoliza = poliza
-                ? poliza.negocio + " - Plan " + poliza.plan
-                : "Póliza no disponible";
 
+            if (tickets.length === 0) {
 
-            return `
-                <article class="policy-row">
+                contenedor.innerHTML = `
+                    <div class="empty-state">
 
-                    <div class="policy-symbol">
                         <i class="bi bi-ticket-perforated"></i>
-                    </div>
 
-                    <div class="flex-grow-1">
+                        <h2 class="h5">
+                            No hay tickets en esta sección
+                        </h2>
 
-                        <div class="d-flex flex-wrap
-                            align-items-center gap-2 mb-1">
-
-                            <h2 class="h6 fw-bold mb-0">
-                                ${ticket.concepto}
-                            </h2>
-
-                            <span class="policy-status
-                                ${claseEstadoTicket(ticket.estado)}">
-
-                                ${ticket.estado}
-
-                            </span>
-
-                        </div>
-
-                        <p class="text-secondary small mb-1">
-
-                            <strong>${ticket.id}</strong>
-                            · ${ticket.modalidad}
-                            · ${ticket.fechaCreacion}
-
-                        </p>
-
-                        <p class="text-secondary small mb-0">
-
-                            <i class="bi bi-file-earmark-check me-1"></i>
-                            ${nombrePoliza}
-
+                        <p class="text-secondary mb-0">
+                            Cuando solicites soporte,
+                            tus tickets aparecerán aquí.
                         </p>
 
                     </div>
+                `;
 
-                    <a href="detalle_ticket.html?id=${ticket.id}"
-                        class="btn btn-sm btn-outline-success">
+                return;
+            }
 
-                        Ver detalle
 
-                    </a>
+            contenedor.innerHTML = tickets.map(
+                function (ticket) {
 
-                </article>
-            `;
-        }
-    ).join("");
+                    const numeroTicket =
+                        "TKT-" +
+                        String(ticket.idTicket).padStart(
+                            3,
+                            "0"
+                        );
+
+                    const fecha =
+                        new Date(
+                            ticket.fechaCreacionT +
+                            "T00:00:00"
+                        ).toLocaleDateString("es-MX");
+
+
+                    return `
+                        <article class="policy-row">
+
+                            <div class="policy-symbol">
+                                <i class="bi bi-ticket-perforated"></i>
+                            </div>
+
+                            <div class="flex-grow-1">
+
+                                <div class="d-flex flex-wrap
+                                    align-items-center gap-2 mb-1">
+
+                                    <h2 class="h6 fw-bold mb-0">
+                                        ${ticket.conceptoT}
+                                    </h2>
+
+                                    <span class="policy-status
+                                        ${claseEstadoTicket(ticket.statusT)}">
+
+                                        ${ticket.statusT}
+
+                                    </span>
+
+                                </div>
+
+                                <p class="text-secondary small mb-1">
+
+                                    <strong>${numeroTicket}</strong>
+                                    · ${ticket.modalidadAtencionT}
+                                    · ${fecha}
+
+                                </p>
+
+                                <p class="text-secondary small mb-0">
+
+                                    <i class="bi bi-file-earmark-check me-1"></i>
+
+                                    ${ticket.nombreEmpresaP}
+                                    - Plan ${ticket.nombreP}
+
+                                </p>
+
+                            </div>
+
+                            <a
+                                href="detalle_ticket.html?id=${ticket.idTicket}"
+                                class="btn btn-sm btn-outline-success"
+                            >
+                                Ver detalle
+                            </a>
+
+                        </article>
+                    `;
+                }
+            ).join("");
+        })
+        .catch(function (error) {
+
+            console.error(
+                "Error al cargar los tickets:",
+                error
+            );
+        });
 }
+
+
 
 
 function configurarFiltrosTickets() {
@@ -1136,16 +1168,8 @@ function configurarFiltrosTickets() {
 
     const idTicket = parametros.get("id");
 
-    const tickets = getTickets();
 
-    const ticket = tickets.find(
-        function (ticket) {
-            return ticket.id === idTicket;
-        }
-    );
-
-
-    if (!ticket) {
+    if (!idTicket) {
 
         contenedor.innerHTML = `
             <div class="glass-card rounded-4 p-5
@@ -1159,8 +1183,7 @@ function configurarFiltrosTickets() {
                 </h1>
 
                 <p class="text-secondary">
-                    No fue posible encontrar
-                    la solicitud seleccionada.
+                    No se recibió un ticket válido.
                 </p>
 
                 <a href="tickets_cliente.html"
@@ -1177,265 +1200,363 @@ function configurarFiltrosTickets() {
     }
 
 
-    const poliza = polizas.find(
-        function (poliza) {
-            return poliza.id === ticket.idPoliza;
-        }
-    );
+    // Obtiene el detalle del ticket desde la BD
+    fetch(
+        "../../backend_web/detalle_ticket_cliente.php?id=" +
+        encodeURIComponent(idTicket)
+    )
+        .then(function (respuesta) {
+            return respuesta.json();
+        })
+        .then(function (datos) {
 
-    const nombrePoliza = poliza
-        ? poliza.negocio + " - Plan " + poliza.plan
-        : "Póliza no disponible";
+            if (!datos.success) {
 
+                contenedor.innerHTML = `
+                    <div class="glass-card rounded-4 p-5
+                        shadow-sm text-center">
 
-    let tecnico = "Pendiente de asignación";
+                        <i class="bi bi-exclamation-circle
+                            fs-1 text-secondary"></i>
 
-    if (ticket.idEmpleado) {
-        tecnico = "Técnico #" + ticket.idEmpleado;
-    }
+                        <h1 class="h4 mt-3">
+                            Ticket no encontrado
+                        </h1>
 
+                        <p class="text-secondary">
+                            ${datos.mensaje}
+                        </p>
 
-    let accionesConformidad = "";
+                        <a href="tickets_cliente.html"
+                            class="btn btn-success">
 
-    if (ticket.estado === "Pendiente conformidad") {
+                            Volver a mis tickets
 
-        accionesConformidad = `
-            <section class="glass-card rounded-4
-                p-4 shadow-sm mt-4">
+                        </a>
 
-                <div class="mb-3">
+                    </div>
+                `;
 
-                    <span class="eyebrow">
-                        Confirmación del servicio
-                    </span>
+                return;
+            }
 
-                    <h2 class="h5 fw-bold mt-2">
-                        ¿El problema quedó solucionado?
-                    </h2>
 
-                    <p class="text-secondary mb-0">
-                        Confirma el resultado del servicio
-                        realizado por el técnico.
-                    </p>
+            const ticket = datos.ticket;
 
-                </div>
 
+            const numeroTicket =
+                "TKT-" +
+                String(ticket.idTicket).padStart(3, "0");
 
-                <div class="d-flex flex-column
-                    flex-sm-row gap-2">
 
-                    <button id="confirmTicket"
-                        class="btn btn-success">
+            const fechaCreacion =
+                new Date(
+                    ticket.fechaCreacionT + "T00:00:00"
+                ).toLocaleDateString("es-MX");
 
-                        <i class="bi bi-check-circle me-1"></i>
-                        Sí, quedó solucionado
 
-                    </button>
+            const fechaAtencion =
+                ticket.fechaAtencionT
+                    ? new Date(
+                        ticket.fechaAtencionT + "T00:00:00"
+                    ).toLocaleDateString("es-MX")
+                    : "Pendiente";
 
-                    <button id="continueTicket"
-                        class="btn btn-outline-danger">
 
-                        <i class="bi bi-arrow-counterclockwise me-1"></i>
-                        El problema continúa
+            const nombrePoliza =
+                ticket.nombreEmpresaP +
+                " - Plan " +
+                ticket.nombreP;
 
-                    </button>
 
-                </div>
+            let tecnico = "Pendiente de asignación";
 
-            </section>
-        `;
-    }
+            if (ticket.idEmpleado) {
 
+                tecnico =
+                    ticket.nombresEmp +
+                    " " +
+                    ticket.apellidosEmp;
+            }
 
-    contenedor.innerHTML = `
 
-        <section class="glass-card rounded-4
-            p-4 p-lg-5 shadow-sm">
+            contenedor.innerHTML = `
 
-            <div class="d-flex flex-column
-                flex-md-row justify-content-between
-                gap-3 mb-4">
+                <section class="glass-card rounded-4
+                    p-4 p-lg-5 shadow-sm">
 
-                <div>
+                    <div class="d-flex flex-column
+                        flex-md-row justify-content-between
+                        gap-3 mb-4">
 
-                    <span class="eyebrow">
-                        ${ticket.id}
-                    </span>
+                        <div>
 
-                    <h1 class="h2 fw-bold mt-2 mb-2">
-                        ${ticket.concepto}
-                    </h1>
+                            <span class="eyebrow">
+                                ${numeroTicket}
+                            </span>
 
-                    <span class="policy-status
-                        ${claseEstadoTicket(ticket.estado)}">
+                            <h1 class="h2 fw-bold mt-2 mb-2">
+                                ${ticket.conceptoT}
+                            </h1>
 
-                        ${ticket.estado}
+                            <span class="policy-status
+                                ${claseEstadoTicket(ticket.statusT)}">
 
-                    </span>
+                                ${ticket.statusT}
 
-                </div>
+                            </span>
 
-                <div class="text-md-end">
+                        </div>
 
-                    <small class="text-secondary d-block">
-                        Fecha de creación
-                    </small>
 
-                    <strong>
-                        ${ticket.fechaCreacion}
-                    </strong>
+                        <div class="text-md-end">
 
-                </div>
+                            <small class="text-secondary d-block">
+                                Fecha de creación
+                            </small>
 
-            </div>
+                            <strong>
+                                ${fechaCreacion}
+                            </strong>
 
+                        </div>
 
-            <hr>
+                    </div>
 
 
-            <div class="row g-4 mt-1">
+                    <hr>
 
-                <div class="col-md-6">
 
-                    <small class="text-secondary">
-                        Póliza
-                    </small>
+                    <div class="row g-4 mt-1">
 
-                    <p class="fw-semibold mb-0">
-                        ${nombrePoliza}
-                    </p>
+                        <div class="col-md-6">
 
-                </div>
+                            <small class="text-secondary">
+                                Póliza
+                            </small>
 
+                            <p class="fw-semibold mb-0">
+                                ${nombrePoliza}
+                            </p>
 
-                <div class="col-md-6">
+                        </div>
 
-                    <small class="text-secondary">
-                        Modalidad
-                    </small>
 
-                    <p class="fw-semibold mb-0">
-                        ${ticket.modalidad}
-                    </p>
+                        <div class="col-md-6">
 
-                </div>
+                            <small class="text-secondary">
+                                Modalidad
+                            </small>
 
+                            <p class="fw-semibold mb-0">
+                                ${ticket.modalidadAtencionT}
+                            </p>
 
-                <div class="col-md-6">
+                        </div>
 
-                    <small class="text-secondary">
-                        Técnico asignado
-                    </small>
 
-                    <p class="fw-semibold mb-0">
-                        ${tecnico}
-                    </p>
+                        <div class="col-md-6">
 
-                </div>
+                            <small class="text-secondary">
+                                Técnico asignado
+                            </small>
 
+                            <p class="fw-semibold mb-0">
+                                ${tecnico}
+                            </p>
 
-                <div class="col-md-6">
+                        </div>
 
-                    <small class="text-secondary">
-                        Fecha de atención
-                    </small>
 
-                    <p class="fw-semibold mb-0">
-                        ${ticket.fechaAtencion || "Pendiente"}
-                    </p>
+                        <div class="col-md-6">
 
-                </div>
+                            <small class="text-secondary">
+                                Fecha de atención
+                            </small>
 
-            </div>
+                            <p class="fw-semibold mb-0">
+                                ${fechaAtencion}
+                            </p>
 
+                        </div>
 
+                    </div>
+
+
+                    <hr class="my-4">
+
+
+                    <div>
+
+                        <h2 class="h5 fw-bold">
+                            Descripción del problema
+                        </h2>
+
+                        <p class="text-secondary mb-0">
+                            ${ticket.descripcionT}
+                        </p>
+
+                    </div>
+
+
+                    ${
+                        ticket.notasTecnico
+                            ? `
+                                <hr class="my-4">
+
+                                <div>
+
+                                    <h2 class="h5 fw-bold">
+                                        Notas del técnico
+                                    </h2>
+
+                                    <p class="text-secondary mb-0">
+                                        ${ticket.notasTecnico}
+                                    </p>
+
+                                </div>
+                            `
+                            : ""
+                    }
+
+                    ${
+    Number(ticket.conformidadCliente) === 1
+        ? `
             <hr class="my-4">
 
+            <div class="alert alert-success mb-0">
+
+                <i class="bi bi-check-circle me-2"></i>
+
+                Confirmaste que el problema fue solucionado.
+
+            </div>
+        `
+        : `
+            <hr class="my-4">
 
             <div>
 
                 <h2 class="h5 fw-bold">
-                    Descripción del problema
+                    ¿Tu problema quedó solucionado?
                 </h2>
 
-                <p class="text-secondary mb-0">
-                    ${ticket.descripcion}
+                <p class="text-secondary">
+                    Confirma el resultado de la atención.
                 </p>
 
+                <div class="d-flex flex-wrap gap-2">
+
+                    <button
+                        class="btn btn-success"
+                        data-conformidad="solucionado"
+                    >
+                        <i class="bi bi-check-circle me-1"></i>
+                        Sí, quedó solucionado
+                    </button>
+
+                    <button
+                        class="btn btn-outline-danger"
+                        data-conformidad="continua"
+                    >
+                        <i class="bi bi-x-circle me-1"></i>
+                        El problema continúa
+                    </button>
+
+                </div>
+
+                <p
+                    id="conformidadMensaje"
+                    class="small mt-3 mb-0"
+                ></p>
+
             </div>
-
-
-            ${
-                ticket.notasTecnico
-                    ? `
-                        <hr class="my-4">
-
-                        <div>
-
-                            <h2 class="h5 fw-bold">
-                                Notas del técnico
-                            </h2>
-
-                            <p class="text-secondary mb-0">
-                                ${ticket.notasTecnico}
-                            </p>
-
-                        </div>
-                    `
-                    : ""
-            }
-
-        </section>
-
-        ${accionesConformidad}
-    `;
-
-
-    const botonConfirmar =
-        document.getElementById("confirmTicket");
-
-    const botonContinuar =
-        document.getElementById("continueTicket");
-
-
-    if (botonConfirmar) {
-
-        botonConfirmar.addEventListener(
-            "click",
-            function () {
-
-                ticket.conformidadCliente = true;
-                ticket.estado = "Cerrado";
-
-                ticket.fechaCierre =
-                    new Date()
-                        .toLocaleDateString("es-MX");
-
-                saveTickets(tickets);
-
-                mostrarDetalleTicket();
-            }
-        );
-    }
-
-
-    if (botonContinuar) {
-
-        botonContinuar.addEventListener(
-            "click",
-            function () {
-
-                ticket.conformidadCliente = false;
-                ticket.estado = "Proceso";
-
-                saveTickets(tickets);
-
-                mostrarDetalleTicket();
-            }
-        );
-    }
-
+        `
 }
+
+                </section>
+            `;
+                            document.querySelectorAll("[data-conformidad]")
+                    .forEach(function (boton) {
+
+                        boton.addEventListener("click", function () {
+
+                            const respuesta =
+                                boton.dataset.conformidad;
+
+                            const formulario =
+                                new FormData();
+
+                            formulario.append(
+                                "idTicket",
+                                ticket.idTicket
+                            );
+
+                            formulario.append(
+                                "respuesta",
+                                respuesta
+                            );
+
+
+                            fetch(
+                                "../../backend_web/conformidad_ticket_cliente.php",
+                                {
+                                    method: "POST",
+                                    body: formulario
+                                }
+                            )
+                                .then(function (respuestaServidor) {
+                                    return respuestaServidor.json();
+                                })
+                                .then(function (datosConformidad) {
+
+                                    if (!datosConformidad.success) {
+
+                                        console.error(
+                                            datosConformidad.mensaje
+                                        );
+
+                                        return;
+                                    }
+
+
+                                    if (respuesta === "solucionado") {
+
+                                        mostrarDetalleTicket();
+
+                                    } else {
+
+                                        document.getElementById(
+                                            "conformidadMensaje"
+                                        ).textContent =
+                                            "Se registró que el problema continúa.";
+                                    }
+                                })
+                                .catch(function (error) {
+
+                                    console.error(
+                                        "Error al registrar la conformidad:",
+                                        error
+                                    );
+                                });
+                        });
+                    });
+
+
+
+        })
+        .catch(function (error) {
+
+            console.error(
+                "Error al cargar el detalle del ticket:",
+                error
+            );
+        });
+}
+
+    
+
+    
     mostrarTickets();
     configurarFiltrosTickets();
     mostrarDetalleTicket();
@@ -1513,25 +1634,24 @@ function claseEstadoTicket(estado) {
 
 function ticketCoincideFiltro(ticket, filtro) {
 
+    const estado = ticket.estado
+        .trim()
+        .toLowerCase();
+
     if (filtro === "all") {
         return true;
     }
 
-    if (filtro === "Pendiente") {
-        return ticket.estado === "Pendiente";
+    if (filtro === "Asignado") {
+        return estado === "asignado";
     }
 
     if (filtro === "Atencion") {
-
-        return [
-            "Asignado",
-            "Proceso",
-            "Pendiente conformidad"
-        ].includes(ticket.estado);
+        return estado === "proceso";
     }
 
     if (filtro === "Cerrado") {
-        return ticket.estado === "Cerrado";
+        return estado === "cerrado";
     }
 
     return true;

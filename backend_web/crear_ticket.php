@@ -272,7 +272,16 @@ $stmtTicket->bind_param(
     $modalidad
 );
 
-$stmtTicket->execute();
+// Ejecuta el registro del ticket y comprueba que realmente se guarde
+if (!$stmtTicket->execute()) {
+
+    echo json_encode([
+        "success" => false,
+        "mensaje" => "Error al guardar el ticket: " . $stmtTicket->error
+    ]);
+
+    exit;
+}
 
 $idTicket = $mysqli->insert_id;
 
