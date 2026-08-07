@@ -38,15 +38,6 @@ if (parametrosTicket.get("created")) {
     };
 
 
-    // Datos provisionales del cliente
-    const clienteInicial = {
-        nombre: "Isaú",
-        apellido: "Ramírez",
-        telefono: "3300000000",
-        correo: "isau@ejemplo.com",
-        empresa: "Empresa principal"
-    };
-
 
     // Pólizas provisionales para mostrar el funcionamiento
     const polizasIniciales = [
@@ -80,13 +71,7 @@ if (parametrosTicket.get("created")) {
     ];
 
 
-    // Crear información inicial solamente si todavía no existe
-    if (!localStorage.getItem("clienteETS")) {
-        localStorage.setItem(
-            "clienteETS",
-            JSON.stringify(clienteInicial)
-        );
-    }
+
 
     if (!localStorage.getItem("polizasETS")) {
         localStorage.setItem(
@@ -96,21 +81,10 @@ if (parametrosTicket.get("created")) {
     }
 
 
-    let cliente = JSON.parse(
-        localStorage.getItem("clienteETS")
-    );
 
     let polizas = JSON.parse(
         localStorage.getItem("polizasETS")
     );
-
-
-    function guardarCliente() {
-        localStorage.setItem(
-            "clienteETS",
-            JSON.stringify(cliente)
-        );
-    }
 
 
     function guardarPolizas() {
@@ -291,38 +265,95 @@ if (newTicketForm) {
         return fecha.toLocaleDateString("es-MX");
     }
 
+    // Carga los datos reales del cliente
+function cargarCliente() {
 
-    // Colocar el nombre del cliente en las diferentes páginas
-    document
-        .querySelectorAll("[data-client-name]")
-        .forEach(function (elemento) {
-            elemento.textContent = cliente.nombre;
-        });
+    fetch("../../backend_web/perfil_cliente.php")
+        .then(function (respuesta) {
+            return respuesta.json();
+        })
+        .then(function (datos) {
 
+            if (!datos.success) {
+                console.error(datos.mensaje);
+                return;
+            }
 
-    document
-        .querySelectorAll("[data-client-fullname]")
-        .forEach(function (elemento) {
-            elemento.textContent =
-                cliente.nombre + " " + cliente.apellido;
-        });
-
-
-    document
-        .querySelectorAll("[data-client-email]")
-        .forEach(function (elemento) {
-            elemento.textContent = cliente.correo;
-        });
+            const cliente = datos.cliente;
 
 
-    document
-        .querySelectorAll("[data-client-initials]")
-        .forEach(function (elemento) {
-            elemento.textContent = obtenerIniciales(
-                cliente.nombre,
-                cliente.apellido
+            document
+                .querySelectorAll("[data-client-name]")
+                .forEach(function (elemento) {
+                    elemento.textContent = cliente.nombreC;
+                });
+
+
+            document
+                .querySelectorAll("[data-client-fullname]")
+                .forEach(function (elemento) {
+                    elemento.textContent =
+                        cliente.nombreC + " " + cliente.apellidoC;
+                });
+
+
+            document
+                .querySelectorAll("[data-client-email]")
+                .forEach(function (elemento) {
+                    elemento.textContent = cliente.correoC;
+                });
+
+
+            document
+                .querySelectorAll("[data-client-initials]")
+                .forEach(function (elemento) {
+                    elemento.textContent = obtenerIniciales(
+                        cliente.nombreC,
+                        cliente.apellidoC
+                    );
+                });
+
+
+            // Llena el formulario si estamos en la página de perfil
+            const profileForm =
+                document.getElementById("profileForm");
+
+            if (profileForm) {
+
+                document.getElementById(
+                    "profileName"
+                ).value = cliente.nombreC;
+
+                document.getElementById(
+                    "profileLastName"
+                ).value = cliente.apellidoC;
+
+                document.getElementById(
+                    "profilePhone"
+                ).value = cliente.telefonoC;
+
+                document.getElementById(
+                    "profileEmail"
+                ).value = cliente.correoC;
+
+                document.getElementById(
+                    "profileCompany"
+                ).value = cliente.empresaC;
+            }
+        })
+        .catch(function (error) {
+
+            console.error(
+                "Error al cargar el perfil:",
+                error
             );
         });
+}
+
+
+cargarCliente();
+    
+
 
 
     // Mostrar pólizas en el panel principal
@@ -775,81 +806,106 @@ function configurarFiltrosTickets() {
         );
     }
 
-
-    // Información y edición del perfil
-    const profileForm = document.getElementById(
-        "profileForm"
-    );
-
-
-    if (profileForm) {
-
-        const profileName = document.getElementById(
-            "profileName"
-        );
-
-        const profileLastName = document.getElementById(
-            "profileLastName"
-        );
-
-        const profilePhone = document.getElementById(
-            "profilePhone"
-        );
-
-        const profileEmail = document.getElementById(
-            "profileEmail"
-        );
-
-        const profileCompany = document.getElementById(
-            "profileCompany"
-        );
+    // Edición del perfil
+const profileForm = document.getElementById(
+    "profileForm"
+);
 
 
-        profileName.value = cliente.nombre;
-        profileLastName.value = cliente.apellido;
-        profilePhone.value = cliente.telefono;
-        profileEmail.value = cliente.correo;
-        profileCompany.value = cliente.empresa;
+if (profileForm) {
+
+    profileForm.addEventListener(
+        "submit",
+        function (evento) {
+
+            evento.preventDefault();
 
 
-        profileForm.addEventListener(
-            "submit",
-            function (evento) {
+            const formulario = new FormData();
 
-                evento.preventDefault();
+            formulario.append(
+                "nombre",
+                document.getElementById(
+                    "profileName"
+                ).value.trim()
+            );
 
-                cliente.nombre = profileName.value.trim();
-                cliente.apellido = profileLastName.value.trim();
-                cliente.telefono = profilePhone.value.trim();
-                cliente.correo = profileEmail.value.trim();
-                cliente.empresa = profileCompany.value.trim();
+            formulario.append(
+                "apellido",
+                document.getElementById(
+                    "profileLastName"
+                ).value.trim()
+            );
 
-                guardarCliente();
+            formulario.append(
+                "telefono",
+                document.getElementById(
+                    "profilePhone"
+                ).value.trim()
+            );
 
-                const profileAlert = document.getElementById(
-                    "profileAlert"
-                );
+            formulario.append(
+                "correo",
+                document.getElementById(
+                    "profileEmail"
+                ).value.trim()
+            );
 
-                profileAlert.classList.remove("d-none");
+            formulario.append(
+                "empresa",
+                document.getElementById(
+                    "profileCompany"
+                ).value.trim()
+            );
 
-                document
-                    .querySelector("[data-client-fullname]")
-                    .textContent =
-                    cliente.nombre + " " + cliente.apellido;
+            formulario.append(
+                "password",
+                document.getElementById(
+                    "profilePassword"
+                ).value
+            );
 
-                document
-                    .querySelector("[data-client-email]")
-                    .textContent = cliente.correo;
 
-                document
-                    .querySelector("[data-client-initials]")
-                    .textContent = obtenerIniciales(
-                        cliente.nombre,
-                        cliente.apellido
+            fetch(
+                "../../backend_web/actualizar_perfil_cliente.php",
+                {
+                    method: "POST",
+                    body: formulario
+                }
+            )
+                .then(function (respuesta) {
+                    return respuesta.json();
+                })
+                .then(function (datos) {
+
+                    if (!datos.success) {
+                        alert(datos.mensaje);
+                        return;
+                    }
+
+                    document.getElementById(
+                        "profileAlert"
+                    ).classList.remove("d-none");
+
+                    document.getElementById(
+                        "profilePassword"
+                    ).value = "";
+
+                    cargarCliente();
+                })
+                .catch(function (error) {
+
+                    console.error(
+                        "Error al actualizar el perfil:",
+                        error
                     );
-            }
-        );
-    }
+                });
+        }
+    );
+}
+
+
+
 
 
     // Botón para mostrar u ocultar la contraseña
