@@ -237,13 +237,10 @@ if (newTicketForm) {
                     );
                 });
 
-           
 
-            window.location.href =
-                "tickets_cliente.html?created=1";
         }
     );
-}
+    }
 
 
 
