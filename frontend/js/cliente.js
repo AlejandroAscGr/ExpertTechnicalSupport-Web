@@ -182,57 +182,62 @@ if (newTicketForm) {
 
             evento.preventDefault();
 
-            const tickets = getTickets();
+            // Prepara los datos del ticket para enviarlos al backend
+            const nuevoTicket = new FormData();
 
-            const nuevoNumero =
-                String(tickets.length + 1)
-                    .padStart(3, "0");
+            nuevoTicket.append(
+                "idPoliza",
+                ticketPolicy.value
+            );
 
+            nuevoTicket.append(
+                "modalidad",
+                document.getElementById(
+                    "ticketModality"
+                ).value
+            );
 
-            const nuevoTicket = {
+            nuevoTicket.append(
+                "concepto",
+                document.getElementById(
+                    "ticketConcept"
+                ).value.trim()
+            );
 
-                id: "TKT-" + nuevoNumero,
-
-                idPoliza: Number(
-                    ticketPolicy.value
-                ),
-
-                modalidad:
-                    document.getElementById(
-                        "ticketModality"
-                    ).value,
-
-                concepto:
-                    document.getElementById(
-                        "ticketConcept"
-                    ).value.trim(),
-
-                descripcion:
-                    document.getElementById(
-                        "ticketDescription"
-                    ).value.trim(),
-
-                estado: "Pendiente",
-
-                idEmpleado: null,
-
-                notasTecnico: "",
-
-                fechaCreacion:
-                    new Date()
-                        .toLocaleDateString("es-MX"),
-
-                fechaAtencion: null,
-
-                conformidadCliente: false,
-
-                fechaCierre: null
-            };
+            nuevoTicket.append(
+                "descripcion",
+                document.getElementById(
+                    "ticketDescription"
+                ).value.trim()
+            );
 
 
-            tickets.push(nuevoTicket);
+            // Envía el nuevo ticket para guardarlo en la BD
+            fetch("../../backend_web/crear_ticket.php", {
+                method: "POST",
+                body: nuevoTicket
+            })
+                .then(function (respuesta) {
+                    return respuesta.json();
+                })
+                .then(function (datos) {
 
-            saveTickets(tickets);
+                    if (!datos.success) {
+                        alert(datos.mensaje);
+                        return;
+                    }
+
+                    window.location.href =
+                        "tickets_cliente.html?created=1";
+                })
+                .catch(function (error) {
+                    console.error(
+                        "Error al crear el ticket:",
+                        error
+                    );
+                });
+
+           
 
             window.location.href =
                 "tickets_cliente.html?created=1";
