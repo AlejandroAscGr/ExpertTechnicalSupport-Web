@@ -137,29 +137,43 @@ if (newTicketForm) {
         "ticketPolicy"
     );
 
-    const polizasActivas = polizas.filter(
-        function (poliza) {
-            return poliza.estado !== "Cancelada";
+    // Obtiene las pólizas  del cliente desde la BD
+  fetch("../../backend_web/polizas_cliente.php")
+    .then(function (respuesta) {
+        return respuesta.json();
+    })
+    .then(function (datos) {
+
+        if (!datos.success) {
+            return;
         }
-    );
 
+        // Agrega cada póliza al select
+        datos.polizas.forEach(function (poliza) {
 
-    // Mostrar las pólizas disponibles
-    polizasActivas.forEach(function (poliza) {
+            const opcion = document.createElement(
+                "option"
+            );
 
-        const opcion = document.createElement(
-            "option"
+            opcion.value = poliza.idPoliza;
+
+            opcion.textContent =
+                poliza.nombreEmpresaP +
+                " - Plan " +
+                poliza.nombreP;
+
+            ticketPolicy.appendChild(opcion);
+        });
+    })
+    .catch(function (error) {
+        console.error(
+            "Error al cargar las pólizas:",
+            error
         );
-
-        opcion.value = poliza.id;
-
-        opcion.textContent =
-            poliza.negocio +
-            " - Plan " +
-            poliza.plan;
-
-        ticketPolicy.appendChild(opcion);
     });
+
+
+
 
 
     newTicketForm.addEventListener(
