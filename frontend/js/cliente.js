@@ -93,13 +93,7 @@ if (parametrosTicket.get("created")) {
             JSON.stringify(polizas)
         );
     }
-    function getTickets() {
-    return JSON.parse(localStorage.getItem("etsDemoTickets")) || [];
-    }
 
-    function saveTickets(tickets) {
-        localStorage.setItem("etsDemoTickets", JSON.stringify(tickets));
-    }
     // Crear un nuevo ticket
 const newTicketForm = document.getElementById(
     "newTicketForm"
@@ -612,108 +606,140 @@ function configurarFiltrosTickets() {
 }
 
 
-    function mostrarPolizas(filtro) {
+    function mostrarPolizas(filtro = "all") {
 
-        if (!policiesGrid) {
-            return;
-        }
+    if (!policiesGrid) {
+        return;
+    }
 
-        let polizasFiltradas = polizas;
+    fetch("../../backend_web/polizas_cliente.php")
+        .then(function (respuesta) {
+            return respuesta.json();
+        })
+        .then(function (datos) {
 
-        if (filtro !== "all") {
+            if (!datos.success) {
+                console.error(datos.mensaje);
+                return;
+            }
 
-            polizasFiltradas = polizas.filter(
-                function (poliza) {
-                    return poliza.estado === filtro;
-                }
-            );
-        }
+            let polizasFiltradas = datos.polizas;
 
-        if (polizasFiltradas.length === 0) {
+            // Filtra según el estado seleccionado
+            if (filtro !== "all") {
 
-            policiesGrid.innerHTML = `
-                <div class="col-12">
+                polizasFiltradas = datos.polizas.filter(
+                    function (poliza) {
+                        return poliza.estadoP === filtro;
+                    }
+                );
+            }
 
-                    <div class="empty-policy text-center">
-                        <i class="bi bi-inbox"></i>
 
-                        <h2 class="h5 mt-3">
-                            No hay pólizas en esta categoría
-                        </h2>
+            if (polizasFiltradas.length === 0) {
 
-                        <p class="text-secondary mb-0">
-                            Prueba seleccionando otro filtro.
-                        </p>
-                    </div>
+                policiesGrid.innerHTML = `
+                    <div class="col-12">
 
-                </div>
-            `;
+                        <div class="empty-policy text-center">
+                            <i class="bi bi-inbox"></i>
 
-            return;
-        }
-
-        policiesGrid.innerHTML =
-            polizasFiltradas.map(function (poliza) {
-
-                const cobertura = planes[poliza.plan];
-
-                return `
-                    <div class="col-md-6 col-xl-4">
-
-                        <article class="policy-card h-100">
-
-                            <div class="d-flex justify-content-between align-items-start mb-4">
-
-                                <span class="policy-card-icon">
-                                    <i class="bi bi-shield-check"></i>
-                                </span>
-
-                                <span class="policy-status ${obtenerClaseEstado(poliza.estado)}">
-                                    ${poliza.estado}
-                                </span>
-
-                            </div>
-
-                            <small class="text-secondary">
-                                Póliza #${poliza.numero}
-                            </small>
-
-                            <h2 class="h5 fw-bold mt-1 mb-1">
-                                ${poliza.negocio}
+                            <h2 class="h5 mt-3">
+                                No hay pólizas en esta categoría
                             </h2>
 
-                            <p class="text-secondary">
-                                Plan ${poliza.plan}
+                            <p class="text-secondary mb-0">
+                                Prueba seleccionando otro filtro.
                             </p>
-
-                            <div class="policy-card-data">
-
-                                <span>
-                                    <i class="bi bi-pc-display"></i>
-                                    Hasta ${cobertura.dispositivos} dispositivos
-                                </span>
-
-                                <span>
-                                    <i class="bi bi-calendar-check"></i>
-                                    Vence ${poliza.fechaVencimiento}
-                                </span>
-
-                            </div>
-
-                            <a
-                                href="detalle_poliza.html?id=${poliza.id}"
-                                class="btn btn-outline-success w-100 mt-4"
-                            >
-                                Ver detalles
-                                <i class="bi bi-arrow-right ms-1"></i>
-                            </a>
-
-                        </article>
+                        </div>
 
                     </div>
                 `;
-            }).join("");
-    }
+
+                return;
+            }
+
+
+            policiesGrid.innerHTML =
+                polizasFiltradas.map(function (poliza) {
+
+                    const cobertura = planes[poliza.nombreP];
+
+                    const numeroPoliza =
+                        "ETS-" +
+                        String(poliza.idPoliza).padStart(3, "0");
+
+                    const fechaVencimiento =
+                        new Date(
+                            poliza.fechaVencimientoP + "T00:00:00"
+                        ).toLocaleDateString("es-MX");
+
+
+                    return `
+                        <div class="col-md-6 col-xl-4">
+
+                            <article class="policy-card h-100">
+
+                                <div class="d-flex justify-content-between align-items-start mb-4">
+
+                                    <span class="policy-card-icon">
+                                        <i class="bi bi-shield-check"></i>
+                                    </span>
+
+                                    <span class="policy-status ${obtenerClaseEstado(poliza.estadoP)}">
+                                        ${poliza.estadoP}
+                                    </span>
+
+                                </div>
+
+                                <small class="text-secondary">
+                                    Póliza #${numeroPoliza}
+                                </small>
+
+                                <h2 class="h5 fw-bold mt-1 mb-1">
+                                    ${poliza.nombreEmpresaP}
+                                </h2>
+
+                                <p class="text-secondary">
+                                    Plan ${poliza.nombreP}
+                                </p>
+
+                                <div class="policy-card-data">
+
+                                    <span>
+                                        <i class="bi bi-pc-display"></i>
+                                        Hasta ${cobertura.dispositivos} dispositivos
+                                    </span>
+
+                                    <span>
+                                        <i class="bi bi-calendar-check"></i>
+                                        Vence ${fechaVencimiento}
+                                    </span>
+
+                                </div>
+
+                                <a
+                                    href="detalle_poliza.html?id=${poliza.idPoliza}"
+                                    class="btn btn-outline-success w-100 mt-4"
+                                >
+                                    Ver detalles
+                                    <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+
+                            </article>
+
+                        </div>
+                    `;
+                }).join("");
+        })
+        .catch(function (error) {
+
+            console.error(
+                "Error al cargar las pólizas:",
+                error
+            );
+        });
+}
 
 
     if (policiesGrid) {

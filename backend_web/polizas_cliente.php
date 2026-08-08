@@ -21,16 +21,21 @@ if (!isset($_SESSION['idCliente'])) {
 $idCliente = $_SESSION['idCliente'];
 
 
-// Busca las pólizas que pertenecen al cliente y obtiene su plan
+// Obtiene las pólizas reales del cliente y su plan
 $query = "
     SELECT
         p.idPoliza,
         p.nombreEmpresaP,
         p.idPlan,
+        p.estadoP,
+        p.fechaInicioP,
+        p.fechaVencimientoP,
+
         pl.nombreP,
         pl.maxPres,
         pl.maxRem,
         pl.maxAse
+
     FROM poliza p
 
     INNER JOIN plan pl
@@ -38,36 +43,56 @@ $query = "
 
     WHERE p.idCliente = ?
 
-    ORDER BY p.idPoliza
+    ORDER BY p.idPoliza DESC
 ";
 
 
 $stmt = $mysqli->prepare($query);
 
-// Muestra el error real si la consulta no pudo prepararse
+
+// Comprueba que la consulta se prepare correctamente
 if (!$stmt) {
-    die("Error al preparar la consulta: " . $mysqli->error);
+
+    echo json_encode([
+        "success" => false,
+        "mensaje" => $mysqli->error
+    ]);
+
+    exit;
 }
 
 
-// Coloca el id del cliente en el signo ?
-$stmt->bind_param("i", $idCliente);
+$stmt->bind_param(
+    "i",
+    $idCliente
+);
 
-$stmt->execute();
+
+// Ejecuta la consulta
+if (!$stmt->execute()) {
+
+    echo json_encode([
+        "success" => false,
+        "mensaje" => $stmt->error
+    ]);
+
+    exit;
+}
+
 
 $resultado = $stmt->get_result();
 
 $polizas = [];
 
 
-// Guarda cada póliza encontrada en el arreglo
+// Guarda cada póliza encontrada
 while ($row = $resultado->fetch_assoc()) {
 
     $polizas[] = $row;
 }
 
 
-// Devuelve las pólizas al frontend en formato JSON
+// Devuelve las pólizas al frontend
 echo json_encode([
     "success" => true,
     "polizas" => $polizas
