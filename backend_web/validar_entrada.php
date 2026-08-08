@@ -13,8 +13,7 @@ $query = "
         idEmpleado AS id,
         nombresEmp AS nombre,
         apellidosEmp AS apellido,
-        rolEmp AS perfil,
-        NULL AS empresa
+        rolEmp AS perfil
     FROM empleado
     WHERE emailEmp = ? AND pass = ?
 
@@ -24,8 +23,7 @@ $query = "
         idCliente AS id,
         nombreC AS nombre,
         apellidoC AS apellido,
-        'CLIENTE' AS perfil,
-        empresaC AS empresa
+        'CLIENTE' AS perfil
     FROM cliente
     WHERE correoC = ? AND passC = ?
 
@@ -84,7 +82,6 @@ if ($resultado->num_rows > 0) {
         case "CLIENTE":
 
             $_SESSION['idCliente'] = $row['id'];
-            $_SESSION['empresa'] = $row['empresa'];
 
             header("Location: ../frontend/cliente/indexcliente.html");
             exit;

@@ -8,7 +8,6 @@ $nombre = trim($_POST['nombreC']);
 $apellido = trim($_POST['apellidoC']);
 $telefono = trim($_POST['telefonoC']);
 $correo = trim($_POST['correoC']);
-$empresa = trim($_POST['empresaC']);
 $password = trim($_POST['passC']);
 
 // Verifica que el correo no esté registrado
@@ -31,18 +30,17 @@ if ($resultadoCorreo->num_rows > 0) {
 
 // Inserta al cliente
 $query = "INSERT INTO cliente
-          (nombreC, apellidoC, telefonoC, correoC, empresaC, passC, fechaAltaC)
-          VALUES (?, ?, ?, ?, ?, ?, CURDATE())";
+          (nombreC, apellidoC, telefonoC, correoC, passC, fechaAltaC)
+          VALUES (?, ?, ?, ?, ?, CURDATE())";
 
 $stmt = $mysqli->prepare($query);
 
 $stmt->bind_param(
-    "ssssss",
+    "sssss",
     $nombre,
     $apellido,
     $telefono,
     $correo,
-    $empresa,
     $password
 );
 

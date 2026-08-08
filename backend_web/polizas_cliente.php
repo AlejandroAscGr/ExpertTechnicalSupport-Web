@@ -26,6 +26,9 @@ $query = "
     SELECT
         p.idPoliza,
         p.nombreEmpresaP,
+        p.direccionServicioP,
+        p.correoP,
+        p.telefonoP,
         p.idPlan,
         p.estadoP,
         p.fechaInicioP,
@@ -34,18 +37,23 @@ $query = "
         pl.nombreP,
         pl.maxPres,
         pl.maxRem,
-        pl.maxAse
+        pl.maxAse,
+
+        c.nombreC,
+        c.apellidoC
 
     FROM poliza p
 
     INNER JOIN plan pl
         ON p.idPlan = pl.idPlan
 
+    INNER JOIN cliente c
+        ON p.idCliente = c.idCliente
+
     WHERE p.idCliente = ?
 
     ORDER BY p.idPoliza DESC
 ";
-
 
 $stmt = $mysqli->prepare($query);
 

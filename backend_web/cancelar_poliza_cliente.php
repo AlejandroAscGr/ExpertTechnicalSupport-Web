@@ -6,7 +6,6 @@ include("../backend_general/conexion.php");
 header("Content-Type: application/json; charset=utf-8");
 
 
-// Comprueba que exista una sesión de cliente
 if (!isset($_SESSION['idCliente'])) {
 
     echo json_encode([
@@ -19,30 +18,32 @@ if (!isset($_SESSION['idCliente'])) {
 
 
 $idCliente = $_SESSION['idCliente'];
+$idPoliza = intval($_POST['idPoliza'] ?? 0);
 
 
-// Consulta los datos del cliente logueado
+if ($idPoliza <= 0) {
+
+    echo json_encode([
+        "success" => false,
+        "mensaje" => "La póliza no es válida"
+    ]);
+
+    exit;
+}
+
+
 $query = "
-    SELECT
-        idCliente,
-        nombreC,
-        apellidoC,
-        telefonoC,
-        correoC,
-        fechaAltaC
-
-    FROM cliente
-
-    WHERE idCliente = ?
-
-    LIMIT 1
+    UPDATE poliza
+    SET estadoP = 'Cancelada'
+    WHERE idPoliza = ?
+    AND idCliente = ?
+    AND estadoP <> 'Cancelada'
 ";
 
 
 $stmt = $mysqli->prepare($query);
 
 
-// Comprueba que la consulta se prepare correctamente
 if (!$stmt) {
 
     echo json_encode([
@@ -54,14 +55,13 @@ if (!$stmt) {
 }
 
 
-// Coloca el cliente de la sesión en el signo ?
 $stmt->bind_param(
-    "i",
+    "ii",
+    $idPoliza,
     $idCliente
 );
 
 
-// Ejecuta la consulta
 if (!$stmt->execute()) {
 
     echo json_encode([
@@ -73,28 +73,23 @@ if (!$stmt->execute()) {
 }
 
 
-$resultado = $stmt->get_result();
-
-
-// Comprueba que el cliente exista
-if ($resultado->num_rows === 0) {
+if ($stmt->affected_rows === 0) {
 
     echo json_encode([
         "success" => false,
-        "mensaje" => "Cliente no encontrado"
+        "mensaje" => "La póliza no existe o ya está cancelada"
     ]);
+
+    $stmt->close();
+    $mysqli->close();
 
     exit;
 }
 
 
-$cliente = $resultado->fetch_assoc();
-
-
-// Devuelve los datos del perfil
 echo json_encode([
     "success" => true,
-    "cliente" => $cliente
+    "mensaje" => "Póliza cancelada correctamente"
 ]);
 
 
