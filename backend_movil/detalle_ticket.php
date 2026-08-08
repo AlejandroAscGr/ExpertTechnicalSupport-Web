@@ -14,12 +14,14 @@ $query = "SELECT
     t.modalidadAtencionT,
     t.fechaCreacionT,
     t.fechaCierreT,
-    u.nombresU,
-    u.apellidosU,
-    u.locacionU,
-    u.correoU
+    c.nombreC,
+    c.apellidoC,
+    c.empresaC,
+    p.nombreEmpresaP,
+    p.direccionServicioP
 FROM ticket t
-JOIN usuario u ON t.idUsuario = u.idUsuario
+JOIN poliza p ON t.idPoliza = p.idPoliza
+JOIN cliente c ON p.idCliente = c.idCliente
 WHERE t.idTicket = ?";
 
 // se ejecuta el statement cawn
