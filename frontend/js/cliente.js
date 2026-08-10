@@ -1234,11 +1234,81 @@ if (policyDetailContent) {
         ).value =
             poliza.direccionServicioP;
 
+            // Prepara únicamente los planes superiores
+const nivelesPlanes = [
+    "Esencial",
+    "Profesional",
+    "Empresarial"
+];
 
-        document.getElementById(
-            "newPolicyPlan"
-        ).value =
-            poliza.nombreP;
+const newPolicyPlan = document.getElementById(
+    "newPolicyPlan"
+);
+
+const improvePolicyButton = document.getElementById(
+    "improvePolicyButton"
+);
+
+
+// Limpia las opciones anteriores
+newPolicyPlan.innerHTML = "";
+
+
+const opcionInicial = document.createElement(
+    "option"
+);
+
+opcionInicial.value = "";
+opcionInicial.textContent =
+    "Selecciona un plan diferente";
+
+opcionInicial.selected = true;
+opcionInicial.disabled = true;
+
+newPolicyPlan.appendChild(
+    opcionInicial
+);
+
+
+const indicePlanActual = nivelesPlanes.indexOf(
+    poliza.nombreP
+);
+
+
+// Agrega únicamente los niveles superiores
+if (indicePlanActual !== -1) {
+
+    nivelesPlanes
+        .slice(indicePlanActual + 1)
+        .forEach(function (nombrePlan) {
+
+            const opcion = document.createElement(
+                "option"
+            );
+
+            opcion.value = nombrePlan;
+            opcion.textContent = nombrePlan;
+
+            newPolicyPlan.appendChild(
+                opcion
+            );
+        });
+}
+
+
+// Determina si la póliza puede mejorarse
+const puedeMejorar =
+    indicePlanActual !== -1 &&
+    indicePlanActual < nivelesPlanes.length - 1 &&
+    poliza.estadoP !== "Cancelada";
+
+
+improvePolicyButton.disabled =
+    !puedeMejorar;
+
+newPolicyPlan.disabled =
+    !puedeMejorar;
+
 
 
         // Control de estado
@@ -1459,6 +1529,74 @@ renewPolicyButton.addEventListener(
             });
     }
 );
+
+// Prepara los planes disponibles
+const planesDisponibles = [
+    "Esencial",
+    "Profesional",
+    "Empresarial"
+];
+
+const newPolicyPlan = document.getElementById(
+    "newPolicyPlan"
+);
+
+const improvePolicyButton = document.getElementById(
+    "improvePolicyButton"
+);
+
+
+// Limpia las opciones anteriores
+newPolicyPlan.innerHTML = "";
+
+
+const opcionInicial = document.createElement(
+    "option"
+);
+
+opcionInicial.value = "";
+opcionInicial.textContent =
+    "Selecciona un plan diferente";
+
+opcionInicial.selected = true;
+opcionInicial.disabled = true;
+
+newPolicyPlan.appendChild(
+    opcionInicial
+);
+
+
+// Agrega todos los planes excepto el actual
+planesDisponibles.forEach(function (nombrePlan) {
+
+    if (nombrePlan === poliza.nombreP) {
+        return;
+    }
+
+    const opcion = document.createElement(
+        "option"
+    );
+
+    opcion.value = nombrePlan;
+    opcion.textContent = nombrePlan;
+
+    newPolicyPlan.appendChild(
+        opcion
+    );
+});
+
+
+// Una póliza cancelada debe renovarse antes
+const puedeCambiarPlan =
+    planesDisponibles.includes(poliza.nombreP) &&
+    poliza.estadoP !== "Cancelada";
+
+
+improvePolicyButton.disabled =
+    !puedeCambiarPlan;
+
+newPolicyPlan.disabled =
+    !puedeCambiarPlan;
 
 
 
