@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
     
     const pathname = window.location.pathname;
 
+    // Esta arregla los menus que no me aparecen los iconos
+    resaltarMenuActivo();
+
     // Arrays Globales para que el fiktro sea en corto
     let allClientes = [];
     let allPolizas = [];
@@ -16,6 +19,91 @@ document.addEventListener("DOMContentLoaded", function () {
     if (pathname.includes("polizas_dg.html")) { cargarPolizas(); setFiltrosPolizas(); }
     if (pathname.includes("tickets_dg.html")) { cargarTickets(); setFiltrosTickets(); }
     if (pathname.includes("reportes_dg.html")) { cargarReportes(); setFiltrosReportes(); }
+    if (pathname.includes("perfil_dg.html")) { cargarPerfil(); setPerfilEventos(); }
+
+    /* PERFIL DG*/
+
+    function cargarPerfil() {
+        fetch("../../backend_web/dg_perfil.php")
+            .then(res => res.json())
+            .then(datos => {
+                if (datos.success) {
+                    const p = datos.perfil;
+                    document.getElementById('dgNombre').value = p.nombresEmp;
+                    document.getElementById('dgApellido').value = p.apellidosEmp;
+                    document.getElementById('dgCorreo').value = p.emailEmp;
+                    
+                    document.getElementById('dgFullName').textContent = `${p.nombresEmp} ${p.apellidosEmp}`;
+                    document.getElementById('dgEmail').textContent = p.emailEmp;
+                    
+                    // Extraer iniciales
+                    const inicial1 = p.nombresEmp.charAt(0).toUpperCase();
+                    const inicial2 = p.apellidosEmp.charAt(0).toUpperCase();
+                    document.getElementById('dgInitials').textContent = inicial1 + inicial2;
+                }
+            }).catch(err => console.error("Error Perfil:", err));
+    }
+
+    function setPerfilEventos() {
+        // Mostrar/Ocultar Contraseña
+        const btnToggle = document.getElementById('btnTogglePass');
+        if(btnToggle) {
+            btnToggle.addEventListener('click', () => {
+                const inputPass = document.getElementById('dgPassword');
+                const icon = btnToggle.querySelector('i');
+                if(inputPass.type === 'password'){
+                    inputPass.type = 'text';
+                    icon.classList.replace('bi-eye', 'bi-eye-slash');
+                } else {
+                    inputPass.type = 'password';
+                    icon.classList.replace('bi-eye-slash', 'bi-eye');
+                }
+            });
+        }
+
+        // Enviar Formulario
+        const formPerfil = document.getElementById('formPerfilDG');
+        if(formPerfil) {
+            formPerfil.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btnSubmit = formPerfil.querySelector('button[type="submit"]');
+                btnSubmit.disabled = true;
+
+                const formData = new FormData();
+                formData.append('nombre', document.getElementById('dgNombre').value);
+                formData.append('apellido', document.getElementById('dgApellido').value);
+                formData.append('correo', document.getElementById('dgCorreo').value);
+                formData.append('password', document.getElementById('dgPassword').value);
+
+                fetch("../../backend_web/actualizar_perfil_dg.php", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(datos => {
+                    btnSubmit.disabled = false;
+                    const alertExito = document.getElementById('profileAlert');
+                    const alertError = document.getElementById('profileError');
+                    
+                    if (datos.success) {
+                        alertError.classList.add('d-none');
+                        alertExito.classList.remove('d-none');
+                        document.getElementById('dgPassword').value = ""; // Limpiar campo
+                        cargarPerfil(); // Recargar datos visuales
+                        setTimeout(() => alertExito.classList.add('d-none'), 3000);
+                    } else {
+                        alertExito.classList.add('d-none');
+                        alertError.textContent = datos.mensaje;
+                        alertError.classList.remove('d-none');
+                    }
+                })
+                .catch(err => {
+                    btnSubmit.disabled = false;
+                    console.error("Error al actualizar:", err);
+                });
+            });
+        }
+    }
 
     /* DASHBOARD PRINCIPAL (este es del indexdg.html xd)*/
     function cargarResumen() {
@@ -332,7 +420,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* Utilidades de color */
+    /*FUNCIONES AUXILIARES (este ayuda a todos los menus y a evitar que se rompan JASJKAJS)*/
     function obtenerColorPoliza(estado) {
         if (estado === "Activa") return "bg-success bg-opacity-10 text-success border border-success border-opacity-25";
         if (estado === "Por renovar") return "bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25";
@@ -344,4 +432,23 @@ document.addEventListener("DOMContentLoaded", function () {
         if (estado === "Asignado" || estado === "Proceso") return "bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25";
         return "bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25";
     }
+
+    // Resalta el menu automáticamente
+    function resaltarMenuActivo() {
+        // Obtiene el nombre del archivo actual, si está vacío asume indexdg.html
+        const paginaActual = window.location.pathname.split("/").pop() || "indexdg.html";
+        
+        // Busca todos los enlaces del menu
+        document.querySelectorAll("#menuNavegacionDG .client-nav-link").forEach(enlace => {
+            const href = enlace.getAttribute("href");
+            
+            // Si el href coincide con la página actual, le pone la clase active
+            if (href === paginaActual) {
+                enlace.classList.add("active");
+            } else {
+                enlace.classList.remove("active");
+            }
+        });
+    }
+
 });
