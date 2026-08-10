@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../backend_general/conexion.php");
+include("../../backend_general/conexion.php");
 header("Content-Type: application/json; charset=utf-8");
 
 if (!isset($_SESSION['idEmpleado']) || $_SESSION['perfil'] !== 'DIRECTOR') {

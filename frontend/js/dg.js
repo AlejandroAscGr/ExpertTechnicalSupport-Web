@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /* PERFIL DG*/
 
     function cargarPerfil() {
-        fetch("../../backend_web/dg_perfil.php")
+        fetch("../../backend_web/dg/dg_perfil.php")
             .then(res => res.json())
             .then(datos => {
                 if (datos.success) {
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 formData.append('correo', document.getElementById('dgCorreo').value);
                 formData.append('password', document.getElementById('dgPassword').value);
 
-                fetch("../../backend_web/actualizar_perfil_dg.php", {
+                fetch("../../backend_web/dg/actualizar_perfil_dg.php", {
                     method: 'POST',
                     body: formData
                 })
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* DASHBOARD PRINCIPAL (este es del indexdg.html xd)*/
     function cargarResumen() {
-        fetch("../../backend_web/dg_resumen.php")
+        fetch("../../backend_web/dg/dg_resumen.php")
             .then(res => res.json())
             .then(datos => {
                 if (datos.success) {
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* MODULO CLIENTES*/
     function cargarClientes() {
-        fetch("../../backend_web/dg_clientes.php")
+        fetch("../../backend_web/dg/dg_clientes.php")
             .then(res => res.json())
             .then(datos => {
                 if (datos.success) {
@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* MoDULO POLIZAS */
     function cargarPolizas() {
-        fetch("../../backend_web/dg_polizas.php")
+        fetch("../../backend_web/dg/dg_polizas.php")
             .then(res => res.json())
             .then(datos => {
                 if (datos.success) {
@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* MODULO TICKETS*/
     function cargarTickets() {
-        fetch("../../backend_web/dg_tickets.php")
+        fetch("../../backend_web/dg/dg_tickets.php")
             .then(res => res.json())
             .then(datos => {
                 if (datos.success) {
@@ -323,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* MODULO REPORTES (Cruza toda la BD) */
     function cargarReportes() {
-        fetch("../../backend_web/dg_reportes.php")
+        fetch("../../backend_web/dg/dg_reportes.php")
             .then(res => res.json())
             .then(datos => {
                 if (datos.success) {
