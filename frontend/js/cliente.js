@@ -1615,10 +1615,10 @@ changePlanForm.addEventListener(
 
                 botonActualizar.disabled = false;
             });
-    }
-);
+        }
+    );
 
-
+    }   
     function mostrarDetalleTicket() {
 
     const contenedor =
