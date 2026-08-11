@@ -1234,8 +1234,8 @@ if (policyDetailContent) {
         ).value =
             poliza.direccionServicioP;
 
-            // Prepara únicamente los planes superiores
-const nivelesPlanes = [
+            // Prepara todos los planes diferentes al actual
+const planesDisponibles = [
     "Esencial",
     "Profesional",
     "Empresarial"
@@ -1270,44 +1270,40 @@ newPolicyPlan.appendChild(
 );
 
 
-const indicePlanActual = nivelesPlanes.indexOf(
-    poliza.nombreP
-);
+// Agrega todos los planes excepto el actual
+planesDisponibles.forEach(function (nombrePlan) {
+
+    if (nombrePlan === poliza.nombreP) {
+        return;
+    }
 
 
-// Agrega únicamente los niveles superiores
-if (indicePlanActual !== -1) {
+    const opcion = document.createElement(
+        "option"
+    );
 
-    nivelesPlanes
-        .slice(indicePlanActual + 1)
-        .forEach(function (nombrePlan) {
+    opcion.value = nombrePlan;
+    opcion.textContent = nombrePlan;
 
-            const opcion = document.createElement(
-                "option"
-            );
-
-            opcion.value = nombrePlan;
-            opcion.textContent = nombrePlan;
-
-            newPolicyPlan.appendChild(
-                opcion
-            );
-        });
-}
+    newPolicyPlan.appendChild(
+        opcion
+    );
+});
 
 
-// Determina si la póliza puede mejorarse
-const puedeMejorar =
-    indicePlanActual !== -1 &&
-    indicePlanActual < nivelesPlanes.length - 1 &&
+// Una póliza cancelada debe renovarse antes
+const puedeCambiarPlan =
+    planesDisponibles.includes(poliza.nombreP) &&
     poliza.estadoP !== "Cancelada";
 
 
 improvePolicyButton.disabled =
-    !puedeMejorar;
+    !puedeCambiarPlan;
 
 newPolicyPlan.disabled =
-    !puedeMejorar;
+    !puedeCambiarPlan;
+
+
 
 
 
