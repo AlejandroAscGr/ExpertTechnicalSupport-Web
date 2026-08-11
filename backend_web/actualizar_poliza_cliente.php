@@ -6,6 +6,7 @@ include("../backend_general/conexion.php");
 header("Content-Type: application/json; charset=utf-8");
 
 
+// Comprueba la sesión del cliente
 if (!isset($_SESSION['idCliente'])) {
 
     echo json_encode([
@@ -17,20 +18,36 @@ if (!isset($_SESSION['idCliente'])) {
 }
 
 
-$idCliente = $_SESSION['idCliente'];
+$idCliente = intval($_SESSION['idCliente']);
 
-$nombre = trim($_POST['nombre'] ?? "");
-$apellido = trim($_POST['apellido'] ?? "");
-$telefono = trim($_POST['telefono'] ?? "");
-$correo = trim($_POST['correo'] ?? "");
-$password = $_POST['password'] ?? "";
+$idPoliza = intval(
+    $_POST['idPoliza'] ?? 0
+);
+
+$empresa = trim(
+    $_POST['empresa'] ?? ""
+);
+
+$telefono = trim(
+    $_POST['telefono'] ?? ""
+);
+
+$correo = trim(
+    $_POST['correo'] ?? ""
+);
+
+$direccion = trim(
+    $_POST['direccion'] ?? ""
+);
 
 
+// Valida los campos obligatorios
 if (
-    empty($nombre) ||
-    empty($apellido) ||
+    $idPoliza <= 0 ||
+    empty($empresa) ||
     empty($telefono) ||
-    empty($correo)
+    empty($correo) ||
+    empty($direccion)
 ) {
 
     echo json_encode([
@@ -42,55 +59,73 @@ if (
 }
 
 
-// Si escribió una contraseña nueva, también la actualiza
-if (!empty($password)) {
+// Valida el formato del correo
+if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
 
-    $query = "
-        UPDATE cliente
-        SET
-            nombreC = ?,
-            apellidoC = ?,
-            telefonoC = ?,
-            correoC = ?,
-            passC = ?
-        WHERE idCliente = ?
-    ";
+    echo json_encode([
+        "success" => false,
+        "mensaje" => "El correo no tiene un formato válido"
+    ]);
 
-    $stmt = $mysqli->prepare($query);
-
-    $stmt->bind_param(
-        "sssssi",
-        $nombre,
-        $apellido,
-        $telefono,
-        $correo,
-        $password,
-        $idCliente
-    );
-
-} else {
-
-    $query = "
-        UPDATE cliente
-        SET
-            nombreC = ?,
-            apellidoC = ?,
-            telefonoC = ?,
-            correoC = ?
-        WHERE idCliente = ?
-    ";
-
-    $stmt = $mysqli->prepare($query);
-
-    $stmt->bind_param(
-        "ssssi",
-        $nombre,
-        $apellido,
-        $telefono,
-        $correo,
-        $idCliente
-    );
+    exit;
 }
+
+
+// Valida el teléfono
+if (
+    !ctype_digit($telefono) ||
+    strlen($telefono) !== 10
+) {
+
+    echo json_encode([
+        "success" => false,
+        "mensaje" => "El teléfono debe contener 10 dígitos"
+    ]);
+
+    exit;
+}
+
+
+// Actualiza únicamente una póliza del cliente actual
+$query = "
+    UPDATE poliza
+
+    SET
+        nombreEmpresaP = ?,
+        telefonoP = ?,
+        correoP = ?,
+        direccionServicioP = ?
+
+    WHERE idPoliza = ?
+    AND idCliente = ?
+";
+
+
+$stmt = $mysqli->prepare($query);
+
+
+if (!$stmt) {
+
+    echo json_encode([
+        "success" => false,
+        "mensaje" => $mysqli->error
+    ]);
+
+    $mysqli->close();
+
+    exit;
+}
+
+
+$stmt->bind_param(
+    "ssssii",
+    $empresa,
+    $telefono,
+    $correo,
+    $direccion,
+    $idPoliza,
+    $idCliente
+);
 
 
 if (!$stmt->execute()) {
@@ -100,13 +135,16 @@ if (!$stmt->execute()) {
         "mensaje" => $stmt->error
     ]);
 
+    $stmt->close();
+    $mysqli->close();
+
     exit;
 }
 
 
 echo json_encode([
     "success" => true,
-    "mensaje" => "Perfil actualizado correctamente"
+    "mensaje" => "Datos de la póliza actualizados correctamente"
 ]);
 
 
