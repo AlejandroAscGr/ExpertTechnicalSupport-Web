@@ -1,19 +1,24 @@
 document.addEventListener("DOMContentLoaded", function () {
-    
     const pathname = window.location.pathname;
 
-    // Esta arregla los menus que no me aparecen los iconos
     resaltarMenuActivo();
 
-    // Arrays Globales para que el fiktro sea en corto
+    // Arrays Globales
     let allClientes = [];
     let allPolizas = [];
     let allTickets = [];
     let allReportes = [];
 
-    // Detectar que modulos cargar
+    // Variables Paginación
+    let currentPageCli = 1, filtradosCli = [];
+    let currentPagePol = 1, filtradasPol = [];
+    let currentPageTkt = 1, filtradosTkt = [];
+    let currentPageRep = 1, filtradosRep = [];
+    const itemsPerPage = 25;
+
     if (pathname.includes("indexdg.html") || pathname.endsWith("/")) {
         cargarResumen();
+        cargarTicketsRecientes();
     }
     if (pathname.includes("clientes_dg.html")) { cargarClientes(); setFiltrosClientes(); }
     if (pathname.includes("polizas_dg.html")) { cargarPolizas(); setFiltrosPolizas(); }
@@ -21,103 +26,19 @@ document.addEventListener("DOMContentLoaded", function () {
     if (pathname.includes("reportes_dg.html")) { cargarReportes(); setFiltrosReportes(); }
     if (pathname.includes("perfil_dg.html")) { cargarPerfil(); setPerfilEventos(); }
 
-    /* PERFIL DG*/
-
-    function cargarPerfil() {
-        fetch("../../backend_web/dg/dg_perfil.php")
-            .then(res => res.json())
-            .then(datos => {
-                if (datos.success) {
-                    const p = datos.perfil;
-                    document.getElementById('dgNombre').value = p.nombresEmp;
-                    document.getElementById('dgApellido').value = p.apellidosEmp;
-                    document.getElementById('dgCorreo').value = p.emailEmp;
-                    
-                    document.getElementById('dgFullName').textContent = `${p.nombresEmp} ${p.apellidosEmp}`;
-                    document.getElementById('dgEmail').textContent = p.emailEmp;
-                    
-                    // Extraer iniciales
-                    const inicial1 = p.nombresEmp.charAt(0).toUpperCase();
-                    const inicial2 = p.apellidosEmp.charAt(0).toUpperCase();
-                    document.getElementById('dgInitials').textContent = inicial1 + inicial2;
-                }
-            }).catch(err => console.error("Error Perfil:", err));
-    }
-
-    function setPerfilEventos() {
-        // Mostrar/Ocultar Contraseña
-        const btnToggle = document.getElementById('btnTogglePass');
-        if(btnToggle) {
-            btnToggle.addEventListener('click', () => {
-                const inputPass = document.getElementById('dgPassword');
-                const icon = btnToggle.querySelector('i');
-                if(inputPass.type === 'password'){
-                    inputPass.type = 'text';
-                    icon.classList.replace('bi-eye', 'bi-eye-slash');
-                } else {
-                    inputPass.type = 'password';
-                    icon.classList.replace('bi-eye-slash', 'bi-eye');
-                }
-            });
-        }
-
-        // Enviar Formulario
-        const formPerfil = document.getElementById('formPerfilDG');
-        if(formPerfil) {
-            formPerfil.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const btnSubmit = formPerfil.querySelector('button[type="submit"]');
-                btnSubmit.disabled = true;
-
-                const formData = new FormData();
-                formData.append('nombre', document.getElementById('dgNombre').value);
-                formData.append('apellido', document.getElementById('dgApellido').value);
-                formData.append('correo', document.getElementById('dgCorreo').value);
-                formData.append('password', document.getElementById('dgPassword').value);
-
-                fetch("../../backend_web/dg/actualizar_perfil_dg.php", {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(res => res.json())
-                .then(datos => {
-                    btnSubmit.disabled = false;
-                    const alertExito = document.getElementById('profileAlert');
-                    const alertError = document.getElementById('profileError');
-                    
-                    if (datos.success) {
-                        alertError.classList.add('d-none');
-                        alertExito.classList.remove('d-none');
-                        document.getElementById('dgPassword').value = ""; // Limpiar campo
-                        cargarPerfil(); // Recargar datos visuales
-                        setTimeout(() => alertExito.classList.add('d-none'), 3000);
-                    } else {
-                        alertExito.classList.add('d-none');
-                        alertError.textContent = datos.mensaje;
-                        alertError.classList.remove('d-none');
-                    }
-                })
-                .catch(err => {
-                    btnSubmit.disabled = false;
-                    console.error("Error al actualizar:", err);
-                });
-            });
-        }
-    }
-
-    /* DASHBOARD PRINCIPAL (este es del indexdg.html xd)*/
+    /* =========================================
+       1. DASHBOARD PRINCIPAL
+    ========================================== */
     function cargarResumen() {
         fetch("../../backend_web/dg/dg_resumen.php")
             .then(res => res.json())
             .then(datos => {
                 if (datos.success) {
-                    // Mapear nombre y contadores
                     document.getElementById("nombreDirector").textContent = datos.usuario;
                     document.getElementById("totClientes").textContent = datos.clientes;
                     document.getElementById("totPolizas").textContent = datos.polizas;
                     document.getElementById("totTickets").textContent = datos.tickets;
 
-                    // Dibuja Graficas
                     if(document.getElementById('chartPolizas')){
                         dibujarGraficaPolizas(datos.graficas.polizas_plan);
                         dibujarGraficaTickets(datos.graficas.tickets_status);
@@ -126,6 +47,31 @@ document.addEventListener("DOMContentLoaded", function () {
             }).catch(err => console.error("Error Resumen:", err));
     }
 
+    function cargarTicketsRecientes() {
+        fetch("../../backend_web/dg/dg_tickets.php")
+            .then(res => res.json())
+            .then(datos => {
+                const tbody = document.getElementById("tablaTicketsRecientes");
+                if (datos.success && datos.tickets.length > 0) {
+                    const recientes = datos.tickets.slice(0, 4);
+                    tbody.innerHTML = recientes.map(t => `
+                        <tr class="border-bottom border-light">
+                            <td class="py-3">
+                                <div class="fw-bold text-dark">TKT-${String(t.idTicket).padStart(3, "0")} - ${t.conceptoT}</div>
+                                <div class="small text-secondary"><i class="bi bi-building me-1"></i>${t.nombreEmpresaP}</div>
+                            </td>
+                            <td class="text-end py-3">
+                                <span class="badge ${obtenerColorTicket(t.statusT)}">${t.statusT}</span>
+                                <div class="small text-secondary mt-1">${new Date(t.fechaCreacionT + "T00:00:00").toLocaleDateString("es-MX")}</div>
+                            </td>
+                        </tr>`).join("");
+                } else {
+                    tbody.innerHTML = `<tr><td class="text-center py-3 text-secondary">Sin actividad reciente.</td></tr>`;
+                }
+            });
+    }
+
+    /* GRÁFICAS */
     function dibujarGraficaPolizas(datosPlanes) {
         const labels = datosPlanes.map(item => item.nombreP);
         const data = datosPlanes.map(item => item.cantidad);
@@ -163,22 +109,45 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* MODULO CLIENTES*/
-    function cargarClientes() {
-        fetch("../../backend_web/dg/dg_clientes.php")
-            .then(res => res.json())
-            .then(datos => {
-                if (datos.success) {
-                    allClientes = datos.clientes;
-                    renderClientes(allClientes);
-                }
-            });
+    /* =========================================
+       FUNCION DE PAGINACIÓN UNIVERSAL
+    ========================================== */
+    function paginar(lista, pagina) {
+        const inicio = (pagina - 1) * itemsPerPage;
+        return lista.slice(inicio, inicio + itemsPerPage);
+    }
+    
+    function actualizarTextoPaginacion(idTexto, currentPage, totalItems) {
+        const textoEl = document.getElementById(idTexto);
+        if(!textoEl) return;
+        const start = (currentPage - 1) * itemsPerPage + 1;
+        const end = Math.min(currentPage * itemsPerPage, totalItems);
+        if(totalItems === 0) {
+            textoEl.textContent = `0 de 0`;
+        } else {
+            textoEl.textContent = `${end} de ${totalItems}`;
+        }
     }
 
-    function renderClientes(lista) {
+    /* =========================================
+       2. MÓDULO CLIENTES
+    ========================================== */
+    function cargarClientes() {
+        fetch("../../backend_web/dg/dg_clientes.php").then(res => res.json()).then(datos => {
+            if (datos.success) {
+                allClientes = datos.clientes;
+                filtradosCli = [...allClientes];
+                renderClientesPaginados();
+            }
+        });
+    }
+
+    function renderClientesPaginados() {
         const tbody = document.getElementById("tablaClientes");
-        if (lista.length > 0) {
-            tbody.innerHTML = lista.map(c => `
+        const aMostrar = paginar(filtradosCli, currentPageCli);
+        
+        if (aMostrar.length > 0) {
+            tbody.innerHTML = aMostrar.map(c => `
                 <tr>
                     <td class="fw-bold text-secondary">#${c.idCliente}</td>
                     <td class="fw-semibold text-dark">${c.nombreC} ${c.apellidoC}</td>
@@ -192,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-secondary">No se encontraron clientes.</td></tr>`;
         }
+        actualizarTextoPaginacion('paginacionCliTexto', currentPageCli, filtradosCli.length);
     }
 
     function setFiltrosClientes() {
@@ -200,39 +170,52 @@ document.addEventListener("DOMContentLoaded", function () {
             const desde = document.getElementById('filtroCliDesde').value;
             const hasta = document.getElementById('filtroCliHasta').value;
 
-            const filtrados = allClientes.filter(c => {
+            filtradosCli = allClientes.filter(c => {
                 const coincideTexto = c.nombreC.toLowerCase().includes(texto) || c.apellidoC.toLowerCase().includes(texto) || c.correoC.toLowerCase().includes(texto);
                 const coincideDesde = !desde || c.fechaAltaC >= desde;
                 const coincideHasta = !hasta || c.fechaAltaC <= hasta;
                 return coincideTexto && coincideDesde && coincideHasta;
             });
-            renderClientes(filtrados);
+            currentPageCli = 1;
+            renderClientesPaginados();
         });
 
         document.getElementById('btnLimpiarCli').addEventListener('click', () => {
             document.getElementById('filtroCliTexto').value = '';
             document.getElementById('filtroCliDesde').value = '';
             document.getElementById('filtroCliHasta').value = '';
-            renderClientes(allClientes);
+            filtradosCli = [...allClientes];
+            currentPageCli = 1;
+            renderClientesPaginados();
+        });
+
+        document.getElementById('btnPrevCli').addEventListener('click', () => {
+            if(currentPageCli > 1) { currentPageCli--; renderClientesPaginados(); }
+        });
+        document.getElementById('btnNextCli').addEventListener('click', () => {
+            if(currentPageCli * itemsPerPage < filtradosCli.length) { currentPageCli++; renderClientesPaginados(); }
         });
     }
 
-    /* MoDULO POLIZAS */
+    /* =========================================
+       3. MÓDULO PÓLIZAS
+    ========================================== */
     function cargarPolizas() {
-        fetch("../../backend_web/dg/dg_polizas.php")
-            .then(res => res.json())
-            .then(datos => {
-                if (datos.success) {
-                    allPolizas = datos.polizas;
-                    renderPolizas(allPolizas);
-                }
-            });
+        fetch("../../backend_web/dg/dg_polizas.php").then(res => res.json()).then(datos => {
+            if (datos.success) {
+                allPolizas = datos.polizas;
+                filtradasPol = [...allPolizas];
+                renderPolizasPaginadas();
+            }
+        });
     }
 
-    function renderPolizas(lista) {
+    function renderPolizasPaginadas() {
         const tbody = document.getElementById("tablaPolizas");
-        if (lista.length > 0) {
-            tbody.innerHTML = lista.map(p => `
+        const aMostrar = paginar(filtradasPol, currentPagePol);
+
+        if (aMostrar.length > 0) {
+            tbody.innerHTML = aMostrar.map(p => `
                 <tr>
                     <td class="fw-bold text-secondary">ETS-${String(p.idPoliza).padStart(3, "0")}</td>
                     <td class="fw-semibold text-dark">${p.nombreEmpresaP}</td>
@@ -244,6 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-secondary">No se encontraron pólizas.</td></tr>`;
         }
+        actualizarTextoPaginacion('paginacionPolTexto', currentPagePol, filtradasPol.length);
     }
 
     function setFiltrosPolizas() {
@@ -252,39 +236,52 @@ document.addEventListener("DOMContentLoaded", function () {
             const plan = document.getElementById('filtroPolPlan').value;
             const estado = document.getElementById('filtroPolEstado').value;
 
-            const filtradas = allPolizas.filter(p => {
+            filtradasPol = allPolizas.filter(p => {
                 const coincideTexto = p.nombreEmpresaP.toLowerCase().includes(texto) || p.nombreC.toLowerCase().includes(texto);
                 const coincidePlan = !plan || p.nombreP === plan;
                 const coincideEstado = !estado || p.estadoP === estado;
                 return coincideTexto && coincidePlan && coincideEstado;
             });
-            renderPolizas(filtradas);
+            currentPagePol = 1;
+            renderPolizasPaginadas();
         });
 
         document.getElementById('btnLimpiarPol').addEventListener('click', () => {
             document.getElementById('filtroPolTexto').value = '';
             document.getElementById('filtroPolPlan').value = '';
             document.getElementById('filtroPolEstado').value = '';
-            renderPolizas(allPolizas);
+            filtradasPol = [...allPolizas];
+            currentPagePol = 1;
+            renderPolizasPaginadas();
+        });
+
+        document.getElementById('btnPrevPol').addEventListener('click', () => {
+            if(currentPagePol > 1) { currentPagePol--; renderPolizasPaginadas(); }
+        });
+        document.getElementById('btnNextPol').addEventListener('click', () => {
+            if(currentPagePol * itemsPerPage < filtradasPol.length) { currentPagePol++; renderPolizasPaginadas(); }
         });
     }
 
-    /* MODULO TICKETS*/
+    /* =========================================
+       4. MÓDULO TICKETS
+    ========================================== */
     function cargarTickets() {
-        fetch("../../backend_web/dg/dg_tickets.php")
-            .then(res => res.json())
-            .then(datos => {
-                if (datos.success) {
-                    allTickets = datos.tickets;
-                    renderTickets(allTickets);
-                }
-            });
+        fetch("../../backend_web/dg/dg_tickets.php").then(res => res.json()).then(datos => {
+            if (datos.success) {
+                allTickets = datos.tickets;
+                filtradosTkt = [...allTickets];
+                renderTicketsPaginados();
+            }
+        });
     }
 
-    function renderTickets(lista) {
+    function renderTicketsPaginados() {
         const tbody = document.getElementById("tablaTickets");
-        if (lista.length > 0) {
-            tbody.innerHTML = lista.map(t => {
+        const aMostrar = paginar(filtradosTkt, currentPageTkt);
+
+        if (aMostrar.length > 0) {
+            tbody.innerHTML = aMostrar.map(t => {
                 const tecnico = t.nombresEmp ? t.nombresEmp : `<span class="text-warning small">Sin asignar</span>`;
                 return `
                 <tr>
@@ -299,44 +296,65 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-secondary">No se encontraron tickets.</td></tr>`;
         }
+        actualizarTextoPaginacion('paginacionTktTexto', currentPageTkt, filtradosTkt.length);
     }
 
     function setFiltrosTickets() {
         document.getElementById('btnFiltrarTkt').addEventListener('click', () => {
             const texto = document.getElementById('filtroTktTexto').value.toLowerCase();
             const estado = document.getElementById('filtroTktEstado').value;
+            const desde = document.getElementById('filtroTktDesde').value;
+            const hasta = document.getElementById('filtroTktHasta').value;
 
-            const filtrados = allTickets.filter(t => {
+            filtradosTkt = allTickets.filter(t => {
                 const coincideTexto = t.conceptoT.toLowerCase().includes(texto) || t.nombreEmpresaP.toLowerCase().includes(texto);
                 const coincideEstado = !estado || t.statusT === estado;
-                return coincideTexto && coincideEstado;
+                const coincideDesde = !desde || t.fechaCreacionT >= desde;
+                const coincideHasta = !hasta || t.fechaCreacionT <= hasta;
+
+                return coincideTexto && coincideEstado && coincideDesde && coincideHasta;
             });
-            renderTickets(filtrados);
+            currentPageTkt = 1;
+            renderTicketsPaginados();
         });
 
         document.getElementById('btnLimpiarTkt').addEventListener('click', () => {
             document.getElementById('filtroTktTexto').value = '';
             document.getElementById('filtroTktEstado').value = '';
-            renderTickets(allTickets);
+            document.getElementById('filtroTktDesde').value = '';
+            document.getElementById('filtroTktHasta').value = '';
+            filtradosTkt = [...allTickets];
+            currentPageTkt = 1;
+            renderTicketsPaginados();
+        });
+
+        document.getElementById('btnPrevTkt').addEventListener('click', () => {
+            if(currentPageTkt > 1) { currentPageTkt--; renderTicketsPaginados(); }
+        });
+        document.getElementById('btnNextTkt').addEventListener('click', () => {
+            if(currentPageTkt * itemsPerPage < filtradosTkt.length) { currentPageTkt++; renderTicketsPaginados(); }
         });
     }
 
-    /* MODULO REPORTES (Cruza toda la BD) */
+    /* =========================================
+       5. MÓDULO REPORTES
+    ========================================== */
     function cargarReportes() {
-        fetch("../../backend_web/dg/dg_reportes.php")
-            .then(res => res.json())
-            .then(datos => {
-                if (datos.success) {
-                    allReportes = datos.data;
-                    renderReportes(allReportes);
-                }
-            });
+        fetch("../../backend_web/dg/dg_reportes.php").then(res => res.json()).then(datos => {
+            if (datos.success) {
+                allReportes = datos.data;
+                filtradosRep = [...allReportes];
+                renderReportesPaginados();
+            }
+        });
     }
 
-    function renderReportes(lista) {
+    function renderReportesPaginados() {
         const tbody = document.getElementById("tablaReportes");
-        if (lista.length > 0) {
-            tbody.innerHTML = lista.map(r => {
+        const aMostrar = paginar(filtradosRep, currentPageRep);
+
+        if (aMostrar.length > 0) {
+            tbody.innerHTML = aMostrar.map(r => {
                 const tecnico = r.nombresEmp ? `${r.nombresEmp} ${r.apellidosEmp||''}` : 'No asignado';
                 return `
                 <tr>
@@ -352,6 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-secondary">Ajuste los filtros. Sin resultados.</td></tr>`;
         }
+        actualizarTextoPaginacion('paginacionRepTexto', currentPageRep, filtradosRep.length);
     }
 
     function setFiltrosReportes() {
@@ -362,7 +381,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const pPlan = document.getElementById('repPolizaPlan').value;
             const busqueda = document.getElementById('repBusqueda').value.toLowerCase();
 
-            const filtrados = allReportes.filter(r => {
+            filtradosRep = allReportes.filter(r => {
                 const cDesde = !desde || r.fechaCreacionT >= desde;
                 const cHasta = !hasta || r.fechaCreacionT <= hasta;
                 const cStatus = !tStatus || r.ticket_status === tStatus;
@@ -378,9 +397,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 return cDesde && cHasta && cStatus && cPlan && cBusqueda;
             });
 
-            // Guarda la matriz temporalmente en otra variable por si queremos exportar el filtro actual
-            window.reporteFiltrado = filtrados; 
-            renderReportes(filtrados);
+            currentPageRep = 1;
+            renderReportesPaginados();
         });
 
         document.getElementById('btnLimpiarReporte').addEventListener('click', () => {
@@ -389,23 +407,27 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('repTicketStatus').value = '';
             document.getElementById('repPolizaPlan').value = '';
             document.getElementById('repBusqueda').value = '';
-            window.reporteFiltrado = allReportes;
-            renderReportes(allReportes);
+            filtradosRep = [...allReportes];
+            currentPageRep = 1;
+            renderReportesPaginados();
+        });
+
+        document.getElementById('btnPrevRep').addEventListener('click', () => {
+            if(currentPageRep > 1) { currentPageRep--; renderReportesPaginados(); }
+        });
+        document.getElementById('btnNextRep').addEventListener('click', () => {
+            if(currentPageRep * itemsPerPage < filtradosRep.length) { currentPageRep++; renderReportesPaginados(); }
         });
 
         document.getElementById('btnExportarCSV').addEventListener('click', () => {
-            const datosAExportar = window.reporteFiltrado || allReportes;
-            if(datosAExportar.length === 0){
-                alert("No hay datos para exportar."); return;
-            }
+            const datosAExportar = filtradosRep;
+            if(datosAExportar.length === 0){ alert("No hay datos para exportar."); return; }
 
             let csv = "ID Ticket,Concepto Falla,Empresa,Plan Contratado,Cliente Responsable,Tecnico Asignado,Fecha Creacion,Status Ticket,Status Poliza\n";
             datosAExportar.forEach(r => {
                 const tecnico = r.nombresEmp ? `${r.nombresEmp} ${r.apellidosEmp||''}` : 'No asignado';
                 const cliente = `${r.nombreC} ${r.apellidoC}`;
-                // Escapar comillas en concepto
                 const concepto = `"${r.conceptoT.replace(/"/g, '""')}"`;
-                
                 csv += `${r.idTicket},${concepto},"${r.nombreEmpresaP}","${r.plan}","${cliente}","${tecnico}","${r.fechaCreacionT}","${r.ticket_status}","${r.poliza_status}"\n`;
             });
 
@@ -420,7 +442,85 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /*FUNCIONES AUXILIARES (este ayuda a todos los menus y a evitar que se rompan JASJKAJS)*/
+    /* =========================================
+       6. MÓDULO PERFIL DG
+    ========================================== */
+    function cargarPerfil() {
+        fetch("../../backend_web/dg/dg_perfil.php").then(res => res.json()).then(datos => {
+            if (datos.success) {
+                const p = datos.perfil;
+                document.getElementById('dgNombre').value = p.nombresEmp;
+                document.getElementById('dgApellido').value = p.apellidosEmp;
+                document.getElementById('dgCorreo').value = p.emailEmp;
+                
+                document.getElementById('dgFullName').textContent = `${p.nombresEmp} ${p.apellidosEmp}`;
+                document.getElementById('dgEmail').textContent = p.emailEmp;
+                
+                const inicial1 = p.nombresEmp.charAt(0).toUpperCase();
+                const inicial2 = p.apellidosEmp.charAt(0).toUpperCase();
+                document.getElementById('dgInitials').textContent = inicial1 + inicial2;
+            }
+        });
+    }
+
+    function setPerfilEventos() {
+        const btnToggle = document.getElementById('btnTogglePass');
+        if(btnToggle) {
+            btnToggle.addEventListener('click', () => {
+                const inputPass = document.getElementById('dgPassword');
+                const icon = btnToggle.querySelector('i');
+                if(inputPass.type === 'password'){
+                    inputPass.type = 'text';
+                    icon.classList.replace('bi-eye', 'bi-eye-slash');
+                } else {
+                    inputPass.type = 'password';
+                    icon.classList.replace('bi-eye-slash', 'bi-eye');
+                }
+            });
+        }
+
+        const formPerfil = document.getElementById('formPerfilDG');
+        if(formPerfil) {
+            formPerfil.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btnSubmit = formPerfil.querySelector('button[type="submit"]');
+                btnSubmit.disabled = true;
+
+                const formData = new FormData();
+                formData.append('nombre', document.getElementById('dgNombre').value);
+                formData.append('apellido', document.getElementById('dgApellido').value);
+                formData.append('correo', document.getElementById('dgCorreo').value);
+                formData.append('password', document.getElementById('dgPassword').value);
+
+                fetch("../../backend_web/dg/actualizar_perfil_dg.php", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(datos => {
+                    btnSubmit.disabled = false;
+                    const alertExito = document.getElementById('profileAlert');
+                    const alertError = document.getElementById('profileError');
+                    
+                    if (datos.success) {
+                        alertError.classList.add('d-none');
+                        alertExito.classList.remove('d-none');
+                        document.getElementById('dgPassword').value = "";
+                        cargarPerfil();
+                        setTimeout(() => alertExito.classList.add('d-none'), 3000);
+                    } else {
+                        alertExito.classList.add('d-none');
+                        alertError.textContent = datos.mensaje;
+                        alertError.classList.remove('d-none');
+                    }
+                });
+            });
+        }
+    }
+
+    /* =========================================
+       FUNCIONES AUXILIARES
+    ========================================== */
     function obtenerColorPoliza(estado) {
         if (estado === "Activa") return "bg-success bg-opacity-10 text-success border border-success border-opacity-25";
         if (estado === "Por renovar") return "bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25";
@@ -433,17 +533,10 @@ document.addEventListener("DOMContentLoaded", function () {
         return "bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25";
     }
 
-    // Resalta el menu automáticamente
     function resaltarMenuActivo() {
-        // Obtiene el nombre del archivo actual, si está vacío asume indexdg.html
         const paginaActual = window.location.pathname.split("/").pop() || "indexdg.html";
-        
-        // Busca todos los enlaces del menu
         document.querySelectorAll("#menuNavegacionDG .client-nav-link").forEach(enlace => {
-            const href = enlace.getAttribute("href");
-            
-            // Si el href coincide con la página actual, le pone la clase active
-            if (href === paginaActual) {
+            if (enlace.getAttribute("href") === paginaActual) {
                 enlace.classList.add("active");
             } else {
                 enlace.classList.remove("active");

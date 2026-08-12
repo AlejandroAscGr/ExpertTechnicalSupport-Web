@@ -8,18 +8,59 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Iconos -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- CSS Personalizado -->
+    <!-- Animaciones AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- CSS Personalizado Base -->
     <link href="css/style.css" rel="stylesheet">
+
+    <!-- CSS EXTRA: Animaciones Premium y Ajustes Responsivos -->
+    <style>
+        /* Tipografía e Imágenes Responsivas (Móviles y Tablets) */
+        @media (max-width: 991px) {
+            .display-4 { font-size: 2.5rem !important; }
+            .display-6 { font-size: 1.8rem !important; }
+            .hero-img-resp { min-height: 250px !important; height: auto !important; }
+            .about-img-resp { height: 280px !important; }
+            .btn-hero-resp { width: 100%; margin-bottom: 10px; }
+        }
+
+        /* Texto con Gradiente Premium */
+        .text-gradient {
+            background: linear-gradient(90deg, #198754, #20c997);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        /* Animación de Latido (Pulse Glow) para Tarjeta Destacada */
+        .glow-plan {
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(25, 135, 84, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(25, 135, 84, 0); }
+        }
+
+        /* Suavizado en botones */
+        .btn-smooth {
+            transition: all 0.3s ease;
+        }
+        .btn-smooth:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(25, 135, 84, 0.2) !important;
+        }
+    </style>
 </head>
 <body class="app-bg">
 
-    <!-- CABECERA MÓVIL (Solo visible en celulares y tablets) -->
-    <header class="d-lg-none glass-header p-3 d-flex justify-content-between align-items-center sticky-top">
+    <!-- CABECERA MÓVIL -->
+    <header class="d-lg-none glass-header p-3 d-flex justify-content-between align-items-center sticky-top shadow-sm">
         <div class="d-flex align-items-center">
             <img src="img/logoETS75px.png" alt="Logo ETS" style="max-height: 40px; width: auto;" class="me-2">
-            <span class="fw-bold text-dark fs-5">ISANA LABS</span>
+            <span class="fw-bold text-dark fs-5 text-gradient">ISANA LABS</span>
         </div>
-        <button class="btn btn-outline-success border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
+        <button class="btn btn-outline-success border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
             <i class="bi bi-list fs-2"></i>
         </button>
     </header>
@@ -27,15 +68,13 @@
     <!-- Contenedor Principal Flex -->
     <div class="d-flex">
 
-        <!-- MENÚ LATERAL MINIMIZABLE (Fijo en PC, Desplegable en Móvil) -->
+        <!-- MENÚ LATERAL -->
         <nav id="sidebar" class="offcanvas-lg offcanvas-start glass-sidebar collapsed d-flex flex-column flex-shrink-0 p-3 vh-100 position-fixed transition-all" tabindex="-1" aria-labelledby="sidebarMenuLabel">
             
-            <!-- Botón cerrar (Solo Móvil) -->
             <div class="offcanvas-header d-lg-none p-0 mb-3 justify-content-end">
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Cerrar"></button>
             </div>
 
-            <!-- Botón para Contraer/Expandir (Solo PC) -->
             <div class="d-none d-lg-flex justify-content-end mb-3">
                 <button id="toggleSidebar" class="btn btn-sm text-success border-0 glass-hover px-2 py-1">
                     <i class="bi bi-list fs-3"></i>
@@ -46,35 +85,36 @@
             <div class="text-center mb-5 logo-container d-none d-lg-block">
                 <img src="img/logoETS75px.png" alt="Logo ETS" style="max-height: 50px; width: auto;" class="mb-2">
                 <div class="logo-text">
-                    <h5 class="fw-bold text-dark mb-0">Expert Technical Support</h5>
-                    <small class="text-secondary">Powered by ISANA LABS</small>
+                    <h5 class="fw-bold text-dark mb-0">Expert Technical</h5>
+                    <h5 class="fw-bold text-dark mb-0">Support</h5>
+                    <small class="text-secondary mt-1 d-block">Powered by ISANA LABS</small>
                 </div>
             </div>
 
             <!-- Navegación -->
             <ul class="nav nav-pills flex-column mb-auto gap-2">
                 <li class="nav-item">
-                    <a href="#inicio" class="nav-link active-glass d-flex align-items-center">
+                    <a href="#inicio" class="nav-link text-dark glass-hover active-glass d-flex align-items-center">
                         <i class="bi bi-house-door fs-5 mb-0"></i> 
                         <span class="nav-text ms-3">Inicio</span>
                     </a>
                 </li>
                 <li>
                     <a href="#nosotros" class="nav-link text-dark glass-hover d-flex align-items-center">
-                        <i class="bi bi-people fs-5 mb-0"></i> 
-                        <span class="nav-text ms-3">Sobre Nosotros</span>
+                        <i class="bi bi-building fs-5 mb-0"></i> 
+                        <span class="nav-text ms-3">La Empresa</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#servicios" class="nav-link text-dark glass-hover d-flex align-items-center">
-                        <i class="bi bi-tools fs-5 mb-0"></i> 
-                        <span class="nav-text ms-3">Servicios</span>
+                    <a href="#polizas" class="nav-link text-dark glass-hover d-flex align-items-center">
+                        <i class="bi bi-shield-check fs-5 mb-0"></i> 
+                        <span class="nav-text ms-3">Pólizas TI</span>
                     </a>
                 </li>
                 <li>
                     <a href="#beneficios" class="nav-link text-dark glass-hover d-flex align-items-center">
-                        <i class="bi bi-award fs-5 mb-0"></i> 
-                        <span class="nav-text ms-3">Beneficios</span>
+                        <i class="bi bi-hdd-network fs-5 mb-0"></i> 
+                        <span class="nav-text ms-3">Plataforma</span>
                     </a>
                 </li>
                 <li>
@@ -87,85 +127,73 @@
 
             <hr class="text-secondary opacity-25 divider-line">
             
-            <!-- Btn Login -->
             <div class="mt-2 login-btn-container">
-                <a href="login.html" class="btn btn-success w-100 py-2 fw-bold shadow-sm d-flex justify-content-center align-items-center text-nowrap">
+                <a href="login.html" class="btn btn-success w-100 py-2 fw-bold shadow-sm d-flex justify-content-center align-items-center text-nowrap btn-smooth">
                     <i class="bi bi-box-arrow-in-right fs-5"></i> 
-                    <span class="nav-text ms-2">Iniciar Sesión</span>
+                    <span class="nav-text ms-2">Ingresar al Portal</span>
                 </a>
-                
-
             </div>
         </nav>
 
         <!-- CONTENIDO PRINCIPAL -->
-        <main id="mainContent" class="main-content expanded flex-grow-1 p-4 p-lg-5 overflow-auto w-100 transition-all">
+        <main id="mainContent" class="main-content expanded flex-grow-1 p-4 p-lg-5 overflow-hidden w-100 transition-all">
             
             <!-- Sección: Inicio (Hero) -->
-            <section id="inicio" class="glass-card rounded-4 p-4 p-lg-5 mb-5 mt-lg-3 shadow-sm position-relative overflow-hidden">
-                <div class="row align-items-center position-relative" style="z-index: 2;">
-                    <div class="col-lg-7">
-                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill mb-3">
-                            <i class="bi bi-check-circle-fill me-1"></i> Líderes en Soporte TI
+            <section id="inicio" class="mb-5 mt-lg-3 position-relative overflow-hidden border-0" style="min-height: 80vh; display: flex; align-items: center;">
+                <div class="row align-items-center w-100 text-center text-lg-start">
+                    <div class="col-lg-6 pe-lg-5" data-aos="fade-right" data-aos-duration="1000">
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill mb-4" style="font-weight: 600; letter-spacing: 0.5px;">
+                            <i class="bi bi-cpu me-1"></i> Expert Technical Support
                         </span>
-                        <h1 class="fw-bold display-5 mb-4 text-dark">Soluciones tecnológicas inteligentes para tu empresa</h1>
-                        <p class="text-secondary lead mb-4">Gestionamos, reparamos y optimizamos tus recursos informáticos y redes. Tu negocio nunca se detiene, nuestro soporte tampoco.</p>
+                        <h1 class="fw-bold display-4 mb-4 text-dark lh-sm">Tu departamento de TI externo, operando <span class="text-gradient">24/7.</span></h1>
+                        <p class="text-secondary fs-5 mb-5" style="line-height: 1.6;">
+                            Mantener un equipo de sistemas interno es costoso y complejo. A través de nuestras pólizas <strong>Expert Technical Support</strong>, brindamos mantenimiento, redes y soporte técnico inmediato a empresas que exigen continuidad operativa sin los costos de una nómina fija.
+                        </p>
                         
-                        <!-- Puntos de confianza -->
-                        <div class="d-flex flex-wrap gap-3 mb-4">
-                            <div class="d-flex align-items-center text-dark fw-medium small">
-                                <i class="bi bi-shield-check text-success fs-5 me-2"></i> 100% Seguro
-                            </div>
-                            <div class="d-flex align-items-center text-dark fw-medium small">
-                                <i class="bi bi-clock-history text-success fs-5 me-2"></i> Soporte 24/7
-                            </div>
-                            <div class="d-flex align-items-center text-dark fw-medium small">
-                                <i class="bi bi-person-badge text-success fs-5 me-2"></i> Expertos Certificados
-                            </div>
+                        <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
+                            <a href="#polizas" class="btn btn-success px-5 py-3 rounded-pill fw-bold shadow-sm btn-smooth btn-hero-resp">Ver Coberturas</a>
+                            <a href="#contacto" class="btn btn-light border px-5 py-3 rounded-pill fw-bold text-dark shadow-sm hover-elevate btn-smooth btn-hero-resp">Contáctanos</a>
                         </div>
-
-                        <a href="#servicios" class="btn btn-success px-4 py-2 rounded-pill fw-semibold shadow-sm me-2 mb-2">Ver Servicios</a>
-                        <a href="#contacto" class="btn btn-outline-dark px-4 py-2 rounded-pill fw-semibold mb-2">Contáctanos</a>
                     </div>
-                    <div class="col-lg-5 mt-5 mt-lg-0">
-                        <div class="image-placeholder rounded-4 d-flex justify-content-center align-items-center shadow-sm" style="min-height: 350px;">
-                            <div class="text-center text-secondary">
-                                <i class="bi bi-laptop fs-1 mb-2"></i>
-                                <p class="mb-0 small">Imagen representativa de Servidores/IT</p>
-                            </div>
+                    <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left" data-aos-duration="1200">
+                        <div class="position-relative">
+                            <div class="position-absolute bg-success rounded-circle blur-bg" style="width: 300px; height: 300px; top: -50px; right: -50px; opacity: 0.15; filter: blur(60px); z-index: 0;"></div>
+                            <!-- Agregado float-anim y hero-img-resp -->
+                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" alt="Conectividad y Redes B2B" class="img-fluid rounded-5 shadow-lg w-100 object-fit-cover position-relative float-anim hero-img-resp" style="min-height: 450px; z-index: 1;">
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- Sección: Sobre Nosotros -->
-            <section id="nosotros" class="mb-5 pt-3">
-                <h3 class="fw-bold text-dark mb-4 ms-2"><i class="bi bi-dash text-success"></i> Sobre Nosotros</h3>
-                <div class="glass-card rounded-4 p-4 p-lg-5 shadow-sm">
+            <section id="nosotros" class="mb-5 py-5 text-center text-lg-start">
+                <div class="glass-card rounded-5 p-4 p-lg-5 shadow-sm border-0" data-aos="fade-up" data-aos-duration="1000">
                     <div class="row align-items-center">
-                        <div class="col-md-5 mb-4 mb-md-0">
-                            <div class="image-placeholder placeholder-vertical rounded-4 d-flex justify-content-center align-items-center">
-                                <span class="text-secondary small"><i class="bi bi-camera me-2"></i>Imagen Equipo ISANA</span>
-                            </div>
+                        <div class="col-lg-5 mb-4 mb-lg-0 position-relative">
+                            <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=800&q=80" alt="Infraestructura y Redes ISANA LABS" class="img-fluid rounded-4 shadow w-100 object-fit-cover about-img-resp float-anim" style="height: 400px; animation-duration: 8s;">
                         </div>
-                        <div class="col-md-7 ps-lg-5">
-                            <h4 class="fw-bold mb-3">Más que soporte, somos tus aliados estratégicos</h4>
-                            <p class="text-secondary">En Expert Technical Support entendemos que la tecnología es el corazón de tu negocio. Nos dedicamos a ofrecer soluciones integrales de infraestructura, redes y mantenimiento de equipos con una visión clara: <strong>simplificar la tecnología para que tú puedas enfocarte en crecer</strong>.</p>
-                            <p class="text-secondary mb-4">Contamos con un equipo altamente capacitado y un sistema de gestión de tickets avanzado (ETS) para asegurar la continuidad de tus operaciones sin interrupciones.</p>
+                        <div class="col-lg-7 ps-lg-5">
+                            <h6 class="text-success fw-bold text-uppercase mb-2 tracking-wide text-gradient">Sobre Nosotros</h6>
+                            <h3 class="fw-bold mb-4 display-6">Ingeniería respaldada por resultados.</h3>
+                            <p class="text-secondary fs-6 mb-4">
+                                Entendemos que cuando un servidor cae o una red falla, tu empresa pierde dinero. Por eso, hemos estructurado un modelo de servicio técnico B2B riguroso, medible y escalable.
+                            </p>
+                            <p class="text-secondary fs-6 mb-5">
+                                A diferencia del soporte técnico tradicional que reacciona cuando algo se rompe, nuestro enfoque combina mantenimiento preventivo y monitoreo continuo. Asignamos técnicos especializados de manera inteligente para resolver tus tickets en tiempo récord.
+                            </p>
                             
-                            <!-- Estadísticas Rápidas (Modificado para animación) -->
-                            <div class="row text-center g-3">
+                            <div class="row text-center g-3 border-top pt-4 mt-2">
                                 <div class="col-4">
-                                    <h3 class="fw-bold text-success mb-0">+<span class="counter" data-target="500">0</span></h3>
-                                    <p class="text-secondary small mb-0">Tickets Resueltos</p>
+                                    <h2 class="fw-bold text-success mb-0">+<span class="counter" data-target="1500">0</span></h2>
+                                    <p class="text-secondary small mb-0 fw-semibold text-uppercase" style="font-size: 0.75rem;">Tickets Cerrados</p>
                                 </div>
                                 <div class="col-4 border-start border-end">
-                                    <h3 class="fw-bold text-success mb-0"><span class="counter" data-target="99">0</span>%</h3>
-                                    <p class="text-secondary small mb-0">Uptime Garantizado</p>
+                                    <h2 class="fw-bold text-success mb-0"><span class="counter" data-target="99">0</span>%</h2>
+                                    <p class="text-secondary small mb-0 fw-semibold text-uppercase" style="font-size: 0.75rem;">Uptime Logrado</p>
                                 </div>
                                 <div class="col-4">
-                                    <h3 class="fw-bold text-success mb-0"><span class="counter" data-target="24">0</span>/7</h3>
-                                    <p class="text-secondary small mb-0">Monitoreo</p>
+                                    <h2 class="fw-bold text-success mb-0"><span class="counter" data-target="24">0</span>/7</h2>
+                                    <p class="text-secondary small mb-0 fw-semibold text-uppercase" style="font-size: 0.75rem;">Respuesta</p>
                                 </div>
                             </div>
                         </div>
@@ -173,80 +201,95 @@
                 </div>
             </section>
 
-            <!-- Sección: Servicios -->
-            <section id="servicios" class="mb-5 pt-3">
-                <h3 class="fw-bold text-dark mb-4 ms-2"><i class="bi bi-dash text-success"></i> Nuestros Servicios</h3>
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="glass-card h-100 rounded-4 p-4 p-lg-5 shadow-sm text-center card-hover">
-                            <div class="icon-box mx-auto mb-4 text-success shadow-sm">
-                                <i class="bi bi-hdd-network fs-2"></i>
-                            </div>
-                            <h5 class="fw-bold mb-3">Infraestructura y Redes</h5>
-                            <p class="text-secondary small mb-0">Diseño, instalación, configuración y monitoreo activo de redes corporativas. Optimizamos tu conectividad para máxima velocidad y estabilidad.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="glass-card h-100 rounded-4 p-4 p-lg-5 shadow-sm text-center card-hover">
-                            <div class="icon-box mx-auto mb-4 text-success shadow-sm">
-                                <i class="bi bi-pc-display fs-2"></i>
-                            </div>
-                            <h5 class="fw-bold mb-3">Mantenimiento de Equipos</h5>
-                            <p class="text-secondary small mb-0">Soporte preventivo y correctivo para estaciones de trabajo, laptops y servidores. Alargamos la vida útil de tu hardware empresarial.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="glass-card h-100 rounded-4 p-4 p-lg-5 shadow-sm text-center card-hover">
-                            <div class="icon-box mx-auto mb-4 text-success shadow-sm">
-                                <i class="bi bi-shield-lock fs-2"></i>
-                            </div>
-                            <h5 class="fw-bold mb-3">Seguridad y Respaldos</h5>
-                            <p class="text-secondary small mb-0">Protección integral de datos, configuración de firewalls, respaldos automatizados en la nube y prevención de amenazas cibernéticas.</p>
-                        </div>
-                    </div>
+            <!-- Sección: Pólizas TI -->
+            <section id="polizas" class="mb-5 py-5">
+                <div class="text-center mb-5" data-aos="fade-up">
+                    <h6 class="text-success fw-bold text-uppercase mb-2 tracking-wide text-gradient">Planes de Cobertura</h6>
+                    <h2 class="fw-bold display-6 mb-3">Pólizas de Servicio Empresarial</h2>
+                    <p class="text-secondary mx-auto" style="max-width: 600px;">Elige el nivel de soporte que tu infraestructura requiere. Todos nuestros planes incluyen acceso al portal de gestión de tickets ETS.</p>
                 </div>
-            </section>
 
-            <!-- Sección: Por qué elegirnos -->
-            <section id="beneficios" class="mb-5 pt-3">
-                <div class="glass-card rounded-4 p-4 p-lg-5 shadow-sm">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6 mb-4 mb-lg-0">
-                            <h3 class="fw-bold text-dark mb-3">El respaldo técnico que tu equipo merece</h3>
-                            <p class="text-secondary mb-4">No somos solo un proveedor, operamos como tu propio departamento de TI extendido.</p>
+                <div class="row g-4 align-items-center">
+                    
+                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                        <div class="glass-card h-100 rounded-5 p-4 p-lg-5 shadow-sm border-0 position-relative hover-elevate">
+                            <h5 class="fw-bold mb-1">Esencial</h5>
+                            <p class="text-secondary small mb-4">Ideal para startups o sucursales pequeñas que requieren mantenimiento básico.</p>
                             
-                            <!-- Lista de beneficios -->
-                            <div class="d-flex mb-3">
-                                <div class="flex-shrink-0 mt-1">
-                                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;">
-                                        <i class="bi bi-lightning-charge-fill"></i>
-                                    </div>
+                            <ul class="list-unstyled mb-5 mt-4">
+                                <li class="mb-3 d-flex align-items-center text-dark small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> Hasta 20 dispositivos</li>
+                                <li class="mb-3 d-flex align-items-center text-dark small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> 10 Visitas presenciales al mes</li>
+                                <li class="mb-3 d-flex align-items-center text-dark small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> 20 Soportes remotos (HelpDesk)</li>
+                                <li class="mb-3 d-flex align-items-center text-dark small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> 8 Asesorías especializadas</li>
+                            </ul>
+                            <a href="#contacto" class="btn btn-outline-success w-100 rounded-pill py-2 fw-bold mt-auto btn-smooth">Cotizar Plan</a>
+                        </div>
+                    </div>
+
+                    <!-- Agregado clase glow-plan y hover-elevate -->
+                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                        <div class="glass-card h-100 rounded-5 p-4 p-lg-5 shadow border border-success border-opacity-50 position-relative hover-elevate glow-plan" style="transform: scale(1.03); background: rgba(255,255,255,0.95); z-index: 2;">
+                            <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-success px-4 py-2 text-uppercase tracking-wide">Más Elegido</div>
+                            <h4 class="fw-bold mb-1 text-success mt-2">Profesional</h4>
+                            <p class="text-secondary small mb-4">Para PyMEs en crecimiento que dependen de una red estable y segura.</p>
+                            
+                            <ul class="list-unstyled mb-5 mt-4">
+                                <li class="mb-3 d-flex align-items-center text-dark fw-medium small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> Hasta 45 dispositivos</li>
+                                <li class="mb-3 d-flex align-items-center text-dark fw-medium small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> 15 Visitas presenciales al mes</li>
+                                <li class="mb-3 d-flex align-items-center text-dark fw-medium small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> 30 Soportes remotos (HelpDesk)</li>
+                                <li class="mb-3 d-flex align-items-center text-dark fw-medium small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> 12 Asesorías / Redes</li>
+                            </ul>
+                            <a href="#contacto" class="btn btn-success w-100 rounded-pill py-2 fw-bold mt-auto shadow-sm btn-smooth">Cotizar Plan</a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                        <div class="glass-card h-100 rounded-5 p-4 p-lg-5 shadow-sm border-0 position-relative hover-elevate">
+                            <h5 class="fw-bold mb-1">Empresarial</h5>
+                            <p class="text-secondary small mb-4">Solución total para corporativos. Ciberseguridad e infraestructura dedicada.</p>
+                            
+                            <ul class="list-unstyled mb-5 mt-4">
+                                <li class="mb-3 d-flex align-items-center text-dark small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> Hasta 90 dispositivos</li>
+                                <li class="mb-3 d-flex align-items-center text-dark small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> 25 Visitas presenciales al mes</li>
+                                <li class="mb-3 d-flex align-items-center text-dark small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> 50 Soportes remotos (HelpDesk)</li>
+                                <li class="mb-3 d-flex align-items-center text-dark small"><i class="bi bi-check-circle-fill text-success me-3 fs-5"></i> 20 Asesorías de Alto Nivel</li>
+                            </ul>
+                            <a href="#contacto" class="btn btn-outline-success w-100 rounded-pill py-2 fw-bold mt-auto btn-smooth">Cotizar Plan</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Plataforma ETS -->
+            <section id="beneficios" class="mb-5 py-5 text-center text-lg-start">
+                <div class="glass-card rounded-5 p-4 p-lg-5 shadow-sm border-0" data-aos="fade-up">
+                    <div class="row align-items-center flex-row-reverse">
+                        <div class="col-lg-6 mb-4 mb-lg-0 ps-lg-5">
+                            <h6 class="text-success fw-bold text-uppercase mb-2 tracking-wide text-gradient">Plataforma Exclusiva</h6>
+                            <h3 class="fw-bold text-dark mb-4 display-6">Transparencia y trazabilidad total.</h3>
+                            <p class="text-secondary mb-4 fs-6">A diferencia de los "técnicos de llamada", proveemos un portal privado donde tú tienes el control. Monitorea el estado de tu red y los tiempos de solución en tiempo real.</p>
+                            
+                            <div class="d-flex align-items-start mb-4 text-start">
+                                <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex justify-content-center align-items-center p-3 me-4">
+                                    <i class="bi bi-ui-checks-grid fs-4"></i>
                                 </div>
-                                <div class="ms-3">
-                                    <h6 class="fw-bold mb-1">Tiempos de Respuesta Récord</h6>
-                                    <p class="text-secondary small">Nuestro portal ETS (Expert Technical Support) prioriza tus urgencias automáticamente.</p>
+                                <div>
+                                    <h6 class="fw-bold mb-1 fs-5">Sistema de Tickets ETS</h6>
+                                    <p class="text-secondary small mb-0">Levanta solicitudes de falla al instante. Nuestro sistema distribuye inteligentemente el ticket al ingeniero disponible adecuado.</p>
                                 </div>
                             </div>
-                            <div class="d-flex mb-3">
-                                <div class="flex-shrink-0 mt-1">
-                                    <div class="bg-success bg-opacity-10 text-success rounded-circle d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;">
-                                        <i class="bi bi-graph-up-arrow"></i>
-                                    </div>
+                            <div class="d-flex align-items-start text-start">
+                                <div class="bg-success bg-opacity-10 text-success rounded-3 d-flex justify-content-center align-items-center p-3 me-4">
+                                    <i class="bi bi-bar-chart-steps fs-4"></i>
                                 </div>
-                                <div class="ms-3">
-                                    <h6 class="fw-bold mb-1">Escalabilidad Garantizada</h6>
-                                    <p class="text-secondary small">Soluciones que crecen al mismo ritmo que tu empresa sin costos ocultos.</p>
+                                <div>
+                                    <h6 class="fw-bold mb-1 fs-5">Métricas de Consumo</h6>
+                                    <p class="text-secondary small mb-0">Visualiza cuántos mantenimientos presenciales y remotos de tu póliza se han utilizado en el mes directamente desde tu panel.</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <!-- Imagen descriptiva -->
-                            <div class="image-placeholder rounded-4 d-flex justify-content-center align-items-center shadow-sm" style="min-height: 300px;">
-                                <div class="text-center text-secondary">
-                                    <i class="bi bi-bar-chart-steps fs-1 mb-2"></i>
-                                    <p class="mb-0 small">Dashboard / Gráficos</p>
-                                </div>
-                            </div>
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Dashboard de monitoreo ETS" class="img-fluid rounded-4 shadow-lg w-100 object-fit-cover float-anim" style="min-height: 400px; animation-duration: 5s;">
                         </div>
                     </div>
                 </div>
@@ -254,40 +297,40 @@
 
             <!-- Sección: Contacto -->
             <section id="contacto" class="mb-5 pt-3">
-                <div class="glass-card rounded-4 p-5 shadow-sm text-center position-relative overflow-hidden">
-                    <!-- Efecto de luz de fondo en la tarjeta -->
-                    <div class="position-absolute top-50 start-50 translate-middle w-100 h-100" style="background: radial-gradient(circle, rgba(25,135,84,0.1) 0%, transparent 70%); z-index: 0;"></div>
+                <div class="glass-card rounded-5 p-4 p-lg-5 shadow-sm text-center position-relative overflow-hidden border-0" data-aos="zoom-in" data-aos-duration="800">
+                    <div class="position-absolute top-50 start-50 translate-middle w-100 h-100" style="background: radial-gradient(circle, rgba(25,135,84,0.08) 0%, transparent 80%); z-index: 0;"></div>
                     
                     <div class="position-relative" style="z-index: 1;">
                         <div class="icon-box mx-auto mb-4 text-success bg-white shadow-sm" style="width: 80px; height: 80px; border-radius: 25px;">
-                            <i class="bi bi-headset fs-1"></i>
+                            <i class="bi bi-envelope-paper fs-1"></i>
                         </div>
-                        <h3 class="fw-bold mb-3">¿Listo para optimizar tu infraestructura?</h3>
-                        <p class="text-secondary mb-4 mx-auto" style="max-width: 600px;">
-                            Déjanos tus datos o ingresa a nuestro portal. Nuestro equipo de ingenieros está listo para brindarte el mejor soporte corporativo.
+                        <h3 class="fw-bold mb-3 display-6">Asegura la continuidad de tu empresa hoy.</h3>
+                        <p class="text-secondary mb-5 mx-auto fs-5" style="max-width: 650px;">
+                            Deja la tecnología en manos de expertos. Protege tu información, optimiza tus equipos y enfócate en hacer crecer tu negocio.
                         </p>
-                        <a href="mailto:contacto@isanalabs.com" class="btn btn-success px-5 py-3 rounded-pill fw-bold shadow-sm mb-3 me-2">
-                            <i class="bi bi-envelope me-2"></i> Solicitar Asesoría
-                        </a>
-                        <a href="login.html" class="btn btn-outline-success px-5 py-3 rounded-pill fw-bold shadow-sm mb-3 bg-white">
-                            Ir al Portal ETS
-                        </a>
+                        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+                            <a href="mailto:contacto@ets.com" class="btn btn-success px-5 py-3 rounded-pill fw-bold shadow-sm btn-smooth">
+                                <i class="bi bi-envelope me-2"></i> Solicitar una Asesoría
+                            </a>
+                            <a href="login.html" class="btn btn-dark px-5 py-3 rounded-pill fw-bold shadow-sm btn-smooth">
+                                <i class="bi bi-box-arrow-in-right me-2"></i> Acceder a ETS
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Footer -->
-            <footer class="pt-4 pb-2 border-top border-success border-opacity-10">
+            <footer class="pt-5 pb-4 mt-5 border-top border-secondary border-opacity-10 text-center text-md-start">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                    <div class="mb-3 mb-md-0 d-flex align-items-center">
-                        <img src="img/logo-isana.png" alt="ISANA LABS" style="height: 20px;" class="me-2 opacity-75">
-                        <small class="text-secondary">&copy; 2026 ISANA LABS. Todos los derechos reservados.</small>
+                    <div class="mb-3 mb-md-0 d-flex flex-column flex-md-row align-items-center">
+                        <img src="img/logoETS75px.png" alt="ETS" style="height: 25px;" class="me-0 me-md-2 mb-2 mb-md-0 opacity-75">
+                        <small class="text-secondary fw-medium">&copy; 2026 ISANA LABS. Todos los derechos reservados.</small>
                     </div>
-                    <ul class="list-unstyled d-flex gap-3 mb-0">
-                        <li><a href="#" class="text-secondary text-decoration-none small glass-hover px-2 py-1">Términos</a></li>
-                        <li><a href="#" class="text-secondary text-decoration-none small glass-hover px-2 py-1">Privacidad</a></li>
-                        <li><a href="#" class="text-success"><i class="bi bi-linkedin"></i></a></li>
-                        <li><a href="#" class="text-success"><i class="bi bi-twitter-x"></i></a></li>
+                    <ul class="list-unstyled d-flex gap-4 mb-0 justify-content-center align-items-center">
+                        <li><a href="terminos.html" class="text-secondary text-decoration-none small fw-medium text-hover-success">Términos de Servicio</a></li>
+                        <li><a href="privacidad.html" class="text-secondary text-decoration-none small fw-medium text-hover-success">Privacidad</a></li>
+                        <!-- <li><a href="#" class="text-success fs-5"><i class="bi bi-linkedin"></i></a></li> -->
                     </ul>
                 </div>
             </footer>
@@ -297,12 +340,19 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-<!-- Script para Menú, ScrollSpy y Animación de Contadores -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
-            // 1. LÓGICA DE LA BARRA LATERAL (Minimizar/Expandir)
+            // 1. Iniciar AOS Animations
+            AOS.init({
+                once: true,
+                offset: 50,
+            });
+            
+            // 2. Lógica Sidebar
             const toggleBtn = document.getElementById('toggleSidebar');
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
@@ -314,13 +364,12 @@
                 });
             }
 
-            // 2. MENÚ ACTIVO DINÁMICO (ScrollSpy)
+            // 3. ScrollSpy para menú
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('#sidebar .nav-link');
 
             window.addEventListener('scroll', () => {
                 let current = '';
-                
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     if (scrollY >= (sectionTop - 250)) {
@@ -336,13 +385,12 @@
                 });
             });
 
-            // 3. ANIMACIÓN DE NÚMEROS (Reiniciable cada vez que entra en pantalla)
+            // 4. Animación Numérica
             const startCounting = (counter) => {
                 const target = +counter.getAttribute('data-target');
                 let count = +counter.innerText;
-                const increment = target / 40; // Ajusta el 40 para cambiar la velocidad
+                const increment = target / 40; 
 
-                // Verificamos el estado para saber si debemos seguir animando
                 if (count < target && counter.getAttribute('data-counting') === 'true') {
                     counter.innerText = Math.ceil(count + increment);
                     setTimeout(() => startCounting(counter), 30);
@@ -354,31 +402,22 @@
             const statsObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const countersToAnimate = entry.target.querySelectorAll('.counter');
-                    
                     if (entry.isIntersecting) {
-                        // Entró en pantalla: Arranca la cuenta
                         countersToAnimate.forEach(counter => {
                             counter.setAttribute('data-counting', 'true');
-                            // Si está en cero, iniciamos la función
-                            if(counter.innerText === '0') {
-                                startCounting(counter);
-                            }
+                            if(counter.innerText === '0') startCounting(counter);
                         });
                     } else {
-                        // Salió de pantalla: Reiniciar a cero inmediatamente
                         countersToAnimate.forEach(counter => {
-                            counter.setAttribute('data-counting', 'false'); // Detiene el ciclo si seguía contando
+                            counter.setAttribute('data-counting', 'false'); 
                             counter.innerText = '0';
                         });
                     }
                 });
-            }, { threshold: 0.3 }); // El 30% de la sección debe ser visible para arrancar
+            }, { threshold: 0.3 }); 
 
             const statsSection = document.getElementById('nosotros');
-            if (statsSection) {
-                statsObserver.observe(statsSection);
-            }
-
+            if (statsSection) statsObserver.observe(statsSection);
         });
     </script>
 </body>

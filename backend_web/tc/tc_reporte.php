@@ -24,13 +24,21 @@ $resultado = $stmt->get_result();
 
 $tickets = [];
 $total = 0; $cerrados = 0; $proceso = 0; $asignados = 0;
+$modalidades = ["Presencial" => 0, "Remoto" => 0, "Asesoria" => 0];
 
 while($row = $resultado->fetch_assoc()){
     $tickets[] = $row;
     $total++;
+    
+    // Conteo por estatus
     if($row['statusT'] == 'Cerrado') $cerrados++;
     else if($row['statusT'] == 'Proceso') $proceso++;
     else if($row['statusT'] == 'Asignado') $asignados++;
+
+    // Conteo por modalidad para la gráfica
+    if(isset($modalidades[$row['modalidadAtencionT']])) {
+        $modalidades[$row['modalidadAtencionT']]++;
+    }
 }
 
 $progreso = $total > 0 ? round(($cerrados / $total) * 100) : 0;
@@ -46,7 +54,11 @@ echo json_encode([
     "proceso" => $proceso,
     "asignados" => $asignados,
     "progreso" => $progreso,
-    "historial" => $tickets
+    "historial" => $tickets,
+    "graficas" => [
+        "estatus" => [$cerrados, $proceso, $asignados],
+        "modalidad" => [$modalidades["Presencial"], $modalidades["Remoto"], $modalidades["Asesoria"]]
+    ]
 ]);
 
 $stmt->close();
