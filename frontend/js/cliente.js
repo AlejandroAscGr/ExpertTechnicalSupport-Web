@@ -16,29 +16,61 @@ document.addEventListener("DOMContentLoaded", function () {
         Empresarial: { dispositivos: 90, presenciales: 25, remotos: 50, asesorias: 20 }
     };
 
+
+
+    // Pólizas provisionales para mostrar el funcionamiento
     const polizasIniciales = [
         {
-            id: 1, numero: "ETS-001", plan: "Profesional", estado: "Activa",
-            negocio: "Sucursal Centro", telefono: "3312345678", direccion: "Guadalajara, Jalisco",
-            correo: "contacto@negocio.com", responsable: "Isaú Ramírez",
-            fechaInicio: "01/08/2026", fechaVencimiento: "01/08/2027"
+            id: 1,
+            numero: "ETS-001",
+            plan: "Profesional",
+            estado: "Activa",
+            negocio: "Sucursal Centro",
+            telefono: "3312345678",
+            direccion: "Guadalajara, Jalisco",
+            correo: "contacto@negocio.com",
+            responsable: "Isaú Ramírez",
+            fechaInicio: "01/08/2026",
+            fechaVencimiento: "01/08/2027"
         },
+
         {
-            id: 2, numero: "ETS-002", plan: "Esencial", estado: "Por renovar",
-            negocio: "Sucursal Norte", telefono: "3387654321", direccion: "Zapopan, Jalisco",
-            correo: "norte@negocio.com", responsable: "Isaú Ramírez",
-            fechaInicio: "15/08/2025", fechaVencimiento: "15/08/2026"
+            id: 2,
+            numero: "ETS-002",
+            plan: "Esencial",
+            estado: "Por renovar",
+            negocio: "Sucursal Norte",
+            telefono: "3387654321",
+            direccion: "Zapopan, Jalisco",
+            correo: "norte@negocio.com",
+            responsable: "Isaú Ramírez",
+            fechaInicio: "15/08/2025",
+            fechaVencimiento: "15/08/2026"
         }
     ];
 
+
+
+
     if (!localStorage.getItem("polizasETS")) {
-        localStorage.setItem("polizasETS", JSON.stringify(polizasIniciales));
+        localStorage.setItem(
+            "polizasETS",
+            JSON.stringify(polizasIniciales)
+        );
     }
 
-    let polizas = JSON.parse(localStorage.getItem("polizasETS"));
+
+
+    let polizas = JSON.parse(
+        localStorage.getItem("polizasETS")
+    );
+
 
     function guardarPolizas() {
-        localStorage.setItem("polizasETS", JSON.stringify(polizas));
+        localStorage.setItem(
+            "polizasETS",
+            JSON.stringify(polizas)
+        );
     }
 
     const newTicketForm = document.getElementById("newTicketForm");
@@ -94,29 +126,72 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function obtenerFechaActual() {
+
         const fecha = new Date();
+
         return fecha.toLocaleDateString("es-MX");
     }
+
 
     function obtenerFechaVencimiento() {
+
         const fecha = new Date();
-        fecha.setFullYear(fecha.getFullYear() + 1);
+
+        fecha.setFullYear(
+            fecha.getFullYear() + 1
+        );
+
         return fecha.toLocaleDateString("es-MX");
     }
 
-    function cargarCliente() {
-        fetch("../../backend_web/perfil_cliente.php")
-            .then(function (respuesta) { return respuesta.json(); })
-            .then(function (datos) {
-                if (!datos.success) {
-                    console.error(datos.mensaje);
-                    return;
-                }
-                const cliente = datos.cliente;
-                document.querySelectorAll("[data-client-name]").forEach(function (elemento) { elemento.textContent = cliente.nombreC; });
-                document.querySelectorAll("[data-client-fullname]").forEach(function (elemento) { elemento.textContent = cliente.nombreC + " " + cliente.apellidoC; });
-                document.querySelectorAll("[data-client-email]").forEach(function (elemento) { elemento.textContent = cliente.correoC; });
-                document.querySelectorAll("[data-client-initials]").forEach(function (elemento) { elemento.textContent = obtenerIniciales(cliente.nombreC, cliente.apellidoC); });
+    // Carga los datos reales del cliente
+function cargarCliente() {
+
+    fetch("../../backend_web/perfil_cliente.php")
+        .then(function (respuesta) {
+            return respuesta.json();
+        })
+        .then(function (datos) {
+
+            if (!datos.success) {
+                console.error(datos.mensaje);
+                return;
+            }
+
+            const cliente = datos.cliente;
+
+
+            document
+                .querySelectorAll("[data-client-name]")
+                .forEach(function (elemento) {
+                    elemento.textContent = cliente.nombreC;
+                });
+
+
+            document
+                .querySelectorAll("[data-client-fullname]")
+                .forEach(function (elemento) {
+                    elemento.textContent =
+                        cliente.nombreC + " " + cliente.apellidoC;
+                });
+
+
+            document
+                .querySelectorAll("[data-client-email]")
+                .forEach(function (elemento) {
+                    elemento.textContent = cliente.correoC;
+                });
+
+
+            document
+                .querySelectorAll("[data-client-initials]")
+                .forEach(function (elemento) {
+                    elemento.textContent = obtenerIniciales(
+                        cliente.nombreC,
+                        cliente.apellidoC
+                    );
+                });
+
 
                 const profileForm = document.getElementById("profileForm");
                 if (profileForm) {
@@ -313,26 +388,69 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    const newPolicyForm = document.getElementById("newPolicyForm");
+
+    // Formulario para crear una póliza
+    const newPolicyForm = document.getElementById(
+        "newPolicyForm"
+    );
+
 
     if (newPolicyForm) {
-        newPolicyForm.addEventListener("submit", function (evento) {
-            evento.preventDefault();
-            const planSeleccionado = document.querySelector('input[name="policyPlan"]:checked');
-            if (!planSeleccionado) { return; }
 
-            const nuevoId = polizas.length > 0 ? Math.max(...polizas.map(function (poliza) { return poliza.id; })) + 1 : 1;
-            const nuevaPoliza = {
-                id: nuevoId, numero: "ETS-" + String(nuevoId).padStart(3, "0"), plan: planSeleccionado.value, estado: "Activa",
-                negocio: document.getElementById("businessName").value.trim(), telefono: document.getElementById("businessPhone").value.trim(),
-                direccion: document.getElementById("businessAddress").value.trim(), correo: document.getElementById("businessEmail").value.trim(),
-                responsable: document.getElementById("businessContact").value.trim(), fechaInicio: obtenerFechaActual(), fechaVencimiento: obtenerFechaVencimiento()
-            };
+        newPolicyForm.addEventListener(
+            "submit",
+            function (evento) {
 
-            polizas.push(nuevaPoliza);
-            guardarPolizas();
-            window.location.href = "detalle_poliza.html?id=" + nuevaPoliza.id;
-        });
+                evento.preventDefault();
+
+                const planSeleccionado = document.querySelector(
+                    'input[name="policyPlan"]:checked'
+                );
+
+                if (!planSeleccionado) {
+                    return;
+                }
+
+                const nuevoId = polizas.length > 0
+                    ? Math.max(
+                        ...polizas.map(function (poliza) {
+                            return poliza.id;
+                        })
+                    ) + 1
+                    : 1;
+
+                const nuevaPoliza = {
+                    id: nuevoId,
+                    numero: "ETS-" + String(nuevoId).padStart(3, "0"),
+                    plan: planSeleccionado.value,
+                    estado: "Activa",
+                    negocio: document.getElementById(
+                        "businessName"
+                    ).value.trim(),
+                    telefono: document.getElementById(
+                        "businessPhone"
+                    ).value.trim(),
+                    direccion: document.getElementById(
+                        "businessAddress"
+                    ).value.trim(),
+                    correo: document.getElementById(
+                        "businessEmail"
+                    ).value.trim(),
+                    responsable: document.getElementById(
+                        "businessContact"
+                    ).value.trim(),
+                    fechaInicio: obtenerFechaActual(),
+                    fechaVencimiento: obtenerFechaVencimiento()
+                };
+
+                polizas.push(nuevaPoliza);
+
+                guardarPolizas();
+
+                window.location.href =
+                    "detalle_poliza.html?id=" + nuevaPoliza.id;
+            }
+        );
     }
 
     const profileFormEl = document.getElementById("profileForm");
@@ -440,31 +558,80 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("editBusinessEmail").value = poliza.correoP;
             document.getElementById("editBusinessAddress").value = poliza.direccionServicioP;
 
-            const nivelesPlanes = ["Esencial", "Profesional", "Empresarial"];
-            const newPolicyPlan = document.getElementById("newPolicyPlan");
-            const improvePolicyButton = document.getElementById("improvePolicyButton");
-            newPolicyPlan.innerHTML = "";
+            // Prepara únicamente los planes superiores
+const nivelesPlanes = [
+    "Esencial",
+    "Profesional",
+    "Empresarial"
+];
 
-            const opcionInicial = document.createElement("option");
-            opcionInicial.value = "";
-            opcionInicial.textContent = "Selecciona un plan diferente";
-            opcionInicial.selected = true;
-            opcionInicial.disabled = true;
-            newPolicyPlan.appendChild(opcionInicial);
+const newPolicyPlan = document.getElementById(
+    "newPolicyPlan"
+);
 
-            const indicePlanActual = nivelesPlanes.indexOf(poliza.nombreP);
-            if (indicePlanActual !== -1) {
-                nivelesPlanes.slice(indicePlanActual + 1).forEach(function (nombrePlan) {
-                    const opcion = document.createElement("option");
-                    opcion.value = nombrePlan;
-                    opcion.textContent = nombrePlan;
-                    newPolicyPlan.appendChild(opcion);
-                });
-            }
+const improvePolicyButton = document.getElementById(
+    "improvePolicyButton"
+);
 
-            const puedeMejorar = indicePlanActual !== -1 && indicePlanActual < nivelesPlanes.length - 1 && poliza.estadoP !== "Cancelada";
-            improvePolicyButton.disabled = !puedeMejorar;
-            newPolicyPlan.disabled = !puedeMejorar;
+
+// Limpia las opciones anteriores
+newPolicyPlan.innerHTML = "";
+
+
+const opcionInicial = document.createElement(
+    "option"
+);
+
+opcionInicial.value = "";
+opcionInicial.textContent =
+    "Selecciona un plan diferente";
+
+opcionInicial.selected = true;
+opcionInicial.disabled = true;
+
+newPolicyPlan.appendChild(
+    opcionInicial
+);
+
+
+const indicePlanActual = nivelesPlanes.indexOf(
+    poliza.nombreP
+);
+
+
+// Agrega únicamente los niveles superiores
+if (indicePlanActual !== -1) {
+
+    nivelesPlanes
+        .slice(indicePlanActual + 1)
+        .forEach(function (nombrePlan) {
+
+            const opcion = document.createElement(
+                "option"
+            );
+
+            opcion.value = nombrePlan;
+            opcion.textContent = nombrePlan;
+
+            newPolicyPlan.appendChild(
+                opcion
+            );
+        });
+}
+
+
+// Determina si la póliza puede mejorarse
+const puedeMejorar =
+    indicePlanActual !== -1 &&
+    indicePlanActual < nivelesPlanes.length - 1 &&
+    poliza.estadoP !== "Cancelada";
+
+
+improvePolicyButton.disabled =
+    !puedeMejorar;
+
+newPolicyPlan.disabled =
+    !puedeMejorar;
 
             if (poliza.estadoP === "Cancelada") {
                 document.getElementById("cancelPolicyButton").disabled = true;
@@ -473,35 +640,104 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        const editPolicyForm = document.getElementById("editPolicyForm");
-        editPolicyForm.addEventListener("submit", function (evento) {
-            evento.preventDefault();
-            const formulario = new FormData();
-            formulario.append("idPoliza", idPoliza);
-            formulario.append("empresa", document.getElementById("editBusinessName").value.trim());
-            formulario.append("telefono", document.getElementById("editBusinessPhone").value.trim());
-            formulario.append("correo", document.getElementById("editBusinessEmail").value.trim());
-            formulario.append("direccion", document.getElementById("editBusinessAddress").value.trim());
+    // Actualizar datos de la póliza
+const editPolicyForm = document.getElementById(
+    "editPolicyForm"
+);
 
-            fetch("../../backend_web/actualizar_poliza_cliente.php", {
-                method: "POST", body: formulario
+
+editPolicyForm.addEventListener(
+    "submit",
+    function (evento) {
+
+        evento.preventDefault();
+
+
+        const formulario = new FormData();
+
+        formulario.append(
+            "idPoliza",
+            idPoliza
+        );
+
+        formulario.append(
+            "empresa",
+            document.getElementById(
+                "editBusinessName"
+            ).value.trim()
+        );
+
+        formulario.append(
+            "telefono",
+            document.getElementById(
+                "editBusinessPhone"
+            ).value.trim()
+        );
+
+        formulario.append(
+            "correo",
+            document.getElementById(
+                "editBusinessEmail"
+            ).value.trim()
+        );
+
+        formulario.append(
+            "direccion",
+            document.getElementById(
+                "editBusinessAddress"
+            ).value.trim()
+        );
+
+
+        fetch(
+            "../../backend_web/actualizar_poliza_cliente.php",
+            {
+                method: "POST",
+                body: formulario
+            }
+        )
+            .then(function (respuesta) {
+                return respuesta.json();
             })
-                .then(function (respuesta) { return respuesta.json(); })
-                .then(function (datos) {
-                    if (!datos.success) {
-                        alert(datos.mensaje);
-                        return;
-                    }
-                    window.location.reload();
-                })
-                .catch(function (error) { console.error("Error al actualizar la póliza:", error); });
-        });
+            .then(function (datos) {
 
-        const confirmCancelPolicy = document.getElementById("confirmCancelPolicy");
-        confirmCancelPolicy.addEventListener("click", function () {
-            const formulario = new FormData();
-            formulario.append("idPoliza", idPoliza);
-            confirmCancelPolicy.disabled = true;
+                if (!datos.success) {
+                    alert(datos.mensaje);
+                    return;
+                }
+
+
+                // Recarga para mostrar los datos actualizados
+                window.location.reload();
+            })
+            .catch(function (error) {
+
+                console.error(
+                    "Error al actualizar la póliza:",
+                    error
+                );
+            });
+    }
+);
+// Cancelar la póliza
+const confirmCancelPolicy = document.getElementById(
+    "confirmCancelPolicy"
+);
+
+
+confirmCancelPolicy.addEventListener(
+    "click",
+    function () {
+
+        const formulario = new FormData();
+
+        formulario.append(
+            "idPoliza",
+            idPoliza
+        );
+
+
+        confirmCancelPolicy.disabled = true;
 
             fetch("../../backend_web/cancelar_poliza_cliente.php", {
                 method: "POST", body: formulario
@@ -548,30 +784,79 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         });
 
-        const planesDisponibles = ["Esencial", "Profesional", "Empresarial"];
-        const newPolicyPlan = document.getElementById("newPolicyPlan");
-        const improvePolicyButton = document.getElementById("improvePolicyButton");
-        newPolicyPlan.innerHTML = "";
+// Prepara los planes disponibles
+const planesDisponibles = [
+    "Esencial",
+    "Profesional",
+    "Empresarial"
+];
 
-        const opcionInicial = document.createElement("option");
-        opcionInicial.value = "";
-        opcionInicial.textContent = "Selecciona un plan diferente";
-        opcionInicial.selected = true;
-        opcionInicial.disabled = true;
-        newPolicyPlan.appendChild(opcionInicial);
+const newPolicyPlan = document.getElementById(
+    "newPolicyPlan"
+);
 
-        planesDisponibles.forEach(function (nombrePlan) {
-            if (nombrePlan === poliza?.nombreP) { return; }
-            const opcion = document.createElement("option");
-            opcion.value = nombrePlan;
-            opcion.textContent = nombrePlan;
-            newPolicyPlan.appendChild(opcion);
-        });
+const improvePolicyButton = document.getElementById(
+    "improvePolicyButton"
+);
 
-        const puedeCambiarPlan = poliza && planesDisponibles.includes(poliza.nombreP) && poliza.estadoP !== "Cancelada";
-        improvePolicyButton.disabled = !puedeCambiarPlan;
-        newPolicyPlan.disabled = !puedeCambiarPlan;
+
+// Limpia las opciones anteriores
+newPolicyPlan.innerHTML = "";
+
+
+const opcionInicial = document.createElement(
+    "option"
+);
+
+opcionInicial.value = "";
+opcionInicial.textContent =
+    "Selecciona un plan diferente";
+
+opcionInicial.selected = true;
+opcionInicial.disabled = true;
+
+newPolicyPlan.appendChild(
+    opcionInicial
+);
+
+
+// Agrega todos los planes excepto el actual
+planesDisponibles.forEach(function (nombrePlan) {
+
+    if (nombrePlan === poliza.nombreP) {
+        return;
     }
+
+    const opcion = document.createElement(
+        "option"
+    );
+
+    opcion.value = nombrePlan;
+    opcion.textContent = nombrePlan;
+
+    newPolicyPlan.appendChild(
+        opcion
+    );
+});
+
+
+// Una póliza cancelada debe renovarse antes
+const puedeCambiarPlan =
+    planesDisponibles.includes(poliza.nombreP) &&
+    poliza.estadoP !== "Cancelada";
+
+
+improvePolicyButton.disabled =
+    !puedeCambiarPlan;
+
+newPolicyPlan.disabled =
+    !puedeCambiarPlan;
+
+
+
+}
+
+
 
     function mostrarDetalleTicket() {
         const contenedor = document.getElementById("ticketDetail");
