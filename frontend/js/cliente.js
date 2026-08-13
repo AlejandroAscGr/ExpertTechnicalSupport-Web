@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
     resaltarPaginaActual();
 
     const parametrosTicket = new URLSearchParams(window.location.search);
-
     if (parametrosTicket.get("created")) {
         const alerta = document.getElementById("ticketCreatedAlert");
         if (alerta) {
@@ -16,65 +15,31 @@ document.addEventListener("DOMContentLoaded", function () {
         Empresarial: { dispositivos: 90, presenciales: 25, remotos: 50, asesorias: 20 }
     };
 
-
-
-    // Pólizas provisionales para mostrar el funcionamiento
     const polizasIniciales = [
         {
-            id: 1,
-            numero: "ETS-001",
-            plan: "Profesional",
-            estado: "Activa",
-            negocio: "Sucursal Centro",
-            telefono: "3312345678",
-            direccion: "Guadalajara, Jalisco",
-            correo: "contacto@negocio.com",
-            responsable: "Isaú Ramírez",
-            fechaInicio: "01/08/2026",
-            fechaVencimiento: "01/08/2027"
+            id: 1, numero: "ETS-001", plan: "Profesional", estado: "Activa",
+            negocio: "Sucursal Centro", telefono: "3312345678", direccion: "Guadalajara, Jalisco",
+            correo: "contacto@negocio.com", responsable: "Isaú Ramírez",
+            fechaInicio: "01/08/2026", fechaVencimiento: "01/08/2027"
         },
-
         {
-            id: 2,
-            numero: "ETS-002",
-            plan: "Esencial",
-            estado: "Por renovar",
-            negocio: "Sucursal Norte",
-            telefono: "3387654321",
-            direccion: "Zapopan, Jalisco",
-            correo: "norte@negocio.com",
-            responsable: "Isaú Ramírez",
-            fechaInicio: "15/08/2025",
-            fechaVencimiento: "15/08/2026"
+            id: 2, numero: "ETS-002", plan: "Esencial", estado: "Por renovar",
+            negocio: "Sucursal Norte", telefono: "3387654321", direccion: "Zapopan, Jalisco",
+            correo: "norte@negocio.com", responsable: "Isaú Ramírez",
+            fechaInicio: "15/08/2025", fechaVencimiento: "15/08/2026"
         }
     ];
 
-
-
-
     if (!localStorage.getItem("polizasETS")) {
-        localStorage.setItem(
-            "polizasETS",
-            JSON.stringify(polizasIniciales)
-        );
+        localStorage.setItem("polizasETS", JSON.stringify(polizasIniciales));
     }
-
-
-
-    let polizas = JSON.parse(
-        localStorage.getItem("polizasETS")
-    );
-
-
+    let polizas = JSON.parse(localStorage.getItem("polizasETS"));
     function guardarPolizas() {
-        localStorage.setItem(
-            "polizasETS",
-            JSON.stringify(polizas)
-        );
+        localStorage.setItem("polizasETS", JSON.stringify(polizas));
     }
 
+    // NUEVO TICKET
     const newTicketForm = document.getElementById("newTicketForm");
-
     if (newTicketForm) {
         const ticketPolicy = document.getElementById("ticketPolicy");
         fetch("../../backend_web/polizas_cliente.php")
@@ -88,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     ticketPolicy.appendChild(opcion);
                 });
             })
-            .catch(function (error) { console.error("Error al cargar las pólizas:", error); });
+            .catch(function (error) { console.error("Error al cargar pólizas:", error); });
 
         newTicketForm.addEventListener("submit", function (evento) {
             evento.preventDefault();
@@ -125,73 +90,24 @@ document.addEventListener("DOMContentLoaded", function () {
         return "status-cancelled";
     }
 
-    function obtenerFechaActual() {
-
-        const fecha = new Date();
-
-        return fecha.toLocaleDateString("es-MX");
-    }
-
+    function obtenerFechaActual() { return new Date().toLocaleDateString("es-MX"); }
 
     function obtenerFechaVencimiento() {
-
         const fecha = new Date();
-
-        fecha.setFullYear(
-            fecha.getFullYear() + 1
-        );
-
+        fecha.setFullYear(fecha.getFullYear() + 1);
         return fecha.toLocaleDateString("es-MX");
     }
 
-    // Carga los datos reales del cliente
-function cargarCliente() {
-
-    fetch("../../backend_web/perfil_cliente.php")
-        .then(function (respuesta) {
-            return respuesta.json();
-        })
-        .then(function (datos) {
-
-            if (!datos.success) {
-                console.error(datos.mensaje);
-                return;
-            }
-
-            const cliente = datos.cliente;
-
-
-            document
-                .querySelectorAll("[data-client-name]")
-                .forEach(function (elemento) {
-                    elemento.textContent = cliente.nombreC;
-                });
-
-
-            document
-                .querySelectorAll("[data-client-fullname]")
-                .forEach(function (elemento) {
-                    elemento.textContent =
-                        cliente.nombreC + " " + cliente.apellidoC;
-                });
-
-
-            document
-                .querySelectorAll("[data-client-email]")
-                .forEach(function (elemento) {
-                    elemento.textContent = cliente.correoC;
-                });
-
-
-            document
-                .querySelectorAll("[data-client-initials]")
-                .forEach(function (elemento) {
-                    elemento.textContent = obtenerIniciales(
-                        cliente.nombreC,
-                        cliente.apellidoC
-                    );
-                });
-
+    function cargarCliente() {
+        fetch("../../backend_web/perfil_cliente.php")
+            .then(function (respuesta) { return respuesta.json(); })
+            .then(function (datos) {
+                if (!datos.success) return;
+                const cliente = datos.cliente;
+                document.querySelectorAll("[data-client-name]").forEach(function (elemento) { elemento.textContent = cliente.nombreC; });
+                document.querySelectorAll("[data-client-fullname]").forEach(function (elemento) { elemento.textContent = cliente.nombreC + " " + cliente.apellidoC; });
+                document.querySelectorAll("[data-client-email]").forEach(function (elemento) { elemento.textContent = cliente.correoC; });
+                document.querySelectorAll("[data-client-initials]").forEach(function (elemento) { elemento.textContent = obtenerIniciales(cliente.nombreC, cliente.apellidoC); });
 
                 const profileForm = document.getElementById("profileForm");
                 if (profileForm) {
@@ -203,9 +119,9 @@ function cargarCliente() {
             })
             .catch(function (error) { console.error("Error al cargar el perfil:", error); });
     }
-
     cargarCliente();
 
+    // POLIZAS EN PANEL PRINCIPAL
     const dashboardPolicies = document.getElementById("dashboardPolicies");
     const activePolicies = document.getElementById("activePolicies");
 
@@ -213,10 +129,7 @@ function cargarCliente() {
         fetch("../../backend_web/polizas_cliente.php")
             .then(function (respuesta) { return respuesta.json(); })
             .then(function (datos) {
-                if (!datos.success) {
-                    console.error(datos.mensaje);
-                    return;
-                }
+                if (!datos.success) return;
                 const polizasActivas = datos.polizas.filter(function (poliza) { return poliza.estadoP !== "Cancelada"; });
                 if (activePolicies) { activePolicies.textContent = polizasActivas.length; }
                 if (!dashboardPolicies) { return; }
@@ -249,73 +162,94 @@ function cargarCliente() {
                     `;
                 }).join("");
             })
-            .catch(function (error) { console.error("Error al cargar las pólizas del panel:", error); });
+            .catch(function (error) { console.error("Error cargando pólizas panel:", error); });
     }
 
-    const policiesGrid = document.getElementById("policiesGrid");
+    // ==========================================
+    // SECCIÓN DE TICKETS (BUGS CORREGIDOS)
+    // ==========================================
+    const contenedorTickets = document.getElementById("ticketsList");
+    window.misTicketsLocales = []; // Guardamos los datos para no hacer fetch múltiples veces
 
-    function mostrarTickets(filtro = "all") {
-        const contenedor = document.getElementById("ticketsList");
-        if (!contenedor) return;
-
+    function cargarDatosTicketsBase() {
+        if (!contenedorTickets) return;
         fetch("../../backend_web/tickets_cliente.php")
-            .then(function (respuesta) { return respuesta.json(); })
-            .then(function (datos) {
+            .then(respuesta => respuesta.json())
+            .then(datos => {
                 if (!datos.success) {
                     console.error(datos.mensaje);
                     return;
                 }
-
-                const tickets = datos.tickets.filter(function (ticket) {
-                    return ticketCoincideFiltro({ estado: ticket.statusT }, filtro);
-                });
-
-                if (tickets.length === 0) {
-                    contenedor.innerHTML = `
-                        <div class="empty-state">
-                            <i class="bi bi-ticket-perforated"></i>
-                            <h2 class="h5">No hay tickets en esta sección</h2>
-                            <p class="text-secondary mb-0">Cuando solicites soporte, tus tickets aparecerán aquí.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                contenedor.innerHTML = tickets.map(function (ticket) {
-                    const numeroTicket = "TKT-" + String(ticket.idTicket).padStart(3, "0");
-                    const fecha = new Date(ticket.fechaCreacionT + "T00:00:00").toLocaleDateString("es-MX");
-                    return `
-                        <article class="policy-row">
-                            <div class="policy-symbol"><i class="bi bi-ticket-perforated"></i></div>
-                            <div class="flex-grow-1">
-                                <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                                    <h2 class="h6 fw-bold mb-0">${ticket.conceptoT}</h2>
-                                    <span class="policy-status ${claseEstadoTicket(ticket.statusT)}">${ticket.statusT}</span>
-                                </div>
-                                <p class="text-secondary small mb-1">
-                                    <strong>${numeroTicket}</strong> · ${ticket.modalidadAtencionT} · ${fecha}
-                                </p>
-                                <p class="text-secondary small mb-0">
-                                    <i class="bi bi-file-earmark-check me-1"></i> ${ticket.nombreEmpresaP} - Plan ${ticket.nombreP}
-                                </p>
-                            </div>
-                            <a href="detalle_ticket.html?id=${ticket.idTicket}" class="btn btn-sm btn-outline-success">Ver detalle</a>
-                        </article>
-                    `;
-                }).join("");
+                window.misTicketsLocales = datos.tickets; // Guardamos globalmente
+                pintarListaTickets("all"); // Pintamos todos por defecto
             })
-            .catch(function (error) { console.error("Error al cargar los tickets:", error); });
+            .catch(error => console.error("Error trayendo tickets:", error));
     }
 
-    function configurarFiltrosTickets() {
+    function pintarListaTickets(filtro) {
+        if (!contenedorTickets) return;
+
+        // Filtramos usando nuestra variable local
+        const filtrados = window.misTicketsLocales.filter(function (ticket) {
+            return ticketCoincideFiltroLocal(ticket.statusT, filtro);
+        });
+
+        if (filtrados.length === 0) {
+            contenedorTickets.innerHTML = `
+                <div class="empty-state">
+                    <i class="bi bi-ticket-perforated"></i>
+                    <h2 class="h5">No hay tickets en esta sección</h2>
+                    <p class="text-secondary mb-0">No encontramos registros con este filtro.</p>
+                </div>
+            `;
+            return;
+        }
+
+        contenedorTickets.innerHTML = filtrados.map(function (ticket) {
+            const numeroTicket = "TKT-" + String(ticket.idTicket).padStart(3, "0");
+            const fecha = new Date(ticket.fechaCreacionT + "T00:00:00").toLocaleDateString("es-MX");
+            return `
+                <article class="policy-row">
+                    <div class="policy-symbol"><i class="bi bi-ticket-perforated"></i></div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                            <h2 class="h6 fw-bold mb-0">${ticket.conceptoT}</h2>
+                            <span class="policy-status ${claseEstadoTicket(ticket.statusT)}">${ticket.statusT}</span>
+                        </div>
+                        <p class="text-secondary small mb-1">
+                            <strong>${numeroTicket}</strong> · ${ticket.modalidadAtencionT} · ${fecha}
+                        </p>
+                        <p class="text-secondary small mb-0">
+                            <i class="bi bi-file-earmark-check me-1"></i> ${ticket.nombreEmpresaP} - Plan ${ticket.nombreP}
+                        </p>
+                    </div>
+                    <a href="detalle_ticket.html?id=${ticket.idTicket}" class="btn btn-sm btn-outline-success">Ver detalle</a>
+                </article>
+            `;
+        }).join("");
+    }
+
+    function configurarBotonesFiltroTickets() {
         document.querySelectorAll("[data-ticket-filter]").forEach(function (boton) {
             boton.addEventListener("click", function () {
-                document.querySelectorAll("[data-ticket-filter]").forEach(function (item) { item.classList.remove("active"); });
+                document.querySelectorAll("[data-ticket-filter]").forEach(function (item) { 
+                    item.classList.remove("active"); 
+                });
                 boton.classList.add("active");
-                mostrarTickets(boton.dataset.ticketFilter);
+                // Llamamos a pintar usando los datos locales
+                pintarListaTickets(boton.dataset.ticketFilter);
             });
         });
     }
+
+    // Inicializar funciones de tickets
+    cargarDatosTicketsBase();
+    configurarBotonesFiltroTickets();
+
+    // ==========================================
+    // POLIZAS CLIENTE 
+    // ==========================================
+    const policiesGrid = document.getElementById("policiesGrid");
 
     function mostrarPolizas(filtro = "all") {
         if (!policiesGrid) { return; }
@@ -323,10 +257,7 @@ function cargarCliente() {
         fetch("../../backend_web/polizas_cliente.php")
             .then(function (respuesta) { return respuesta.json(); })
             .then(function (datos) {
-                if (!datos.success) {
-                    console.error(datos.mensaje);
-                    return;
-                }
+                if (!datos.success) return;
 
                 let polizasFiltradas = datos.polizas;
                 if (filtro !== "all") {
@@ -388,118 +319,10 @@ function cargarCliente() {
         });
     });
 
-
-    // Formulario para crear una póliza
-    const newPolicyForm = document.getElementById(
-        "newPolicyForm"
-    );
-
-
-    if (newPolicyForm) {
-
-        newPolicyForm.addEventListener(
-            "submit",
-            function (evento) {
-
-                evento.preventDefault();
-
-                const planSeleccionado = document.querySelector(
-                    'input[name="policyPlan"]:checked'
-                );
-
-                if (!planSeleccionado) {
-                    return;
-                }
-
-                const nuevoId = polizas.length > 0
-                    ? Math.max(
-                        ...polizas.map(function (poliza) {
-                            return poliza.id;
-                        })
-                    ) + 1
-                    : 1;
-
-                const nuevaPoliza = {
-                    id: nuevoId,
-                    numero: "ETS-" + String(nuevoId).padStart(3, "0"),
-                    plan: planSeleccionado.value,
-                    estado: "Activa",
-                    negocio: document.getElementById(
-                        "businessName"
-                    ).value.trim(),
-                    telefono: document.getElementById(
-                        "businessPhone"
-                    ).value.trim(),
-                    direccion: document.getElementById(
-                        "businessAddress"
-                    ).value.trim(),
-                    correo: document.getElementById(
-                        "businessEmail"
-                    ).value.trim(),
-                    responsable: document.getElementById(
-                        "businessContact"
-                    ).value.trim(),
-                    fechaInicio: obtenerFechaActual(),
-                    fechaVencimiento: obtenerFechaVencimiento()
-                };
-
-                polizas.push(nuevaPoliza);
-
-                guardarPolizas();
-
-                window.location.href =
-                    "detalle_poliza.html?id=" + nuevaPoliza.id;
-            }
-        );
-    }
-
-    const profileFormEl = document.getElementById("profileForm");
-
-    if (profileFormEl) {
-        profileFormEl.addEventListener("submit", function (evento) {
-            evento.preventDefault();
-            const formulario = new FormData();
-            formulario.append("nombre", document.getElementById("profileName").value.trim());
-            formulario.append("apellido", document.getElementById("profileLastName").value.trim());
-            formulario.append("telefono", document.getElementById("profilePhone").value.trim());
-            formulario.append("correo", document.getElementById("profileEmail").value.trim());
-            formulario.append("password", document.getElementById("profilePassword").value);
-
-            fetch("../../backend_web/actualizar_perfil_cliente.php", {
-                method: "POST", body: formulario
-            })
-                .then(function (respuesta) { return respuesta.json(); })
-                .then(function (datos) {
-                    if (!datos.success) {
-                        alert(datos.mensaje);
-                        return;
-                    }
-                    document.getElementById("profileAlert").classList.remove("d-none");
-                    document.getElementById("profilePassword").value = "";
-                    cargarCliente();
-                })
-                .catch(function (error) { console.error("Error al actualizar el perfil:", error); });
-        });
-    }
-
-    document.querySelectorAll("[data-toggle-password]").forEach(function (boton) {
-        boton.addEventListener("click", function () {
-            const campo = document.getElementById("profilePassword");
-            const icono = boton.querySelector("i");
-            if (campo.type === "password") {
-                campo.type = "text";
-                icono.classList.remove("bi-eye");
-                icono.classList.add("bi-eye-slash");
-            } else {
-                campo.type = "password";
-                icono.classList.remove("bi-eye-slash");
-                icono.classList.add("bi-eye");
-            }
-        });
-    });
-
+    // ==========================================
+    // DETALLE DE POLIZA
+    // ==========================================
     const policyDetailContent = document.getElementById("policyDetailContent");
-
     if (policyDetailContent) {
         const parametros = new URLSearchParams(window.location.search);
         const idPoliza = Number(parametros.get("id"));
@@ -507,10 +330,7 @@ function cargarCliente() {
         fetch("../../backend_web/polizas_cliente.php")
             .then(function (respuesta) { return respuesta.json(); })
             .then(function (datos) {
-                if (!datos.success) {
-                    console.error(datos.mensaje);
-                    return;
-                }
+                if (!datos.success) return;
 
                 const polizaSeleccionada = datos.polizas.find(function (poliza) { return Number(poliza.idPoliza) === idPoliza; });
 
@@ -520,8 +340,7 @@ function cargarCliente() {
                     return;
                 }
                 cargarDetallePoliza(polizaSeleccionada);
-            })
-            .catch(function (error) { console.error("Error al cargar el detalle de la póliza:", error); });
+            });
 
         function cargarDetallePoliza(poliza) {
             const cobertura = planes[poliza.nombreP];
@@ -558,80 +377,31 @@ function cargarCliente() {
             document.getElementById("editBusinessEmail").value = poliza.correoP;
             document.getElementById("editBusinessAddress").value = poliza.direccionServicioP;
 
-            // Prepara únicamente los planes superiores
-const nivelesPlanes = [
-    "Esencial",
-    "Profesional",
-    "Empresarial"
-];
+            const nivelesPlanes = ["Esencial", "Profesional", "Empresarial"];
+            const newPolicyPlan = document.getElementById("newPolicyPlan");
+            const improvePolicyButton = document.getElementById("improvePolicyButton");
+            newPolicyPlan.innerHTML = "";
 
-const newPolicyPlan = document.getElementById(
-    "newPolicyPlan"
-);
+            const opcionInicial = document.createElement("option");
+            opcionInicial.value = "";
+            opcionInicial.textContent = "Selecciona un plan diferente";
+            opcionInicial.selected = true;
+            opcionInicial.disabled = true;
+            newPolicyPlan.appendChild(opcionInicial);
 
-const improvePolicyButton = document.getElementById(
-    "improvePolicyButton"
-);
+            const indicePlanActual = nivelesPlanes.indexOf(poliza.nombreP);
+            if (indicePlanActual !== -1) {
+                nivelesPlanes.slice(indicePlanActual + 1).forEach(function (nombrePlan) {
+                    const opcion = document.createElement("option");
+                    opcion.value = nombrePlan;
+                    opcion.textContent = nombrePlan;
+                    newPolicyPlan.appendChild(opcion);
+                });
+            }
 
-
-// Limpia las opciones anteriores
-newPolicyPlan.innerHTML = "";
-
-
-const opcionInicial = document.createElement(
-    "option"
-);
-
-opcionInicial.value = "";
-opcionInicial.textContent =
-    "Selecciona un plan diferente";
-
-opcionInicial.selected = true;
-opcionInicial.disabled = true;
-
-newPolicyPlan.appendChild(
-    opcionInicial
-);
-
-
-const indicePlanActual = nivelesPlanes.indexOf(
-    poliza.nombreP
-);
-
-
-// Agrega únicamente los niveles superiores
-if (indicePlanActual !== -1) {
-
-    nivelesPlanes
-        .slice(indicePlanActual + 1)
-        .forEach(function (nombrePlan) {
-
-            const opcion = document.createElement(
-                "option"
-            );
-
-            opcion.value = nombrePlan;
-            opcion.textContent = nombrePlan;
-
-            newPolicyPlan.appendChild(
-                opcion
-            );
-        });
-}
-
-
-// Determina si la póliza puede mejorarse
-const puedeMejorar =
-    indicePlanActual !== -1 &&
-    indicePlanActual < nivelesPlanes.length - 1 &&
-    poliza.estadoP !== "Cancelada";
-
-
-improvePolicyButton.disabled =
-    !puedeMejorar;
-
-newPolicyPlan.disabled =
-    !puedeMejorar;
+            const puedeMejorar = indicePlanActual !== -1 && indicePlanActual < nivelesPlanes.length - 1 && poliza.estadoP !== "Cancelada";
+            improvePolicyButton.disabled = !puedeMejorar;
+            newPolicyPlan.disabled = !puedeMejorar;
 
             if (poliza.estadoP === "Cancelada") {
                 document.getElementById("cancelPolicyButton").disabled = true;
@@ -640,224 +410,96 @@ newPolicyPlan.disabled =
             }
         }
 
-    // Actualizar datos de la póliza
-const editPolicyForm = document.getElementById(
-    "editPolicyForm"
-);
+        const editPolicyForm = document.getElementById("editPolicyForm");
+        editPolicyForm.addEventListener("submit", function (evento) {
+            evento.preventDefault();
+            const formulario = new FormData();
+            formulario.append("idPoliza", idPoliza);
+            formulario.append("empresa", document.getElementById("editBusinessName").value.trim());
+            formulario.append("telefono", document.getElementById("editBusinessPhone").value.trim());
+            formulario.append("correo", document.getElementById("editBusinessEmail").value.trim());
+            formulario.append("direccion", document.getElementById("editBusinessAddress").value.trim());
 
-
-editPolicyForm.addEventListener(
-    "submit",
-    function (evento) {
-
-        evento.preventDefault();
-
-
-        const formulario = new FormData();
-
-        formulario.append(
-            "idPoliza",
-            idPoliza
-        );
-
-        formulario.append(
-            "empresa",
-            document.getElementById(
-                "editBusinessName"
-            ).value.trim()
-        );
-
-        formulario.append(
-            "telefono",
-            document.getElementById(
-                "editBusinessPhone"
-            ).value.trim()
-        );
-
-        formulario.append(
-            "correo",
-            document.getElementById(
-                "editBusinessEmail"
-            ).value.trim()
-        );
-
-        formulario.append(
-            "direccion",
-            document.getElementById(
-                "editBusinessAddress"
-            ).value.trim()
-        );
-
-
-        fetch(
-            "../../backend_web/actualizar_poliza_cliente.php",
-            {
-                method: "POST",
-                body: formulario
-            }
-        )
-            .then(function (respuesta) {
-                return respuesta.json();
-            })
-            .then(function (datos) {
-
-                if (!datos.success) {
-                    alert(datos.mensaje);
-                    return;
-                }
-
-
-                // Recarga para mostrar los datos actualizados
+            fetch("../../backend_web/actualizar_poliza_cliente.php", {
+                method: "POST", body: formulario
+            }).then(function (respuesta) { return respuesta.json(); }).then(function (datos) {
+                if (!datos.success) { alert(datos.mensaje); return; }
                 window.location.reload();
-            })
-            .catch(function (error) {
-
-                console.error(
-                    "Error al actualizar la póliza:",
-                    error
-                );
             });
-    }
-);
-// Cancelar la póliza
-const confirmCancelPolicy = document.getElementById(
-    "confirmCancelPolicy"
-);
+        });
 
-
-confirmCancelPolicy.addEventListener(
-    "click",
-    function () {
-
-        const formulario = new FormData();
-
-        formulario.append(
-            "idPoliza",
-            idPoliza
-        );
-
-
-        confirmCancelPolicy.disabled = true;
-
+        const confirmCancelPolicy = document.getElementById("confirmCancelPolicy");
+        confirmCancelPolicy.addEventListener("click", function () {
+            const formulario = new FormData();
+            formulario.append("idPoliza", idPoliza);
+            confirmCancelPolicy.disabled = true;
             fetch("../../backend_web/cancelar_poliza_cliente.php", {
                 method: "POST", body: formulario
-            })
-                .then(function (respuesta) { return respuesta.json(); })
-                .then(function (datos) {
-                    if (!datos.success) {
-                        alert(datos.mensaje);
-                        confirmCancelPolicy.disabled = false;
-                        return;
-                    }
-                    window.location.reload();
-                })
-                .catch(function (error) {
-                    console.error("Error al cancelar la póliza:", error);
-                    confirmCancelPolicy.disabled = false;
-                });
+            }).then(function (respuesta) { return respuesta.json(); }).then(function (datos) {
+                if (!datos.success) { alert(datos.mensaje); confirmCancelPolicy.disabled = false; return; }
+                window.location.reload();
+            });
         });
 
         const renewPolicyButton = document.getElementById("renewPolicyButton");
         renewPolicyButton.addEventListener("click", function () {
-            const confirmarRenovacion = confirm("¿Deseas renovar esta póliza por 1 mes?");
-            if (!confirmarRenovacion) { return; }
-
+            if (!confirm("¿Deseas renovar esta póliza por 1 mes?")) return;
             const formulario = new FormData();
             formulario.append("idPoliza", idPoliza);
             renewPolicyButton.disabled = true;
-
             fetch("../../backend_web/renovar_poliza_cliente.php", {
                 method: "POST", body: formulario
-            })
-                .then(function (respuesta) { return respuesta.json(); })
-                .then(function (datos) {
-                    if (!datos.success) {
-                        alert(datos.mensaje);
-                        renewPolicyButton.disabled = false;
-                        return;
-                    }
-                    window.location.reload();
-                })
-                .catch(function (error) {
-                    console.error("Error al renovar la póliza:", error);
-                    renewPolicyButton.disabled = false;
-                });
+            }).then(function (respuesta) { return respuesta.json(); }).then(function (datos) {
+                if (!datos.success) { alert(datos.mensaje); renewPolicyButton.disabled = false; return; }
+                window.location.reload();
+            });
         });
-
-// Prepara los planes disponibles
-const planesDisponibles = [
-    "Esencial",
-    "Profesional",
-    "Empresarial"
-];
-
-const newPolicyPlan = document.getElementById(
-    "newPolicyPlan"
-);
-
-const improvePolicyButton = document.getElementById(
-    "improvePolicyButton"
-);
-
-
-// Limpia las opciones anteriores
-newPolicyPlan.innerHTML = "";
-
-
-const opcionInicial = document.createElement(
-    "option"
-);
-
-opcionInicial.value = "";
-opcionInicial.textContent =
-    "Selecciona un plan diferente";
-
-opcionInicial.selected = true;
-opcionInicial.disabled = true;
-
-newPolicyPlan.appendChild(
-    opcionInicial
-);
-
-
-// Agrega todos los planes excepto el actual
-planesDisponibles.forEach(function (nombrePlan) {
-
-    if (nombrePlan === poliza.nombreP) {
-        return;
     }
 
-    const opcion = document.createElement(
-        "option"
-    );
+    // ==========================================
+    // PERFIL
+    // ==========================================
+    const profileFormEl = document.getElementById("profileForm");
+    if (profileFormEl) {
+        profileFormEl.addEventListener("submit", function (evento) {
+            evento.preventDefault();
+            const formulario = new FormData();
+            formulario.append("nombre", document.getElementById("profileName").value.trim());
+            formulario.append("apellido", document.getElementById("profileLastName").value.trim());
+            formulario.append("telefono", document.getElementById("profilePhone").value.trim());
+            formulario.append("correo", document.getElementById("profileEmail").value.trim());
+            formulario.append("password", document.getElementById("profilePassword").value);
 
-    opcion.value = nombrePlan;
-    opcion.textContent = nombrePlan;
+            fetch("../../backend_web/actualizar_perfil_cliente.php", {
+                method: "POST", body: formulario
+            }).then(function (respuesta) { return respuesta.json(); }).then(function (datos) {
+                if (!datos.success) { alert(datos.mensaje); return; }
+                document.getElementById("profileAlert").classList.remove("d-none");
+                document.getElementById("profilePassword").value = "";
+                cargarCliente();
+            });
+        });
+    }
 
-    newPolicyPlan.appendChild(
-        opcion
-    );
-});
+    document.querySelectorAll("[data-toggle-password]").forEach(function (boton) {
+        boton.addEventListener("click", function () {
+            const campo = document.getElementById("profilePassword");
+            const icono = boton.querySelector("i");
+            if (campo.type === "password") {
+                campo.type = "text";
+                icono.classList.remove("bi-eye");
+                icono.classList.add("bi-eye-slash");
+            } else {
+                campo.type = "password";
+                icono.classList.remove("bi-eye-slash");
+                icono.classList.add("bi-eye");
+            }
+        });
+    });
 
-
-// Una póliza cancelada debe renovarse antes
-const puedeCambiarPlan =
-    planesDisponibles.includes(poliza.nombreP) &&
-    poliza.estadoP !== "Cancelada";
-
-
-improvePolicyButton.disabled =
-    !puedeCambiarPlan;
-
-newPolicyPlan.disabled =
-    !puedeCambiarPlan;
-
-
-
-}
-
-
-
+    // ==========================================
+    // DETALLE TICKET
+    // ==========================================
     function mostrarDetalleTicket() {
         const contenedor = document.getElementById("ticketDetail");
         if (!contenedor) return;
@@ -865,32 +507,12 @@ newPolicyPlan.disabled =
         const parametros = new URLSearchParams(window.location.search);
         const idTicket = parametros.get("id");
 
-        if (!idTicket) {
-            contenedor.innerHTML = `
-                <div class="glass-card rounded-4 p-5 shadow-sm text-center">
-                    <i class="bi bi-exclamation-circle fs-1 text-secondary"></i>
-                    <h1 class="h4 mt-3">Ticket no encontrado</h1>
-                    <p class="text-secondary">No se recibió un ticket válido.</p>
-                    <a href="tickets_cliente.html" class="btn btn-success">Volver a mis tickets</a>
-                </div>
-            `;
-            return;
-        }
+        if (!idTicket) return;
 
         fetch("../../backend_web/detalle_ticket_cliente.php?id=" + encodeURIComponent(idTicket))
             .then(function (respuesta) { return respuesta.json(); })
             .then(function (datos) {
-                if (!datos.success) {
-                    contenedor.innerHTML = `
-                        <div class="glass-card rounded-4 p-5 shadow-sm text-center">
-                            <i class="bi bi-exclamation-circle fs-1 text-secondary"></i>
-                            <h1 class="h4 mt-3">Ticket no encontrado</h1>
-                            <p class="text-secondary">${datos.mensaje}</p>
-                            <a href="tickets_cliente.html" class="btn btn-success">Volver a mis tickets</a>
-                        </div>
-                    `;
-                    return;
-                }
+                if (!datos.success) return;
 
                 const ticket = datos.ticket;
                 const numeroTicket = "TKT-" + String(ticket.idTicket).padStart(3, "0");
@@ -898,9 +520,7 @@ newPolicyPlan.disabled =
                 const fechaAtencion = ticket.fechaAtencionT ? new Date(ticket.fechaAtencionT + "T00:00:00").toLocaleDateString("es-MX") : "Pendiente";
                 const nombrePoliza = ticket.nombreEmpresaP + " - Plan " + ticket.nombreP;
                 let tecnico = "Pendiente de asignación";
-                if (ticket.idEmpleado) {
-                    tecnico = ticket.nombresEmp + " " + ticket.apellidosEmp;
-                }
+                if (ticket.idEmpleado) tecnico = ticket.nombresEmp + " " + ticket.apellidosEmp;
 
                 contenedor.innerHTML = `
                     <section class="glass-card rounded-4 p-4 p-lg-5 shadow-sm">
@@ -917,22 +537,10 @@ newPolicyPlan.disabled =
                         </div>
                         <hr>
                         <div class="row g-4 mt-1">
-                            <div class="col-md-6">
-                                <small class="text-secondary">Póliza</small>
-                                <p class="fw-semibold mb-0">${nombrePoliza}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <small class="text-secondary">Modalidad</small>
-                                <p class="fw-semibold mb-0">${ticket.modalidadAtencionT}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <small class="text-secondary">Técnico asignado</small>
-                                <p class="fw-semibold mb-0">${tecnico}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <small class="text-secondary">Fecha de atención</small>
-                                <p class="fw-semibold mb-0">${fechaAtencion}</p>
-                            </div>
+                            <div class="col-md-6"><small class="text-secondary">Póliza</small><p class="fw-semibold mb-0">${nombrePoliza}</p></div>
+                            <div class="col-md-6"><small class="text-secondary">Modalidad</small><p class="fw-semibold mb-0">${ticket.modalidadAtencionT}</p></div>
+                            <div class="col-md-6"><small class="text-secondary">Técnico asignado</small><p class="fw-semibold mb-0">${tecnico}</p></div>
+                            <div class="col-md-6"><small class="text-secondary">Fecha de atención</small><p class="fw-semibold mb-0">${fechaAtencion}</p></div>
                         </div>
                         <hr class="my-4">
                         <div>
@@ -941,28 +549,18 @@ newPolicyPlan.disabled =
                         </div>
                         ${ticket.notasTecnico ? `
                             <hr class="my-4">
-                            <div>
-                                <h2 class="h5 fw-bold">Notas del técnico</h2>
-                                <p class="text-secondary mb-0">${ticket.notasTecnico}</p>
-                            </div>
+                            <div><h2 class="h5 fw-bold">Notas del técnico</h2><p class="text-secondary mb-0">${ticket.notasTecnico}</p></div>
                         ` : ""}
                         ${Number(ticket.conformidadCliente) === 1 ? `
-                            <hr class="my-4">
-                            <div class="alert alert-success mb-0">
-                                <i class="bi bi-check-circle me-2"></i> Confirmaste que el problema fue solucionado.
-                            </div>
+                            <hr class="my-4"><div class="alert alert-success mb-0"><i class="bi bi-check-circle me-2"></i> Confirmaste que el problema fue solucionado.</div>
                         ` : `
                             <hr class="my-4">
                             <div>
                                 <h2 class="h5 fw-bold">¿Tu problema quedó solucionado?</h2>
                                 <p class="text-secondary">Confirma el resultado de la atención.</p>
                                 <div class="d-flex flex-wrap gap-2">
-                                    <button class="btn btn-success" data-conformidad="solucionado">
-                                        <i class="bi bi-check-circle me-1"></i> Sí, quedó solucionado
-                                    </button>
-                                    <button class="btn btn-outline-danger" data-conformidad="continua">
-                                        <i class="bi bi-x-circle me-1"></i> El problema continúa
-                                    </button>
+                                    <button class="btn btn-success" data-conformidad="solucionado"><i class="bi bi-check-circle me-1"></i> Sí, quedó solucionado</button>
+                                    <button class="btn btn-outline-danger" data-conformidad="continua"><i class="bi bi-x-circle me-1"></i> El problema continúa</button>
                                 </div>
                                 <p id="conformidadMensaje" class="small mt-3 mb-0"></p>
                             </div>
@@ -979,32 +577,22 @@ newPolicyPlan.disabled =
 
                         fetch("../../backend_web/conformidad_ticket_cliente.php", {
                             method: "POST", body: formulario
-                        })
-                            .then(function (respuestaServidor) { return respuestaServidor.json(); })
-                            .then(function (datosConformidad) {
-                                if (!datosConformidad.success) {
-                                    console.error(datosConformidad.mensaje);
-                                    return;
-                                }
-                                if (respuesta === "solucionado") {
-                                    mostrarDetalleTicket();
-                                } else {
-                                    document.getElementById("conformidadMensaje").textContent = "Se registró que el problema continúa.";
-                                }
-                            })
-                            .catch(function (error) { console.error("Error al registrar la conformidad:", error); });
+                        }).then(function (res) { return res.json(); }).then(function (dat) {
+                            if (!dat.success) return;
+                            if (respuesta === "solucionado") mostrarDetalleTicket();
+                            else document.getElementById("conformidadMensaje").textContent = "Se registró que el problema continúa.";
+                        });
                     });
                 });
-            })
-            .catch(function (error) { console.error("Error al cargar el detalle del ticket:", error); });
+            });
     }
-
-    mostrarTickets();
-    configurarFiltrosTickets();
     mostrarDetalleTicket();
 
-    const paginaActual = window.location.pathname.split("/").pop() || "indexcliente.html";
-    if (paginaActual === "indexcliente.html" || paginaActual === "") {
+    // ==========================================
+    // GRAFICAS PANEL (INDEX CLIENTE)
+    // ==========================================
+    const paginaActualURL = window.location.pathname.split("/").pop() || "indexcliente.html";
+    if (paginaActualURL === "indexcliente.html" || paginaActualURL === "") {
         cargarResumenGraficoCliente();
     }
 
@@ -1073,11 +661,11 @@ newPolicyPlan.disabled =
                         });
                     }
                 }
-            })
-            .catch(err => console.error("Error al cargar gráficas del cliente:", err));
+            }).catch(err => console.error(err));
     }
 });
 
+// FUNCIONES AUXILIARES GLOBALES
 function resaltarPaginaActual() {
     const paginaActual = window.location.pathname.split("/").pop() || "indexcliente.html";
     const paginasPolizas = ["polizas_cliente.html", "nueva_poliza.html", "detalle_poliza.html"];
@@ -1089,11 +677,8 @@ function resaltarPaginaActual() {
             (paginaEnlace === "polizas_cliente.html" && paginasPolizas.includes(paginaActual)) ||
             (paginaEnlace === "tickets_cliente.html" && paginasTickets.includes(paginaActual));
         enlace.classList.toggle("active", estaActivo);
-        if (estaActivo) {
-            enlace.setAttribute("aria-current", "page");
-        } else {
-            enlace.removeAttribute("aria-current");
-        }
+        if (estaActivo) enlace.setAttribute("aria-current", "page");
+        else enlace.removeAttribute("aria-current");
     });
 }
 
@@ -1103,8 +688,11 @@ function claseEstadoTicket(estado) {
     return "status-cancelled";
 }
 
-function ticketCoincideFiltro(ticket, filtro) {
-    const estado = ticket.estado.trim().toLowerCase();
+// ARREGLADO: Bug de filtro ("estado" -> "statusT")
+function ticketCoincideFiltroLocal(statusOriginal, filtro) {
+    if(!statusOriginal) return false;
+    const estado = statusOriginal.trim().toLowerCase();
+    
     if (filtro === "all") return true;
     if (filtro === "Asignado") return estado === "asignado";
     if (filtro === "Atencion") return estado === "proceso";
