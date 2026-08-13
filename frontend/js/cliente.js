@@ -15,30 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
         Empresarial: { dispositivos: 90, presenciales: 25, remotos: 50, asesorias: 20 }
     };
 
-    const polizasIniciales = [
-        {
-            id: 1, numero: "ETS-001", plan: "Profesional", estado: "Activa",
-            negocio: "Sucursal Centro", telefono: "3312345678", direccion: "Guadalajara, Jalisco",
-            correo: "contacto@negocio.com", responsable: "Isaú Ramírez",
-            fechaInicio: "01/08/2026", fechaVencimiento: "01/08/2027"
-        },
-        {
-            id: 2, numero: "ETS-002", plan: "Esencial", estado: "Por renovar",
-            negocio: "Sucursal Norte", telefono: "3387654321", direccion: "Zapopan, Jalisco",
-            correo: "norte@negocio.com", responsable: "Isaú Ramírez",
-            fechaInicio: "15/08/2025", fechaVencimiento: "15/08/2026"
-        }
-    ];
-
-    if (!localStorage.getItem("polizasETS")) {
-        localStorage.setItem("polizasETS", JSON.stringify(polizasIniciales));
-    }
-    let polizas = JSON.parse(localStorage.getItem("polizasETS"));
-    function guardarPolizas() {
-        localStorage.setItem("polizasETS", JSON.stringify(polizas));
-    }
-
-    // NUEVO TICKET
+    // FORMULARIO NUEVO TICKET
     const newTicketForm = document.getElementById("newTicketForm");
     if (newTicketForm) {
         const ticketPolicy = document.getElementById("ticketPolicy");
@@ -90,14 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return "status-cancelled";
     }
 
-    function obtenerFechaActual() { return new Date().toLocaleDateString("es-MX"); }
-
-    function obtenerFechaVencimiento() {
-        const fecha = new Date();
-        fecha.setFullYear(fecha.getFullYear() + 1);
-        return fecha.toLocaleDateString("es-MX");
-    }
-
+    // CARGAR CLIENTE
     function cargarCliente() {
         fetch("../../backend_web/perfil_cliente.php")
             .then(function (respuesta) { return respuesta.json(); })
@@ -121,19 +91,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     cargarCliente();
 
-    // POLIZAS EN PANEL PRINCIPAL
+    // POLIZAS PANEL RESUMEN
     const dashboardPolicies = document.getElementById("dashboardPolicies");
-    const activePolicies = document.getElementById("activePolicies");
-
-    if (dashboardPolicies || activePolicies) {
+    if (dashboardPolicies) {
         fetch("../../backend_web/polizas_cliente.php")
             .then(function (respuesta) { return respuesta.json(); })
             .then(function (datos) {
                 if (!datos.success) return;
                 const polizasActivas = datos.polizas.filter(function (poliza) { return poliza.estadoP !== "Cancelada"; });
-                if (activePolicies) { activePolicies.textContent = polizasActivas.length; }
-                if (!dashboardPolicies) { return; }
-
+                
                 const polizasVisibles = polizasActivas.slice(0, 2);
                 if (polizasVisibles.length === 0) {
                     dashboardPolicies.innerHTML = `
@@ -166,64 +132,104 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ==========================================
-    // SECCIÓN DE TICKETS (BUGS CORREGIDOS)
+    // SECCIÓN DE TICKETS CON DISEÑO CORREGIDO
     // ==========================================
     const contenedorTickets = document.getElementById("ticketsList");
-    window.misTicketsLocales = []; // Guardamos los datos para no hacer fetch múltiples veces
+    window.misTicketsLocales = []; 
+    let currentPageTkt = 1;
+    let filtradosTkt = [];
+    const itemsPerPageTkt = 25;
 
     function cargarDatosTicketsBase() {
         if (!contenedorTickets) return;
         fetch("../../backend_web/tickets_cliente.php")
             .then(respuesta => respuesta.json())
             .then(datos => {
-                if (!datos.success) {
-                    console.error(datos.mensaje);
-                    return;
-                }
-                window.misTicketsLocales = datos.tickets; // Guardamos globalmente
-                pintarListaTickets("all"); // Pintamos todos por defecto
+                if (!datos.success) return;
+                window.misTicketsLocales = datos.tickets; 
+                pintarListaTicketsPaginada("all"); 
             })
             .catch(error => console.error("Error trayendo tickets:", error));
     }
 
-    function pintarListaTickets(filtro) {
+    function pintarListaTicketsPaginada(filtro) {
         if (!contenedorTickets) return;
 
-        // Filtramos usando nuestra variable local
-        const filtrados = window.misTicketsLocales.filter(function (ticket) {
-            return ticketCoincideFiltroLocal(ticket.statusT, filtro);
-        });
+        // Si hay un filtro, reiniciamos la paginación y filtramos
+        if (filtro) {
+            filtradosTkt = window.misTicketsLocales.filter(function (ticket) {
+                return ticketCoincideFiltroLocal(ticket.statusT, filtro);
+            });
+            currentPageTkt = 1;
+        }
 
-        if (filtrados.length === 0) {
+        // Matemáticas de paginación
+        const inicio = (currentPageTkt - 1) * itemsPerPageTkt;
+        const aMostrar = filtradosTkt.slice(inicio, inicio + itemsPerPageTkt);
+
+        // Actualizar el texto "1 - 25 de 156"
+        const textoPaginacion = document.getElementById("paginacionTktClienteTexto");
+        if (textoPaginacion) {
+            if (filtradosTkt.length === 0) {
+                textoPaginacion.textContent = "0 resultados";
+            } else {
+                const end = Math.min(currentPageTkt * itemsPerPageTkt, filtradosTkt.length);
+                textoPaginacion.textContent = `${inicio + 1} - ${end} de ${filtradosTkt.length}`;
+            }
+        }
+
+        // Estado vacío
+        if (aMostrar.length === 0) {
             contenedorTickets.innerHTML = `
-                <div class="empty-state">
-                    <i class="bi bi-ticket-perforated"></i>
-                    <h2 class="h5">No hay tickets en esta sección</h2>
+                <div class="text-center py-5">
+                    <i class="bi bi-ticket-perforated fs-1 text-secondary"></i>
+                    <h2 class="h5 mt-3">No hay tickets</h2>
                     <p class="text-secondary mb-0">No encontramos registros con este filtro.</p>
                 </div>
             `;
             return;
         }
 
-        contenedorTickets.innerHTML = filtrados.map(function (ticket) {
+        // PINTAR EL DISEÑO CORRECTO (CARD MODERNA)
+        contenedorTickets.innerHTML = aMostrar.map(function (ticket) {
             const numeroTicket = "TKT-" + String(ticket.idTicket).padStart(3, "0");
             const fecha = new Date(ticket.fechaCreacionT + "T00:00:00").toLocaleDateString("es-MX");
+            
+            // Asignar colores dinámicos según estatus
+            let colorClass = "success";
+            let bgRgba = "rgba(25, 135, 84, 0.1)";
+            const estadoLower = ticket.statusT ? ticket.statusT.toLowerCase() : "";
+            
+            if (estadoLower.includes("proceso") || estadoLower.includes("atencion")) {
+                colorClass = "warning";
+                bgRgba = "rgba(255, 193, 7, 0.1)";
+            } else if (estadoLower.includes("asignado") || estadoLower.includes("pendiente")) {
+                colorClass = "danger";
+                bgRgba = "rgba(220, 53, 69, 0.1)";
+            }
+
             return `
-                <article class="policy-row">
-                    <div class="policy-symbol"><i class="bi bi-ticket-perforated"></i></div>
-                    <div class="flex-grow-1">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                            <h2 class="h6 fw-bold mb-0">${ticket.conceptoT}</h2>
-                            <span class="policy-status ${claseEstadoTicket(ticket.statusT)}">${ticket.statusT}</span>
+                <article class="glass-card rounded-4 p-4 shadow-sm border border-secondary border-opacity-10 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 w-100" style="background: rgba(255,255,255,0.7);">
+                    <div class="d-flex gap-3 align-items-center">
+                        <div class="icon-box text-${colorClass} flex-shrink-0 d-flex justify-content-center align-items-center" style="width: 50px; height: 50px; background: ${bgRgba}; border-radius: 12px;">
+                            <i class="bi bi-ticket-detailed fs-3"></i>
                         </div>
-                        <p class="text-secondary small mb-1">
-                            <strong>${numeroTicket}</strong> · ${ticket.modalidadAtencionT} · ${fecha}
-                        </p>
-                        <p class="text-secondary small mb-0">
-                            <i class="bi bi-file-earmark-check me-1"></i> ${ticket.nombreEmpresaP} - Plan ${ticket.nombreP}
-                        </p>
+                        <div>
+                            <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                                <h2 class="h6 fw-bold mb-0 text-dark">${ticket.conceptoT}</h2>
+                                <span class="badge bg-${colorClass} bg-opacity-10 text-${colorClass} border border-${colorClass} border-opacity-25 px-2 py-1 rounded-pill">${ticket.statusT}</span>
+                            </div>
+                            <p class="text-secondary small mb-1 fw-medium">
+                                <strong class="text-dark">${numeroTicket}</strong> <span class="mx-1">•</span> ${ticket.modalidadAtencionT} <span class="mx-1">•</span> Creado: ${fecha}
+                            </p>
+                            <p class="text-secondary small mb-0">
+                                <i class="bi bi-building me-1"></i> ${ticket.nombreEmpresaP} - Plan ${ticket.nombreP}
+                            </p>
+                        </div>
                     </div>
-                    <a href="detalle_ticket.html?id=${ticket.idTicket}" class="btn btn-sm btn-outline-success">Ver detalle</a>
+                    <div class="text-md-end mt-2 mt-md-0 flex-shrink-0">
+                        <a href="detalle_ticket.html?id=${ticket.idTicket}" class="btn btn-outline-success rounded-pill px-4 fw-semibold">Ver detalle <i class="bi bi-arrow-right ms-1"></i></a>
+                    </div>
                 </article>
             `;
         }).join("");
@@ -236,15 +242,39 @@ document.addEventListener("DOMContentLoaded", function () {
                     item.classList.remove("active"); 
                 });
                 boton.classList.add("active");
-                // Llamamos a pintar usando los datos locales
-                pintarListaTickets(boton.dataset.ticketFilter);
+                pintarListaTicketsPaginada(boton.dataset.ticketFilter);
             });
         });
+
+        // Eventos para flechas de paginación
+        const btnPrev = document.getElementById("btnPrevTktCliente");
+        const btnNext = document.getElementById("btnNextTktCliente");
+        
+        if (btnPrev) {
+            btnPrev.addEventListener("click", () => {
+                if (currentPageTkt > 1) {
+                    currentPageTkt--;
+                    pintarListaTicketsPaginada(null); // null para no reiniciar el filtro
+                }
+            });
+        }
+        if (btnNext) {
+            btnNext.addEventListener("click", () => {
+                const totalPages = Math.ceil(filtradosTkt.length / itemsPerPageTkt);
+                if (currentPageTkt < totalPages) {
+                    currentPageTkt++;
+                    pintarListaTicketsPaginada(null);
+                }
+            });
+        }
     }
 
-    // Inicializar funciones de tickets
-    cargarDatosTicketsBase();
-    configurarBotonesFiltroTickets();
+    // Inicializar tickets si existe el contenedor
+    if(contenedorTickets) {
+        cargarDatosTicketsBase();
+        configurarBotonesFiltroTickets();
+    }
+
 
     // ==========================================
     // POLIZAS CLIENTE 
@@ -522,13 +552,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 let tecnico = "Pendiente de asignación";
                 if (ticket.idEmpleado) tecnico = ticket.nombresEmp + " " + ticket.apellidosEmp;
 
+                // Logica visual de color detalle ticket
+                let colorClass = "success";
+                let bgRgba = "rgba(25, 135, 84, 0.1)";
+                const estadoLower = ticket.statusT ? ticket.statusT.toLowerCase() : "";
+                
+                if (estadoLower.includes("proceso") || estadoLower.includes("atencion")) {
+                    colorClass = "warning";
+                } else if (estadoLower.includes("asignado") || estadoLower.includes("pendiente")) {
+                    colorClass = "danger";
+                }
+
                 contenedor.innerHTML = `
                     <section class="glass-card rounded-4 p-4 p-lg-5 shadow-sm">
                         <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
                             <div>
                                 <span class="eyebrow">${numeroTicket}</span>
                                 <h1 class="h2 fw-bold mt-2 mb-2">${ticket.conceptoT}</h1>
-                                <span class="policy-status ${claseEstadoTicket(ticket.statusT)}">${ticket.statusT}</span>
+                                <span class="badge bg-${colorClass} bg-opacity-10 text-${colorClass} border border-${colorClass} border-opacity-25 px-3 py-2 rounded-pill">${ticket.statusT}</span>
                             </div>
                             <div class="text-md-end">
                                 <small class="text-secondary d-block">Fecha de creación</small>
@@ -688,7 +729,6 @@ function claseEstadoTicket(estado) {
     return "status-cancelled";
 }
 
-// ARREGLADO: Bug de filtro ("estado" -> "statusT")
 function ticketCoincideFiltroLocal(statusOriginal, filtro) {
     if(!statusOriginal) return false;
     const estado = statusOriginal.trim().toLowerCase();
