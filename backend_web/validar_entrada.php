@@ -32,7 +32,7 @@ $query = "
 
 $stmt = $mysqli->prepare($query);
 
-// Coloca el correo y contraseña en los cuatro signos ?
+
 $stmt->bind_param(
     "ssss",
     $correo,

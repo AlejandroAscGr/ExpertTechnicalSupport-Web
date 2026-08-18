@@ -54,7 +54,6 @@ if (!$stmt) {
 }
 
 
-// Coloca el cliente de la sesión en el signo ?
 $stmt->bind_param(
     "i",
     $idCliente

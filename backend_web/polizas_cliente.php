@@ -100,7 +100,6 @@ while ($row = $resultado->fetch_assoc()) {
 }
 
 
-// Devuelve las pólizas al frontend
 echo json_encode([
     "success" => true,
     "polizas" => $polizas

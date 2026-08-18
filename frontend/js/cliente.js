@@ -131,9 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(function (error) { console.error("Error cargando pólizas panel:", error); });
     }
 
-    // ==========================================
-    // SECCIÓN DE TICKETS CON DISEÑO CORREGIDO
-    // ==========================================
+
     const contenedorTickets = document.getElementById("ticketsList");
     window.misTicketsLocales = []; 
     let currentPageTkt = 1;
@@ -155,7 +153,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function pintarListaTicketsPaginada(filtro) {
         if (!contenedorTickets) return;
 
-        // Si hay un filtro, reiniciamos la paginación y filtramos
         if (filtro) {
             filtradosTkt = window.misTicketsLocales.filter(function (ticket) {
                 return ticketCoincideFiltroLocal(ticket.statusT, filtro);
@@ -167,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const inicio = (currentPageTkt - 1) * itemsPerPageTkt;
         const aMostrar = filtradosTkt.slice(inicio, inicio + itemsPerPageTkt);
 
-        // Actualizar el texto "1 - 25 de 156"
+
         const textoPaginacion = document.getElementById("paginacionTktClienteTexto");
         if (textoPaginacion) {
             if (filtradosTkt.length === 0) {
@@ -190,7 +187,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // PINTAR EL DISEÑO CORRECTO (CARD MODERNA)
         contenedorTickets.innerHTML = aMostrar.map(function (ticket) {
             const numeroTicket = "TKT-" + String(ticket.idTicket).padStart(3, "0");
             const fecha = new Date(ticket.fechaCreacionT + "T00:00:00").toLocaleDateString("es-MX");
@@ -276,9 +272,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // ==========================================
-    // POLIZAS CLIENTE 
-    // ==========================================
     const policiesGrid = document.getElementById("policiesGrid");
 
     function mostrarPolizas(filtro = "all") {
@@ -349,9 +342,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ==========================================
+
     // DETALLE DE POLIZA
-    // ==========================================
     const policyDetailContent = document.getElementById("policyDetailContent");
     if (policyDetailContent) {
         const parametros = new URLSearchParams(window.location.search);
@@ -486,9 +478,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ==========================================
     // PERFIL
-    // ==========================================
     const profileFormEl = document.getElementById("profileForm");
     if (profileFormEl) {
         profileFormEl.addEventListener("submit", function (evento) {
@@ -527,9 +517,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // ==========================================
     // DETALLE TICKET
-    // ==========================================
     function mostrarDetalleTicket() {
         const contenedor = document.getElementById("ticketDetail");
         if (!contenedor) return;
@@ -629,9 +617,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     mostrarDetalleTicket();
 
-    // ==========================================
     // GRAFICAS PANEL (INDEX CLIENTE)
-    // ==========================================
+
     const paginaActualURL = window.location.pathname.split("/").pop() || "indexcliente.html";
     if (paginaActualURL === "indexcliente.html" || paginaActualURL === "") {
         cargarResumenGraficoCliente();

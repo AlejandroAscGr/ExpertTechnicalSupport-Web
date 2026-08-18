@@ -8,7 +8,6 @@ if (!isset($_SESSION['idEmpleado']) || $_SESSION['perfil'] !== 'DIRECTOR') {
     exit;
 }
 
-// Extraemos los tickets, vinculando la póliza (para el nombre de empresa) y al técnico si existe.
 $query = "SELECT t.idTicket, t.conceptoT, t.statusT, t.fechaCreacionT,
                  p.nombreEmpresaP, e.nombresEmp
           FROM ticket t

@@ -91,7 +91,6 @@ if (!$stmt) {
 }
 
 
-// Coloca el ticket y cliente en los signos ?
 $stmt->bind_param(
     "ii",
     $idTicket,
@@ -99,7 +98,6 @@ $stmt->bind_param(
 );
 
 
-// Ejecuta la consulta
 if (!$stmt->execute()) {
 
     echo json_encode([

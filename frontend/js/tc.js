@@ -3,10 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const pathname = window.location.pathname;
     let todosLosTickets = [];
 
-    // Pintar menú activo
+    // menú activo
     resaltarMenuActivoTC();
 
-    // Ruteo
+
     if (pathname.includes("indextc.html") || pathname.endsWith("/")) {
         cargarNombreSimple();
     }
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Funciones
     function cargarNombreSimple() {
-        // Aprovecha la ruta de tickets para extraer solo el nombre de quien inició sesión
+        // ruta de tickets para extraer el nombre de quien inició sesión
         fetch("../../backend_web/tc/tc_tickets.php")
             .then(res => res.json())
             .then(datos => {
@@ -31,9 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }).catch(err => console.error(err));
     }
 
-    /* =========================================
-       MÓDULO DE TICKETS (tickets_tc.html)
-    ========================================== */
+
+       // MÓDULO DE TICKETS 
     function cargarTicketsTecnico() {
         fetch("../../backend_web/tc/tc_tickets.php")
             .then(res => res.json())
@@ -165,9 +164,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* =========================================
-       MÓDULO DE REPORTE (reporte_tc.html)
-    ========================================== */
+
+      // MÓDULO DE REPORTE 
+
     function cargarReporteMensual() {
         fetch("../../backend_web/tc/tc_reporte.php")
             .then(res => res.json())
@@ -180,13 +179,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById('repProceso').textContent = datos.proceso;
                     document.getElementById('repAsignados').textContent = datos.asignados;
 
-                    // Animar la barra de progreso
+                    // barra de progreso
                     setTimeout(() => {
                         document.getElementById('barraProgreso').style.width = `${datos.progreso}%`;
                     }, 300);
                     document.getElementById('txtProgreso').textContent = datos.progreso;
 
-                    // Pintar la tabla
                     const tbody = document.getElementById('tablaHistorial');
                     if(datos.historial.length > 0){
                         tbody.innerHTML = datos.historial.map(t => {
@@ -205,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-secondary">No se han registrado tickets este mes.</td></tr>`;
                     }
 
-                    // PINTAR GRÁFICA DE MODALIDAD
+                    // GRÁFICA DE MODALIDAD
                     if(document.getElementById('chartModalidadTC')){
                         const dataModalidad = datos.graficas.modalidad; // [Presencial, Remoto, Asesoria]
                         new Chart(document.getElementById('chartModalidadTC'), {
@@ -226,7 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }).catch(err => console.error(err));
     }
 
-    /* UTILS */
     function getColorTextoEstatus(status) {
         if(status === 'Cerrado') return 'text-success';
         if(status === 'Proceso') return 'text-warning';

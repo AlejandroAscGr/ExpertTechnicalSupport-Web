@@ -54,7 +54,7 @@
 </head>
 <body class="app-bg">
 
-    <!-- CABECERA MÓVIL -->
+
     <header class="d-lg-none glass-header p-3 d-flex justify-content-between align-items-center sticky-top shadow-sm">
         <div class="d-flex align-items-center">
             <img src="img/logoETS75px.png" alt="Logo ETS" style="max-height: 40px; width: auto;" class="me-2">
@@ -65,7 +65,6 @@
         </button>
     </header>
 
-    <!-- Contenedor Principal Flex -->
     <div class="d-flex">
 
         <!-- MENÚ LATERAL -->
@@ -91,7 +90,7 @@
                 </div>
             </div>
 
-            <!-- Navegación -->
+    
             <ul class="nav nav-pills flex-column mb-auto gap-2">
                 <li class="nav-item">
                     <a href="#inicio" class="nav-link text-dark glass-hover active-glass d-flex align-items-center">
@@ -137,8 +136,7 @@
 
         <!-- CONTENIDO PRINCIPAL -->
         <main id="mainContent" class="main-content expanded flex-grow-1 p-4 p-lg-5 overflow-hidden w-100 transition-all">
-            
-            <!-- Sección: Inicio (Hero) -->
+
             <section id="inicio" class="mb-5 mt-lg-3 position-relative overflow-hidden border-0" style="min-height: 80vh; display: flex; align-items: center;">
                 <div class="row align-items-center w-100 text-center text-lg-start">
                     <div class="col-lg-6 pe-lg-5" data-aos="fade-right" data-aos-duration="1000">
@@ -158,14 +156,14 @@
                     <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left" data-aos-duration="1200">
                         <div class="position-relative">
                             <div class="position-absolute bg-success rounded-circle blur-bg" style="width: 300px; height: 300px; top: -50px; right: -50px; opacity: 0.15; filter: blur(60px); z-index: 0;"></div>
-                            <!-- Agregado float-anim y hero-img-resp -->
+                        
                             <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" alt="Conectividad y Redes B2B" class="img-fluid rounded-5 shadow-lg w-100 object-fit-cover position-relative float-anim hero-img-resp" style="min-height: 450px; z-index: 1;">
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Sección: Sobre Nosotros -->
+            <!--  Sobre Nosotros -->
             <section id="nosotros" class="mb-5 py-5 text-center text-lg-start">
                 <div class="glass-card rounded-5 p-4 p-lg-5 shadow-sm border-0" data-aos="fade-up" data-aos-duration="1000">
                     <div class="row align-items-center">
@@ -201,7 +199,7 @@
                 </div>
             </section>
 
-            <!-- Sección: Pólizas TI -->
+    
             <section id="polizas" class="mb-5 py-5">
                 <div class="text-center mb-5" data-aos="fade-up">
                     <h6 class="text-success fw-bold text-uppercase mb-2 tracking-wide text-gradient">Planes de Cobertura</h6>
@@ -226,7 +224,7 @@
                         </div>
                     </div>
 
-                    <!-- Agregado clase glow-plan y hover-elevate -->
+                   
                     <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
                         <div class="glass-card h-100 rounded-5 p-4 p-lg-5 shadow border border-success border-opacity-50 position-relative hover-elevate glow-plan" style="transform: scale(1.03); background: rgba(255,255,255,0.95); z-index: 2;">
                             <div class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-success px-4 py-2 text-uppercase tracking-wide">Más Elegido</div>
@@ -295,7 +293,7 @@
                 </div>
             </section>
 
-            <!-- Sección: Contacto -->
+            <!--  Contacto -->
             <section id="contacto" class="mb-5 pt-3">
                 <div class="glass-card rounded-5 p-4 p-lg-5 shadow-sm text-center position-relative overflow-hidden border-0" data-aos="zoom-in" data-aos-duration="800">
                     <div class="position-absolute top-50 start-50 translate-middle w-100 h-100" style="background: radial-gradient(circle, rgba(25,135,84,0.08) 0%, transparent 80%); z-index: 0;"></div>
@@ -338,15 +336,13 @@
         </main>
     </div>
 
-    <!-- Bootstrap JS -->
+  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            
-            // 1. Iniciar AOS Animations
+        
             AOS.init({
                 once: true,
                 offset: 50,
@@ -364,7 +360,7 @@
                 });
             }
 
-            // 3. ScrollSpy para menú
+   
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('#sidebar .nav-link');
 

@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (pathname.includes("reportes_dg.html")) { cargarReportes(); setFiltrosReportes(); }
     if (pathname.includes("perfil_dg.html")) { cargarPerfil(); setPerfilEventos(); }
 
-    /* =========================================
-       1. DASHBOARD PRINCIPAL
-    ========================================== */
+
+      //DASHBOARD PRINCIPAL 
+
     function cargarResumen() {
         fetch("../../backend_web/dg/dg_resumen.php")
             .then(res => res.json())
@@ -109,9 +109,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* =========================================
-       FUNCION DE PAGINACIÓN UNIVERSAL
-    ========================================== */
+
+      // FUNCION DE PAGINACIÓN UNIVERSAL
+
     function paginar(lista, pagina) {
         const inicio = (pagina - 1) * itemsPerPage;
         return lista.slice(inicio, inicio + itemsPerPage);
@@ -129,9 +129,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /* =========================================
-       2. MÓDULO CLIENTES
-    ========================================== */
+  
+       // MÓDULO CLIENTES
+
     function cargarClientes() {
         fetch("../../backend_web/dg/dg_clientes.php").then(res => res.json()).then(datos => {
             if (datos.success) {
@@ -197,9 +197,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* =========================================
-       3. MÓDULO PÓLIZAS
-    ========================================== */
+      //  MÓDULO PÓLIZAS
+
     function cargarPolizas() {
         fetch("../../backend_web/dg/dg_polizas.php").then(res => res.json()).then(datos => {
             if (datos.success) {

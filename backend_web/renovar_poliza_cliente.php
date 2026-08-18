@@ -32,15 +32,6 @@ if ($idPoliza <= 0) {
 }
 
 
-/*
-    Si la póliza ya venció:
-    - La nueva vigencia inicia hoy.
-    - Termina dentro de un año.
-
-    Si todavía está vigente:
-    - Conserva su fecha inicial.
-    - Agrega un año al vencimiento actual.
-*/
 $query = "
     UPDATE poliza
 

@@ -1,8 +1,6 @@
-/* ==========================================================================
-   SECCIÓN 1: ESTILOS GENERALES Y LOGIN (login.html)
-   ========================================================================== */
 
-/* Fondo Colorido Luminoso (Mesh Gradient) para Login */
+
+/* Mesh Gradient*/
 .login-bg {
     background: 
         radial-gradient(circle at 15% 10%, rgba(32, 201, 151, 0.35) 0%, transparent 45%),
@@ -19,7 +17,7 @@
     z-index: 10;
 }
 
-/* Tarjeta Principal Dividida (Login) */
+/* Login */
 .login-card {
     background: rgba(255, 255, 255, 0.8); 
     backdrop-filter: blur(20px); 
@@ -32,7 +30,7 @@
     border: 1px solid rgba(255, 255, 255, 0.9) !important;
 }
 
-/* Panel Izquierdo (Diseño Curvo Verde - Login) */
+/* Diseño Curvo Verde Login */
 .left-panel {
     background: linear-gradient(135deg, #20c997 0%, #198754 100%);
     width: 40%; 
@@ -46,7 +44,7 @@
     padding: 3rem 6rem !important; 
 }
 
-/* Adaptación a dispositivos móviles para Login */
+/* Adaptación a móviles para Login */
 @media (max-width: 991px) {
     .left-panel, .right-panel {
         width: 100%;
@@ -57,7 +55,7 @@
     }
 }
 
-/* Campos de Entrada e Íconos (Inputs) */
+/* Campos de entrada */
 .glass-input {
     background: rgba(255, 255, 255, 0.8) !important;
     border: 1px solid rgba(25, 135, 84, 0.3) !important;
@@ -77,7 +75,6 @@
     border-radius: 0 8px 8px 0 !important;
 }
 
-/* Efecto al hacer clic en el input */
 .glass-input:focus {
     background: #ffffff !important;
     border-color: #198754 !important;
@@ -89,7 +86,7 @@
     border-color: #198754 !important;
 }
 
-/* Botones Generales */
+/* Botones */
 .login-btn {
     background-color: #5c8df6; 
     background: linear-gradient(90deg, #198754 0%, #20c997 100%);
@@ -109,7 +106,6 @@
     transform: translateY(1px);
 }
 
-/* Botones de Redes Sociales */
 .social-btn {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -131,11 +127,9 @@
 }
 
 
-/* ==========================================================================
-   SECCIÓN 2: ESTILOS LANDING PAGE RESPONSIVA (index.html)
-   ========================================================================== */
 
-/* Fondo Global (Aplica al Body de la Landing) */
+
+/* Fondo Global */
 .app-bg {
     background: 
         radial-gradient(circle at 15% 10%, rgba(32, 201, 151, 0.25) 0%, transparent 45%),
@@ -147,12 +141,12 @@
     overflow-x: hidden;
 }
 
-/* Transiciones Suaves Globales para el Menú */
+/* Transiciones para el Menú */
 .transition-all {
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Cabecera Móvil (Solo visible en celulares) */
+/* Cabecera Móvil */
 .glass-header {
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(15px);
@@ -161,31 +155,26 @@
     z-index: 1040;
 }
 
-/* Menú Lateral (Mini Sidebar Sólido) */
+/* Menú Lateral */
 .glass-sidebar {
     width: 280px;
-    /* Color 100% sólido (Blanco) para distinguirse del fondo */
     background-color: #ffffff; 
-    /* Sombra verde muy sutil para crear separación visual */
     box-shadow: 4px 0 25px rgba(25, 135, 84, 0.08);
     border-right: 1px solid rgba(25, 135, 84, 0.15);
     z-index: 1050;
     overflow-x: hidden; 
 }
 
-/* ESTADO CONTRAÍDO (Solo Íconos) */
 .glass-sidebar.collapsed {
     width: 85px;
 }
 
-/* Oculta los textos y logos cuando está contraído */
 .glass-sidebar.collapsed .nav-text,
 .glass-sidebar.collapsed .logo-text,
 .glass-sidebar.collapsed .divider-line {
     display: none !important;
 }
 
-/* Centra los íconos cuando está contraído */
 .glass-sidebar.collapsed .nav-link,
 .glass-sidebar.collapsed .login-btn-container a {
     justify-content: center !important;
@@ -197,7 +186,7 @@
     margin: 0 !important;
 }
 
-/* Links del menú */
+
 .glass-hover {
     border-radius: 8px;
     font-weight: 500;
@@ -208,7 +197,7 @@
     color: #198754 !important;
 }
 
-/* Link Activo (Mejorado con borde lateral) */
+
 .active-glass {
     background: rgba(25, 135, 84, 0.12) !important;
     color: #146c43 !important;
@@ -219,15 +208,13 @@
 
 /* Contenido Principal */
 .main-content {
-    margin-left: 280px; /* Deja el espacio exacto del Sidebar expandido */
+    margin-left: 280px; 
 }
-
-/* Cuando el sidebar se contrae, el contenido principal se expande */
+ */
 .main-content.expanded {
     margin-left: 85px;
 }
 
-/* En móviles, quitar márgenes laterales */
 @media (max-width: 991.98px) {
     .main-content, .main-content.expanded {
         margin-left: 0 !important; 
@@ -297,13 +284,6 @@
 }
 
 
-
-
-
-
-/* ==========================================================================
-   SECCIÓN 4: COMPLEMENTOS PARA PÓLIZAS
-   ========================================================================== */
 
 /* Pólizas mostradas en el panel principal */
 .dashboard-policy {

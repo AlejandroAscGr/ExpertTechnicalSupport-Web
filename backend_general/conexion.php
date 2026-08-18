@@ -1,9 +1,9 @@
 <?php
 //abre la conexion 
 
-$servidor = "localhost:3306"; // este puede cambiar depende del tema del vepene
+$servidor = "localhost:3306"; // este puede cambiar depende del tema del VPN
 $usuariobd = "root"; // este puede cambiar tambien cawn
-$passwordbd = ""; // este tambien cawn
+$passwordbd = ""; 
 $basedatos = "isana2labs2"; // Segun yo asi se llama cawn
 
 //aqui se enlaza el pedo cawn

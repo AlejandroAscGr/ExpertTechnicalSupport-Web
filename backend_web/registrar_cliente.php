@@ -1,6 +1,5 @@
 <?php
 
-// Incluye la conexión a la base de datos
 include("../backend_general/conexion.php");
 
 // Recibe los datos del formulario
